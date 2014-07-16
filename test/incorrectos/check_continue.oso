@@ -1,0 +1,22 @@
+<3 Caso de prueba para comprobar que no hay roloePea ni fondoBlanco
+<3 fuero de mientras.
+
+max(polar i, polar j) => polar
+{
+  polar x = 2;
+  hola : mientras(i < 3) { vomita 1; }
+  vomita 0;
+}
+oso() => extinto
+{
+  polar x = 0;
+  mientras (x < 5) {
+    si(x < 3) {
+      si( x == 2 ) {
+        fondoBlanco;
+      }
+    }
+  }
+  fondoBlanco;
+  roloePea;
+}

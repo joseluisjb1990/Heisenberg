@@ -1,0 +1,60 @@
+<3 usar un mientras con expresiones que no sean booleanas
+
+oso() => extinto {
+  polar a;
+  panda b;
+  kodiak c;
+  hormiguero d = "Prueba";
+  malayo e;
+
+  <3 Mientras con expresiones polar en la condición
+
+  mientras (a) {
+    escribir("Esto esta mal!");
+  }
+
+  mientras (56) {
+    escribir("Esto esta mal!");
+  }
+
+  <3 Mientras con expresiones kodiak en la condición
+
+  mientras (c) {
+    escribir("Esto esta mal!");
+  }
+
+  mientras (56.69) {
+    escribir("Esto esta mal!");
+  }
+
+  <3 Mientras con expresiones hormiguero en la condición
+
+  mientras (d) {
+    escribir("Esto esta mal!");
+  }
+
+  mientras ("guardiaaa") {
+    escribir("Esto esta mal!");
+  }
+
+  <3 Mientras con expresiones malayo en la condición
+
+  mientras (e) {
+    escribir("Esto esta mal!");
+  }
+
+  mientras ('e') {
+    escribir("Esto esta mal!");
+  }
+
+  <3 Mientras con expresiones polares en la condición
+
+  mientras (a) {
+    escribir("Esto esta mal!");
+  }
+
+  mientras (56) {
+    escribir("Esto esta mal!");
+  }
+
+}

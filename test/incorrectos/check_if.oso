@@ -1,0 +1,9 @@
+<3 Caso de prueba para comprobar que el tipo de la guarda del selector es panda.
+oso() => extinto
+{
+  si(1)
+  {
+    escribir("HOLA MUNDO");
+    escribir('\n');
+  }
+}

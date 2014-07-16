@@ -1,0 +1,26 @@
+<3 Hacer read con variables de tipos equivocados
+
+pardo foo {
+  panda a;
+  polar b;
+}
+
+grizzli bar {
+  kodiak c;
+  malayo d;
+}
+
+hormiguero e = "Prueba";
+cueva [46] de cueva [95] de panda f;
+
+foo g;
+bar h;
+
+oso() => extinto {
+
+  leer(e); <3 error: intento de leer en variable de tipo hormiguero
+  leer(f); <3 error: intento de leer en variable de tipo cueva
+  leer(g); <3 error: intento de leer en variable de tipo pardo
+  leer(h); <3 error: intento de leer en variable de tipo grizzli
+
+}

@@ -1,0 +1,33 @@
+--<3
+  Caso de prueba del factorial de cola con errores.
+  1) Falta el ; despues de la declaracion de la funcion factorial (linea 8).
+  2) Falta el tipo de retorno en la función principal oso (linea 21).
+-<3->
+
+factorial(polar n) => polar
+factorial_cola(polar n, ^polar res) => extinto;
+
+factorial(polar n) => polar {
+  si (n < 0) { escribir("ERROR: El factorial de un número negativo no esta definido"); vomita -1; }
+  sino       { polar res = 1; factorial_cola(n,res); vomita res;  }
+}
+
+factorial_cola(polar n, ^polar res) => extinto
+{
+  si(n > 0) { factorial_cola( n-1, res*n ); }
+}
+
+oso() =>
+{
+
+  <3 Recibimos por entrada estadar el valor que queremos obtener el factorial.
+
+  escribir("Por favor, introduzca el numero al que \n desea calcularle el factorial");
+  polar N = 0;
+  leer (N);
+
+  polar res = factorial(N);
+
+  <3 Retornamos el resultado.
+  escribir("El factorial de "); escribir(N); escribir("es "); escribir(res);
+}

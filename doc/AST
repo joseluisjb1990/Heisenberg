@@ -1,0 +1,134 @@
+#AST
+
+## AST
+
+*inicio
+*final
+
+## Declaración (AST)
+
+*tipo
+*nombre
+
+## Variable (Declaración)
+
+*valor
+*mutabilidad
+
+## Funcion (Declaración)
+
+*argumentos
+*declaraciones
+*cuerpo
+
+## Oso (Funcion)
+
+## Instrucción (AST) *
+
+## Asignación (Instrucción)
+
+*lvalue
+*valor
+
+## Leer (Instrucción)
+
+*argumento
+
+## Escribir (Instrucción)
+
+*argumento
+
+## LlamadaFuncion (Instrucción)
+
+*argumentos
+
+## Condicional (Instrucción)
+
+*condición
+*brazoTrue
+*cuerpo
+*brazoFalse
+*cuerpo
+
+## IteraciónAcotada (Instrucción)
+
+*limiteInferior
+*limiteSuperior
+*paso
+*cuerpo
+
+## IteraciónIndeterminada (Instrucción)
+
+*condición
+*cuerpo
+
+## Aumento (Instrucción)
+
+*variable
+
+## Decremento (Instrucción)
+
+*variable
+
+## Vomita (Instrucción)
+
+[*etiqueta]
+
+## FondoBlanco (Instrucción)
+
+[*etiqueta]
+
+## RoloePea (Instrucción)
+
+[*etiqueta]
+
+## Expresión (AST) *
+
+## Simple (Expresión)
+
+*valor
+
+## Unaria (Expresión)
+
+*operador
+*operando
+
+## Binaria (Expresión)
+
+*operador
+*operandoIzquierdo
+*operandoDerecho
+
+## Selector (Expresión)
+
+*condición
+*operandoTrue
+*operandoFalse
+
+## DeclaraciónCueva (Declaración)
+
+*tamaños
+
+## AccesoCueva (Expresión)
+
+*nombre
+*posición
+
+## DeclaraciónPardo (Declaración)
+
+*campos
+
+## AccesoPardo (Expresión)
+
+*campo
+*valor
+
+## DeclaraciónGrizzli (Declaración)
+
+*campos
+
+## AccesoGrizzli (Expresión)
+
+*campo
+*valor
+

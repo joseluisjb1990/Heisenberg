@@ -1,0 +1,4 @@
+<3 Este programa emite un error cuando se declara la función oso con un tipo de retorno faltante.
+
+oso() => {
+}

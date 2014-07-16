@@ -1,0 +1,14 @@
+<3 Caso de prueba para comprobar que una función tenga al menos una instruccion
+<3 vomita explicita
+
+max(polar i, polar j) => polar;
+
+max(polar i, polar j) => polar
+{
+  si(i < j) { vomita j; }
+}
+
+oso() => extinto
+{
+  escribir(max(2,3));
+}

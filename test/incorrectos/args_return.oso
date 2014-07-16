@@ -1,0 +1,4 @@
+<3 Este programa emite un error cuando se declara la función oso con algún tipo de parametros y con un tipo de retorno diferente a extinto
+
+oso(polar foo, panda bar) => kodiak
+{}

@@ -1,0 +1,6 @@
+<3 Caso de prueba para comprobar la decalración con inicializacion.
+
+oso() => extinto
+{
+  polar i,j = "Prueba de declaracion con inicializacion de variable", blanco;
+}

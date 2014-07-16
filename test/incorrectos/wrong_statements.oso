@@ -1,0 +1,72 @@
+--<3 Este programa tiene una colección de errore sintácticos
+que se reportan en diferentes instrucciones del lenguaje Bear.
+Cada error está indicado en el código como comentarios
+<3->
+
+mayor(polar x, polar y) => polar {
+  si (x>y) {
+    vomita x;
+  } sino {
+    vomita y;
+  }
+}
+
+pardo f;
+
+<3 error en los campos del polar
+polar entero;
+panda booleano;
+kodiak double;
+pardo g {
+  panda a;
+  polar b
+  kodiak c;
+}
+
+oso () => extinto
+{
+  <3 declaración de una constante panda faltandole el '='
+  const panda a blanco;
+  <3 declaracion de una constante kodiak faltando su valor
+  const kodiak b =;
+
+  polar c;
+  panda d;
+  <3 declaración con falta de ';'
+  kodiak e
+
+  polar f;
+
+  <3 declaración de variable donde falta el '='
+  polar g 42;
+
+  <3 declaración de varias variables donde falta el '='
+  panda h,i,j 42,69,17;
+
+  <3 declaración de variables donde faltan las ','
+  kodiak k l = 42.0,69.0;
+
+  <3 asignación simple donde falta el '='
+  entero  42;
+
+  <3 asignación múltiple donde falta el '='
+  entero, booleano, double 42, blanco, 42.0;
+
+  <3 asignación múltiple donde falta la ',' tanto en los lvalues como en las expresiones
+  <3 también tendrá un error indicando que la cantidad de variables a asignar es diferente a la cantidad de expresiones
+  entero booleano, double = 42, blanco 42.0;
+
+  <3 falta un ')' a la función leer
+  leer(entero;
+
+  <3 falta un '(' a la función escribir
+  escribir(42;
+
+  <3 falta una "," al llamar a la función mayor
+  mayor(3 5);
+
+  <3 falta el en entre la variable y el rango de iteración
+  para i (4;6) {
+    escribir("fun ");
+  }
+}

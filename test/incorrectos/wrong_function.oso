@@ -1,0 +1,62 @@
+<3 Programa que incluye diversos errores con funciones.
+
+<3 falta el ";" al final de la forward declaration de la función suma
+suma(polar a, polar b) => polar
+
+<3 en esta declaración falta el "=>" y como no se define la función hay errores de que a y b no están definidos.
+resta(polar a, polar b) polar
+{
+  vomita a - b;
+}
+
+suma(polar a, polar b) => polar
+{
+  vomita a + b;
+}
+
+
+<3 falta una coma entre dos parametros, el la pone por tí y avisa que falta una coma.
+<3 no debe arrojar error de que las variables no estén definidas porque si se definen en la tabla.
+calcularPendiente(polar x1 polar x2, polar y1, polar y2) => kodiak
+{
+  polar deltay = y2 - y1;
+  polar deltax = x2 - x1;
+
+  vomita deltay / deltax;
+}
+--<3 Error en los parametros de la función imprimir cueva,
+la cueva que se pasa como parametro debería ser 'cueva [] de cueva [10] de polar c'
+en cambio nos esta faltando la palabra de y la palabra cueva porque confundimos la manera de declarar cuevas
+el reporta el error pero logra declarar adecuadamente el parametro para evitar un error de falta de definición.
+<3->
+imprimirCueva(cueva [][10] de polar c) => extinto
+{
+  para i en c {
+    escribir(c[i]);
+  }
+}
+
+<3 variación del error anterior, aquí falta la palabra 'de' solamente.
+imprimirCueva2(cueva [] cueva [10] de polar c) => extinto
+{
+  para i en c {
+    escribir(c[i]);
+  }
+}
+
+<3 variación del error anterior, aquí falta la palabra 'cueva' solamente.
+imprimirCueva3(cueva [] de [10] de polar c) => extinto
+{
+  para i en c {
+    escribir(c[i]);
+  }
+}
+
+<3 variación del error anterior, aquí falta el ultimo 'de' solamente.
+imprimirCueva4(cueva [] de cueva [10] polar c) => extinto
+{
+  para i en c {
+    escribir(c[i]);
+  }
+}
+oso() => extinto {}

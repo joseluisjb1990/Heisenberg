@@ -1,0 +1,74 @@
+const polar CANT = 3;
+
+<3 warning, declaro varias veces familia.
+pardo familia;
+pardo familia;
+
+pardo persona
+{
+  polar cedula <3 error, falta el ';'
+  polar edad;
+}
+
+<3 esta es una familia moderna de padre solero.
+<3 genera errores mas adelante porque no hay campo del pardo llamado madre
+pardo familia
+{
+  persona hijo;
+  persona padre;
+}
+
+llenarPersona( persona per ) => extinto
+{
+  escribir("\nPor favor, introduzca la cedula de la persona\n");
+  leer(per->cedula);
+
+  escribir("\nPor favor, introduzca la edad de la persona\n");
+  leer(per->edad);
+}
+
+imprimirPersona( persona per ) => extinto
+{
+  escribir("\nCedula : "); escribir ( per->cedula );
+  escribir("\nEdad   : "); escribir ( per->cedula );
+}
+
+llenarFamilia( familia fam ) => extinto
+{
+  escribir("\nPor favor, introduzca la informacion del hijo\n");
+  llenarPersona( fam->hijo );
+
+  escribir("\nPor favor, introduzca la informacion del de la madre\n");
+  llenarPersona( fam->madre ); <3 error, no hay campo madre en familia
+
+  escribir("\nPor favor, introduzca la informacion del padre\n");
+  llenarPersona( fam->padre );
+}
+
+<3 error, caracter inesperado '~'
+imprimirFamilia~( familia fam ) => extinto
+{
+  escribir("\nHijo");
+  imprimirPersona( fam->hijo );
+
+  escribir("\nMadre");
+  imprimirPersona( fam->madre ); <3 error, no hay campo madre en familia
+
+  escribir("\nPadre");
+  imprimirPersona( fam->padre );
+}
+
+oso() => extinto
+{
+  cueva [CANT] de familia familias;
+  para fam en familias
+  {
+    escribir("\nPor favor introduzca la informacion sobre la familia\n");
+    llenarFamilia( fam );
+  }
+
+  para i en (0;CANT-1)
+  {
+    imprimirFamilia( familias[i] ) <3 error, falta ';'
+  }
+}

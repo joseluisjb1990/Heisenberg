@@ -1,0 +1,18 @@
+<3 usar un for con expresiones en los limites que no sean 'polar'
+
+oso() => extinto {
+  panda b;
+  kodiak c;
+  hormiguero d = "Prueba";
+  malayo e;
+
+  <3 error: los limites y el step deben ser 'polar' en vez de 'panda', 'kodiak' y 'hormiguero'
+  para i en (b;c;d) {
+    escribir("Noooo vale, estas pelando.");
+  }
+
+  <3 error: el step debe ser 'polar' en vez de 'malayo'
+  para i en (1;e;42) {
+    escribir("Sigues fallando.");
+  }
+}

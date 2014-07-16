@@ -1,0 +1,11 @@
+oso() => extinto
+{
+  escribir("La tabla del 9 es \n");
+  polar aux;
+  para i en (0;9)
+  {
+    aux = i * 9;
+    escribir(aux);
+    escribir("\n");
+  }
+}

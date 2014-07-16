@@ -1,0 +1,14 @@
+polar foo;
+panda bar, baz, qux, quxx;
+
+oso() => extinto {
+  foo = 2;
+  bar = 2=<3;
+  baz = no blanco | blanco == blanco;
+  qux =         2+2 > 5-3 == blanco;
+
+
+
+
+  quxx = 2**2**2 == 4+4;
+}

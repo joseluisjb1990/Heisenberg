@@ -1,0 +1,24 @@
+pardo fecha {
+  polar dia;
+  polar mes;
+  polar anio;
+};
+
+fecha hoy;
+
+grizzli booleano {
+  panda true;
+  panda false;
+};
+
+booleano foo;
+
+oso() => extinto {
+
+hoy->dia = 4;
+hoy->mes = 3;
+hoy->anio = 2014;
+
+foo.true = negro;
+
+}

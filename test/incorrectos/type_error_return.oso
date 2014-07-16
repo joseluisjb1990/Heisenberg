@@ -1,0 +1,19 @@
+<3 Contiene diferentes errores correspondientes a retornos en funciones
+
+<3 error: el tipo de retorno es polar y no se hace algún retorno
+foo() => polar {}
+
+<3 error: hay un tipo de retorno y se retorna otro tipo diferente
+bar() => kodiak {
+  vomita blanco;
+}
+
+<3 error: hay un tipo de retorno y no se retorna algo de ese tipo
+baz() => polar {
+  vomita;
+}
+
+<3 error: se retorna 42 y el tipo de retorno es extinto
+oso() => extinto {
+  vomita 42;
+}

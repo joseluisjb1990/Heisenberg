@@ -1,0 +1,33 @@
+polar a, foo, foo?;
+kodiak b;
+hormiguero h = "foo";
+malayo c;
+const panda b = blanco;
+const panda n = negro;
+
+oso() => extinto {
+  <3 Número polar.
+  a = 42;
+
+  <3 Número kodiak.
+  b = 42,0;
+
+  <3 Número kodiak en notación científica.
+  b = 42e0;
+
+  <3 Identificador simple.
+  foo = 5468;
+
+  <3 Identificador con caracter raro.
+  foo? = 42;
+
+  <3 Malayo.
+  c = 'f';
+
+  --<3 A continuación estan todas las expresiones anteriores
+       pero encerradas en paréntesis <3->
+  a = (42);
+  b = (42,0);
+  b = (42e0);
+  c = ('f');
+}

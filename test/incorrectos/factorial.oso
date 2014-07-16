@@ -1,0 +1,22 @@
+oso() => polar <3 error, tipo de retorno es 'polar' en vez de 'extinto'
+{
+  <3 Recibimos por entrada estadar el valor que queremos obtener el factorial.
+
+!! <3 error, caracteres inesperados
+
+  escribir("Por favor, introduzca el numero al que \n desea calcularle el factorial");
+  polar N = 0;
+  leer (N);
+  polar original = N;
+  polar acc  1; <3 error, '=' faltante
+
+<3 de aqui en adelante habrá error cuando se use acc porque nunca fue en efecto declarada
+  mientras(N > 0)
+  {
+    acc = acc * N;
+    N = N - 1;
+  }
+
+  <3 Retornamos el resultado.
+  escribir("El factorial de "); escribir(N); escribir("es "); escribir(acc);
+}

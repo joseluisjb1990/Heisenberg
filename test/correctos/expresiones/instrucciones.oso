@@ -1,0 +1,45 @@
+cueva [42] de polar cuevita;
+polar foo;
+
+oso() => extinto {
+<3  polar foo = 42;
+
+  para i en (1;6) {
+    escribir(i);
+  }
+
+  para i en (1;2;20) {
+    escribir(i);
+  }
+
+  para i en cuevita {
+    escribir(cuevita[i]);
+  }
+
+  foo++;
+  foo--;
+
+  vomita;
+  vomita etiqueta;
+
+  fondoBlanco;
+  fondoBlanco etiqueta;
+
+  roloePea;
+  roloePea etiqueta;
+
+  foo = a_panda(foo);
+  foo = a_malayo(foo);
+  foo = a_polar(foo);
+  foo = a_kodiak(foo);
+  foo = lon(foo);
+
+  mientras (negro) {
+    foo = 42;
+  }
+
+  etiqueta: mientras (negro) {
+    foo = 24;
+  }
+
+}

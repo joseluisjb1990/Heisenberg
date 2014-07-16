@@ -1,0 +1,6 @@
+const polar foo = 42;
+polar bar, baz;
+
+oso() => extinto {
+  bar = foo + baz;
+}

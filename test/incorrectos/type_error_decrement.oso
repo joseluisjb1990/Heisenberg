@@ -1,0 +1,33 @@
+<3 Intentar errores de tipos al decrementar variables.
+
+pardo foo {
+  panda a;
+  polar b;
+}
+
+grizzli bar {
+  kodiak c;
+  malayo d;
+}
+
+oso() => extinto{
+  foo baz;
+  bar qux;
+
+  <3 Intento de decremento de variables del tipo foo y bar que son pardo y grizzli
+  baz--;
+  qux--;
+
+  <3 Intento de decremento de variable de tipo panda
+  panda t = baz->a;
+  t--;
+
+  <3 Intento de decremento de variable de tipo kodiak
+  kodiak y = qux.c;
+  y--;
+
+  <3 Intento de decremento de variable de tipo malayo
+  malayo i = qux.d;
+  i--;
+
+}

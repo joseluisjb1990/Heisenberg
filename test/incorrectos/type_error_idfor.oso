@@ -1,0 +1,17 @@
+<3 intento de hacer un id for con variables que no son cuevas
+
+cueva [42] de polar foo;
+
+oso() => extinto {
+  polar a;
+
+  <3 'para' con un polar en vez de cueva
+  para i en a {
+    escribir("Nooope, you're doing it wrong.");
+  }
+
+  <3 'para' con una cueva pero con errores dentro del cuerpo
+  para i en foo {
+    panda bar = 42;
+  }
+}

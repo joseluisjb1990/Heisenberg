@@ -1,0 +1,7 @@
+<3 Caso de prueba para el incremento
+
+oso() => extinto
+{
+  kodiak b = 1.0;
+  b++;
+}

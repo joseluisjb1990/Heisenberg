@@ -1,0 +1,41 @@
+pardo foo;
+pardo foo;
+
+grizzli blah;
+
+grizzli baz {
+  panda a;
+  polar b;
+  kodiak c;
+  blah i;
+}
+
+pardo bar {
+  foo a;
+  polar b;
+  cueva [7] de panda c;
+  cueva [7] de cueva [8] de baz d;
+}
+
+pardo foo {
+  bar e;
+  polar f;
+  kodiak g;
+  cueva[7] de cueva [8] de cueva [9] de bar h;
+}
+
+pardo foo;
+
+grizzli baz;
+pardo bar;
+
+oso() => extinto {
+  foo x;
+  bar y;
+  baz z;
+
+  z.i = 45;
+  y->a = 5;
+  x->h[1][2][3]->b = 42;
+  y->d[3][4].a = y->c[3];
+}

@@ -1,0 +1,7 @@
+<3 Caso de prueba para la asignación. El resultado debería ser en la línea 6.
+
+oso() => extinto
+{
+  polar i,j,k;
+  i,j,k = 0, 1, blanco;
+}

@@ -1,0 +1,8 @@
+--<3 Este programa se encarga de imprimir en la
+     salida estándar "¡Hola, Mundo! <3"
+<3->
+oso() => extinto
+{
+  <3 error string incompleto
+  escribir("¡Hola, Mundo! <3);
+}

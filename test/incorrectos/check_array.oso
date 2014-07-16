@@ -1,0 +1,24 @@
+<3 Caso de prueba: chequeo de tipos en la asignación y pasaje de parametros de arreglos.
+<3 Resultado esperado: Error en la asignación y sin error en el caso del pasaje por parámetro.
+
+sumarCuevaDeCueva(cueva [] de cueva [5] de hormiguero e) => polar
+{
+  polar retorno = 0;
+
+  para auxCueva en e
+  {
+    para i en auxCueva
+    {
+      retorno = retorno + i;
+    }
+  }
+  vomita retorno;
+}
+
+oso() => extinto
+{
+  cueva [5] de cueva [5] de polar polarCueva;
+  cueva [2] de cueva [4] de polar polarCueva2;
+  polar num = sumarCuevaDeCueva(polarCueva);
+  polarCueva = polarCueva2;
+}

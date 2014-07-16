@@ -1,0 +1,24 @@
+panda a;
+
+oso() => extinto {
+  a = 1 < 2;
+  a = 2=<3;
+  a = 95 >     25;
+  a =     65 >=8  ;
+  a = 42 == 42;
+  a = 72 =/= 96;
+
+  a = blanco | negro;
+
+  a = negro & negro;
+
+  a = no blanco | blanco == blanco;
+
+  a = 2+2 > 5-3 == blanco;
+
+  a = negro =/= 3*3 < 500/10;
+
+  a = -42 =/= 42;
+
+  a = 2**2**2 == 4+4;
+}

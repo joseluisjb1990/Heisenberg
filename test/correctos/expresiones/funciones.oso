@@ -1,0 +1,33 @@
+pardo estructura {
+  polar campo1;
+  polar campo2;
+  polar campo3;
+};
+
+foo(polar a, ^panda b, cueva [] de polar c, estructura d) => extinto {
+  c[42] = a;
+  c[67] = d->campo1;
+};
+
+bar(cueva [] de cueva [7] de polar arreglo, panda t) => extinto {
+  arreglo[3][5] = t;
+};
+
+polar numero;
+panda bool;
+cueva [69] de polar arreglo;
+estructura struct;
+cueva [34] de cueva [7] de polar matriz;
+
+oso() => extinto {
+
+  foo(numero, bool, arreglo, struct);
+  bar(matriz, bool);
+
+  numero = 42;
+  leer(numero);
+  escribir("Holis");
+  escribir(bool);
+  si bool entonces { matriz[2] = 1; };
+  si bool entonces { matriz[2] = 1; } sino { leer(bool); };
+}

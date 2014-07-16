@@ -1,0 +1,20 @@
+foo(polar a, panda b) => extinto {
+  escribir("holis");
+}
+
+bar(panda a, polar b) => polar {
+  escribir("que tal?");
+  vomita 42;
+}
+
+oso() => extinto {
+  <3 llamada correcta con tipos escalares
+  foo(42,blanco);
+  polar x = bar(blanco, negro);
+  <3 llamada con error de tipos escalares
+  foo(blanco, 45);
+  polar y = bar(69,17);
+  <3 llamada correcta con tipos mas complejos
+  
+  <3 llamada con error de tipos mas complejos
+}

@@ -1,0 +1,58 @@
+<3 Chequeo de errores semánticos:
+
+<3 redeclaración de variables
+<3 redefinición de funciones
+<3 redefinición de tipos
+<3 redefinición de etiquetas
+<3 uso de variables sin definir
+<3 uso de funciones sin definir
+<3 uso de tipos sin definir
+<3 uso de etiquetas sin definir
+<3 acceso a un campo de un grizzli o pardo que no existe.
+
+polar a;
+polar a; <3 error, esta definida antes
+
+foo(polar x) => extinto {
+  escribir(x);
+}
+
+<3 error, ya está definida antes
+foo(polar x) => extinto {
+  escribir(x);
+}
+
+pardo fecha {
+  polar dia;
+  polar mes;
+  polar anio;
+}
+
+<3 error, ya está definido antes
+pardo fecha {
+  polar dia;
+  polar mes;
+  polar anio;
+}
+
+oso() => extinto
+{
+
+panda bool = negro;
+
+variableNoDefinida = 42; <3 error, esta variable no está definida.
+
+funcionNoDefinida(a, 99); <3 error, esta función no está definida.
+
+tipoNoDefinido variable; <3 error, tipoNoDefinido no existe.
+
+externa: mientras (bool) {
+  escribir("Hey Apple!");
+  fondoBlanco inicio; <3 error, etiqueta inicio no está definida.
+}
+
+fecha hoy;
+
+hoy->hora=12; <3 error, tipo 'fecha' no tiene un campo 'hora'.
+
+}

@@ -1,0 +1,14 @@
+<3 Programa que tiene un conjunto de declaraciones y falta solamente la de oso.
+
+polar foo;
+
+panda bar;
+
+qux () => polar {
+  si (bar) {
+    vomita 2 * foo;
+  }
+  sino {
+    vomita -1;
+  }
+}

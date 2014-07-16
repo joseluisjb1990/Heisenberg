@@ -1,0 +1,19 @@
+const panda falso = blanco;
+panda tautologia, contingencia;
+polar foo = 41;
+cueva [42] de polar meh;
+cueva [4] de cueva [2] de panda wii;
+pardo libro {
+  polar isbn;
+  polar numPags;
+};
+
+grizzli numero {
+  polar entero;
+  kodiak flotante;
+};
+
+oso() => extinto {
+  tautologia, contingencia = falso |( no falso), falso | negro;
+  foo = foo + 1;
+}

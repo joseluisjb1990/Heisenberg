@@ -1,0 +1,41 @@
+<3 Insertion sort
+
+buscar_menor(cueva [] de polar cueva_elem, polar min, polar max) => polar;
+
+cambiar(cueva [] de polar cueva_elem , polar i, polar j) => extinto;
+
+buscar_menor(cueva [] de polar cueva_elem , polar min, polar max) => polar
+{
+  min = cueva_elem[min];
+
+  para i en (min + 1; max) {
+    si (cueva_elem[i] < min) { min = cueva_elem[i]; }
+  }
+}
+
+cambiar(cueva [] de polar cueva_elem, polar i, polar j) => extinto
+{
+  polar inter = cueva_elem[i];
+  cueva_elem[i] = cueva_elem[j];
+  cueva_elem[j] = cueva_elem[i];
+}
+
+oso () => extinto
+{
+  <3 error, falta la dimensión de la cueva, de aqui en adelante elementos no estará definida
+  cueva [] de polar elementos;
+
+  <3 Falta llenar el arreglo
+
+  para i en (0;4)
+  {
+    polar ind = buscar_menor(elementos,i);
+    <3 error, falta una ',' en los parametros
+    cambiar(elementos, i ind);
+  }
+
+  escribir("El arreglo ordenado \n");
+
+  <3 error, falta la palabra clave 'en'
+  para i (0;5)  { escribir(elementos[i]); }
+}

@@ -1,0 +1,51 @@
+const polar TAM = 10;
+
+es_primo( polar n ) => panda
+{
+  si( n =< 1 ) { vomita blanco; }
+
+  para i en (2;n)
+  {
+    si ((n / i) == 0) { vomita blanco; }
+  }
+
+  vomita negro;
+}
+
+oso() => extinto
+{
+  cueva [TAM] de cueva [TAM] de cueva[TAM] de polar numeros;
+
+  polar n= 0;
+
+  para i en (0;TAM) {
+    para j en (0;TAM) {
+      para k en (0;TAM) {
+        numeros[i][j][k] = (i + j + k) / TAM;
+      }
+    }
+  }
+
+  <3 error, faltan dos ',', luego habrá errores porque no se definen i, j y k
+  polar i, j k = 0, 0 0;
+
+  mas_lejano : mientras( i < 10 )
+               {
+                  j = 0;
+                  niveluno : mientras( j < 10 )
+                              {
+                                k = ((i + j) / 3)%TAM;
+                                si(es_primo(numeros[i][j][k])) { roloePea mas_lejano; }
+                                k = 0;
+                                mientras(k < 10)
+                                {
+                                  polar z = (i * j * k**2)%TAM;
+                                  si(es_primo(numeros[i][j][k])) { roloePea nivel_uno; } <3 error, nivel_uno no está declarada.
+                                  k++;
+                                }
+                                j++;
+                              }
+                  i++;
+               }
+
+}

@@ -1,0 +1,79 @@
+<3 usar un if else con condiciones que no sean booleanas
+
+oso() => extinto {
+  polar a;
+  kodiak c;
+  hormiguero d = "Prueba";
+  malayo e;
+
+  <3 Mientras con expresiones polar en la condición
+
+  si (a) {
+    escribir("Esto esta mal!");
+  } sino {
+    escribir("sigue mal");
+  }
+
+  si (56) {
+    escribir("Esto esta mal!");
+  } sino {
+    escribir("sigue mal");
+  }
+
+  <3 Mientras con expresiones kodiak en la condición
+
+  si (c) {
+    escribir("Esto esta mal!");
+  } sino {
+    escribir("sigue mal");
+  }
+
+  si (56.69) {
+    escribir("Esto esta mal!");
+  } sino {
+    escribir("sigue mal");
+  }
+
+  <3 Mientras con expresiones hormiguero en la condición
+
+  si (d) {
+    escribir("Esto esta mal!");
+  } sino {
+    escribir("sigue mal");
+  }
+
+  si ("guardiaaa") {
+    escribir("Esto esta mal!");
+  } sino {
+    escribir("sigue mal");
+  }
+
+  <3 Mientras con expresiones malayo en la condición
+
+  si (e) {
+    escribir("Esto esta mal!");
+  } sino {
+    escribir("sigue mal");
+  }
+
+  si ('e') {
+    escribir("Esto esta mal!");
+  } sino {
+    escribir("sigue mal");
+  }
+
+  <3 Mientras con expresiones polares en la condición
+
+  si (a) {
+    escribir("Esto esta mal!");
+  } sino {
+    escribir("sigue mal");
+  }
+
+  si (56) {
+    escribir("Esto esta mal!");
+  } sino {
+    escribir("sigue mal");
+  }
+
+}

@@ -1,0 +1,32 @@
+--<3
+Se presenta a continuación un ejemplo con varios errores lexicográficos.
+Cada uno está indicado con un comentario
+<3->
+
+<3 A continuación errores de caracteres no reconocidos por el lenguaje
+ñ
+`
+!
+\
+$
+#
+
+<3 A continuación una serie de caracteres inesperados por el lexer:
+polar a;
+
+<3 Declaración de hormiguero incompleto (faltan las " que cierran).
+hormiguero foo = "Hola mundo! :3 ";
+
+hormiguero bar = "Hola mundo! :3";
+
+oso () => extinto {
+  escribir(bar);
+  escribir("lalalaa);
+  a = 42;
+}
+
+--<3 Y para terminar vamos a poner un comentario incompleto.
+En los comentarios de bloque puede haber saltos de línea y el mismo simbolo inicial --<3 incluso
+pero no es buena idea anidar comentarios de bloque.
+Y aqui deberíamos poner el cierre de comentario de bloque pero no lo haremos para que haya un error.
+Porque podemos.

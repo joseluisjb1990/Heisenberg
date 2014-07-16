@@ -1,0 +1,140 @@
+Programa -> Definiciones 'oso' '(' ')' '=>' 'extinto' '{' ListaInstrucciones '}'
+
+ListaInstrucciones -> Instruccion ';'
+                   |  ListaInstrucciones Instruccion ';'
+
+Instruccion -> ListaLValues '=' Expresiones
+            |  'leer' '(' ID ')'
+            |  'escribir' '(' Expresion ')'
+            |  Funcion
+            |  'si' Expresion 'entonces' '{' ListaInstrucciones '}'
+            |  'si' Expresion 'entonces' '{' ListaInstrucciones '}' sino '{' ListaInstrucciones '}'
+            |  'para' ID 'en' '(' Expresion ';' Expresion ')' '{' ListaInstrucciones '}'
+            |  'para' ID 'en' '(' Expresion ';' Expresion ';' Expresion ')' '{' ListaInstrucciones '}'
+            |  'para' ID 'en' ID '{' ListaInstrucciones '}'
+            |  IteracionIndeterminada
+            |  ID '++'
+            |  ID '--'
+            |  'vomita'
+            |  'vomita' ID
+            |  'fondoBlanco'
+            |  'fondoBlanco' ID
+            |  'roloePea'
+            |  'roloePea' ID
+
+ListaLValues -> LValue
+             |  ListaLValue ',' LValue
+
+LValue -> ID
+       |  LValue '->' LValue
+       |  LValue '.' LValue
+       | AccesoCueva
+
+AccesoCueva -> ID "[" NUM "]"
+            |  AccesoCueva "[" NUM "]"
+            ;
+
+
+
+Expresion -> POLAR
+          |  KODIAK
+          |  HORMIGUERO
+          |  MALAYO
+          |  LValue
+          |  Funcion
+          |  FuncionPredef
+          |  Cueva
+          |  BLANCO
+          |  NEGRO
+          |  Expresion   '<'   Expresion
+          |  Expresion   '<='  Expresion
+          |  Expresion   '>'   Expresion
+          |  Expresion   '>='  Expresion
+          |  Expresion   '=='  Expresion
+          |  Expresion   '=/=' Expresion
+          |  Expresion   '|'   Expresion
+          |  Expresion   '&'   Expresion
+          |  'no' Expresion
+          |  Expresion '+' Expresion
+          |  Expresion '-' Expresion
+          |  Expresion '**' Expresion
+          |  Expresion '*' Expresion
+          |  Expresion '/' Expresion
+          |  '-' Expresion
+          |  Expresion '?' Expresion ':' Expresion
+          |  '(' Expresion ')'
+
+Funcion -> ID '(' Expresiones ')'
+
+FuncionPredef -> 'a_panda'  '(' Expresion ')'
+              |  'a_polar'  '(' Expresion ')'
+              |  'a_malayo' '(' Expresion ')'
+              |  'a_kodiak' '(' Expresion ')'
+              |  'lon'      '(' Expresion ')'
+
+Cueva -> ID '[' NUM ']'
+      |  Cueva '[' NUM ']'
+
+IteracionIndeterminada -> ID ':' 'mientras' '(' Expresion ')' '{' ListaInstrucciones '}'
+                       |  'mientras' '(' Expresion ')' '{' ListaInstrucciones '}'
+
+Definiciones -> ListaDefGlobales
+             |  /* Vacio *\
+
+ListaDefGlobales -> DefinicionGlobal ';'
+                 |  ListaDefGlobales DefinicionGlobal ';'
+
+DefinicionGlobal -> DefConstante
+                 |  DefVariable
+                 |  DefFuncion
+                 |  DefCompleja
+
+DefConstante -> 'const' Tipo Identificadores '=' Expresiones
+
+Identificadores -> ID
+                |  Identificadores ',' ID
+
+Expresiones -> Expresion
+                 |  Expresiones ',' Expresion
+
+DefVariable -> Tipo Identificadores '=' Expresiones
+            |  Tipo Identificadores
+            |  DefCueva
+
+DefCueva -> Cuevas Tipo ID
+
+Cuevas -> 'cueva' '[' NUM ']' 'de'
+       |  Cuevas 'cueva' '[' NUM ']' 'de'
+
+DefCompleja -> 'pardo'   ID '{' Campos '}'
+            |  'grizzli' ID '{' Campos '}'
+
+Campos -> Tipo ID ';'
+       |  Campos Tipo ID ';'
+
+DefFuncion -> ID '(' DefParametros ')' '=>' Tipo
+           |  ID '(' DefParametros ')' '=>' Tipo '{' ListaDefLocales ListaInstrucciones '}'
+
+ListaDefLocales -> DefinicionLocal ';'
+                |  ListaDefLocales DefinicionLocal ';'
+
+DefinicionLocal -> DefConstante
+                |  DefVariable
+
+DefParametros -> DefParametro
+              |  DefParametros ',' DefParametro
+
+DefParametro -> Tipo ID
+          |  '^' Tipo ID
+          |  ParametroCueva Tipo ID
+
+ParametroCueva -> 'cueva' '[' ']' 'de'
+               |  ParametroCueva 'cueva' '[' NUM ']' 'de'
+
+Tipo -> ID
+     |  'panda'
+     |  'polar'
+     |  'kodiak'
+     |  'malayo'
+     |  'hormiguero'
+     |  'extinto'

@@ -1,0 +1,9 @@
+<3 Caso de prueba para probar los indices de la interacion determinada simple
+
+oso() => extinto
+{
+  polar n = "Inicio";
+  polar m = "Final";
+
+  para i en (n;m) { escribir("Hola, mundo!"); }
+}
