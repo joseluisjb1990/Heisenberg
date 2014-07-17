@@ -1,4 +1,4 @@
-Proyecto de CI4721 - Lenguajes de Programación II de Gabriela Limonta (10-10385) y José Luis Jiménez (10-10839) en el trimestre Enero - Marzo 2014 en la Universidad Simón Bolívar.
+Proyecto de CI4721/CI4722 de Joel Araujo (10-10797) y José Luis Jiménez (10-10839) en el trimestre Septiembre - Diciembre 2014 en la Universidad Simón Bolívar.
 
 ***
 
@@ -16,6 +16,6 @@ Para compilar debemos hacer:
 
 El ejecutable se encontrará en este mismo directorio y se ejecuta de la siguiente manera:
 
-    ./bear <nombre_del_archivo>
+    ./heisenberg <nombre_del_archivo>
 
 En el directorio **test** se encuentran un conjunto de programas correctos e incorrectos para probar el funcionamiento del compilador.
