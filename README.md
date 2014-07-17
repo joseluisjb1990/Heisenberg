@@ -2,7 +2,7 @@ Proyecto de CI4721/CI4722 de Joel Araujo (10-10797) y José Luis Jiménez (10-10
 
 ***
 
-Bear
+Heisenberg
 ===================
 
 La documentación del lenguaje se encuentra en el directorio **doc**.
