@@ -9,10 +9,10 @@ main (int argc, char *argv[])
   int res = 0;
   bear_driver driver;
   for (int i = 1; i < argc; ++i)
-    if (argv[i] == std::string ("-p"))
-      driver.trace_parsing = true;
-    else if (argv[i] == std::string ("-s"))
-      driver.trace_scanning = true;
+    if (argv[i] == std::string ("-t"))
+      driver.untilTypeCheck= true;
+    else if (argv[i] == std::string ("-p"))
+      driver.untilAST = true;
     else if (!driver.parse (argv[i]))
       std::cout << std::endl;
     else

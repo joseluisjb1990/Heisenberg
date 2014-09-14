@@ -16,6 +16,6 @@ Para compilar debemos hacer:
 
 El ejecutable se encontrará en este mismo directorio y se ejecuta de la siguiente manera:
 
-    ./heisenberg <nombre_del_archivo>
+    ./ww <nombre_del_archivo>
 
 En el directorio **test** se encuentran un conjunto de programas correctos e incorrectos para probar el funcionamiento del compilador.

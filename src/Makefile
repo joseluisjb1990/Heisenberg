@@ -1,6 +1,6 @@
 CXX = g++
 
-EXE = bear
+EXE = ww
 
 CDEBUG = -g -Wall
 

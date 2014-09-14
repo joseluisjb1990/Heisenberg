@@ -5,13 +5,20 @@ bear_driver::bear_driver () {}
 
 int bear_driver::parse (const std::string &f)
 {
+  
+  int res;
+
   file = f;
   scan_begin ();
   yy::bear_parser parser (*this);
-  int res = parser.parse ();
-  AST->check();
-  if (0 == errores) {
-    if(AST->get_type() != ErrorType::getInstance()) { cout << AST->to_string(0) << std::endl << tabla << std::endl; }
+  res = parser.parse ();
+
+  if (!untilAST)
+  {
+    AST->check();
+    if (0 == errores) {
+      if(AST->get_type() != ErrorType::getInstance()) { cout << AST->to_string(0) << std::endl << tabla << std::endl; }
+    }
   }
   scan_end();
   return res;
