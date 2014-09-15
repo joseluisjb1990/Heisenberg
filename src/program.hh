@@ -3,6 +3,7 @@
 
 #include "statement.hh"
 #include "definition.hh"
+
 class Program : public Node
 {
   public:
@@ -10,6 +11,8 @@ class Program : public Node
     Program() {};
     std::string to_string(int nesting);
     void check();
+    void toIntermediate(IntermediateGen *intGen);
+
   private:
     std::vector<Definition*>* _definitions;
     Statement* _statement;

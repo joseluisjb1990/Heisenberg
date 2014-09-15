@@ -4,6 +4,7 @@
 # include <map>
 # include "bear_parser.tab.hh"
 # include "TablaSimbolos.hh"
+# include "generator.hh"
 
 // Tell Flex the lexer's prototype ...
 # define YY_DECL \

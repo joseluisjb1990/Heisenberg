@@ -37,4 +37,9 @@ void Program::check()
   if(_statement->get_type() != ErrorType::getInstance() and ok) set_type(ExtintoType::getInstance());
   else set_type(ErrorType::getInstance());
 }
+
+void Program::toIntermediate(IntermediateGen *intGen)
+{
+  cout << std::endl << "Ahora deberia proceder la generacion de codigo intermedio" << std::endl;
+}
 #endif
