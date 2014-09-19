@@ -32,6 +32,7 @@ class Assign : public Statement
     Assign(std::vector<Expression*>* ids, std::vector<Expression*>* expr);
     std::string to_string(int nesting);
     void check();
+    void toIntermediate(IntermediateGen *intGen);
 
 };
 
@@ -84,6 +85,7 @@ class Write : public Statement
     Write(Expression* expr);
     std::string to_string(int nesting);
     void check();
+    void toIntermediate(IntermediateGen *intGen);
 
   private:
     Expression* _expr;
@@ -96,6 +98,7 @@ class Read : public Statement
     Read(Expression*);
     std::string to_string(int nesting);
     void check();
+    void toIntermediate(IntermediateGen *intGen);
 
   private:
     Expression* _id;
@@ -112,6 +115,8 @@ class Body : public Statement
     bool isBody() { return true; }
     void setReturn() { hasReturn = true; }
     bool getReturn() { return hasReturn; }
+    void toIntermediate(IntermediateGen *intGen);
+
   private:
     std::vector<Statement *>  * _listSta;
     bool hasReturn = false;

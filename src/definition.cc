@@ -216,4 +216,9 @@ void DefFunction::check()
   else
     set_type(_type);
 }
+
+void DefFunction::toIntermediate(IntermediateGen *intGen)
+{
+  _statements->toIntermediate(intGen);
+}
 #endif

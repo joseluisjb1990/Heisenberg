@@ -20,7 +20,7 @@ int bear_driver::parse (const std::string &f)
       if(AST->get_type() != ErrorType::getInstance()) { cout << AST->to_string(0) << std::endl << tabla << std::endl; }
     }
 
-    if (!untilTypeCheck)
+    if (!untilTypeCheck and errores == 0)
     {
       IntermediateGen *intgen = new IntermediateGen(file);
       AST->toIntermediate(intgen);

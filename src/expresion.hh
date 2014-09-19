@@ -15,15 +15,18 @@ class Expression : public Node
     Expression();
     virtual void check() {};
     virtual std::string to_string(int nesting);
-    std::string to_string()         { return "expression"; };
-    void setNoMut()                 { _mutID = false; }
-    void setTam(unsigned int tam)   { _tam = tam; }
-    bool getMut()                   { return _mutID; }
-    unsigned int getTam()           { return _tam; }
+    std::string to_string()                 { return "expression";  };
+    void setNoMut()                         { _mutID = false;       }
+    void setTam(unsigned int tam)           { _tam = tam;           }
+    bool getMut()                           { return _mutID;        }
+    unsigned int getTam()                   { return _tam;          }
+    virtual std::string getTemp()           { return _temp;         }
+    virtual void setTemp(std::string temp)  { _temp = temp;         }
 
   private :
     bool         _mutID = true;
     unsigned int _tam   = 0;
+    std::string  _temp;
 };
 
 class Constant : public Expression
@@ -39,6 +42,8 @@ class PolarExpr : public Constant
     std::string to_string(int nesting);
     std::string getValue();
     void check();
+    virtual std::string getTemp() { return valor; }
+
 
 };
 
@@ -52,6 +57,7 @@ class KodiakExpr : public Constant
     std::string to_string(int nesting);
     std::string getValue();
     void check();
+    virtual std::string getTemp() { return valor; }
 
 };
 
@@ -65,6 +71,7 @@ class HormigueroExpr : public Constant
     std::string to_string(int nesting);
     std::string getValue();
     void check();
+    virtual std::string getTemp() { return valor; }
 
 };
 
@@ -78,6 +85,7 @@ class MalayoExpr : public Constant
     std::string to_string(int nesting);
     std::string getValue();
     void check();
+    virtual std::string getTemp() { return valor; }
 
 };
 
@@ -91,8 +99,8 @@ class PandaExpr : public Constant
     std::string to_string(int nesting);
     std::string getValue();
     void check();
-
-};
+    virtual std::string getTemp() { return valor; 
+}};
 
 class Sum : public Expression
 {
@@ -104,6 +112,7 @@ class Sum : public Expression
     Sum(Expression* izq, Expression* der);
     std::string to_string(int nesting);
     void check();
+    void toIntermediate(IntermediateGen *intGen);
 
 };
 
@@ -117,6 +126,7 @@ class Substraction : public Expression
     Substraction(Expression* izq, Expression* der);
     std::string to_string(int nesting);
     void check();
+    void toIntermediate(IntermediateGen *intGen);
 
 };
 
@@ -130,6 +140,7 @@ class Multiplication : public Expression
     Multiplication(Expression* izq, Expression* der);
     std::string to_string(int nesting);
     void check();
+    void toIntermediate(IntermediateGen *intGen);
 
 };
 
@@ -143,6 +154,7 @@ class Division : public Expression
     Division(Expression* izq, Expression* der);
     std::string to_string(int nesting);
     void check();
+    void toIntermediate(IntermediateGen *intGen);
 
 };
 
@@ -156,6 +168,7 @@ class Remainder : public Expression
     Remainder(Expression* izq, Expression* der);
     std::string to_string(int nesting);
     void check();
+    void toIntermediate(IntermediateGen *intGen);
 
 };
 
@@ -169,7 +182,7 @@ class Power : public Expression
     Power(Expression* izq, Expression* der);
     std::string to_string(int nesting);
     void check();
-
+    void toIntermediate(IntermediateGen *intGen);
 };
 
 class Minus : public Expression
@@ -181,6 +194,7 @@ class Minus : public Expression
     Minus(Expression* operando);
     std::string to_string(int nesting);
     void check();
+    void toIntermediate(IntermediateGen *intGen);
 
 };
 
@@ -194,6 +208,7 @@ class Less : public Expression
     Less(Expression* izq, Expression* der);
     std::string to_string(int nesting);
     void check();
+    void toIntermediate(IntermediateGen *intGen);
 
 };
 
@@ -207,6 +222,7 @@ class LessEqual : public Expression
     LessEqual(Expression* izq, Expression* der);
     std::string to_string(int nesting);
     void check();
+    void toIntermediate(IntermediateGen *intGen);
 
 };
 
@@ -220,6 +236,7 @@ class Greater : public Expression
     Greater(Expression* izq, Expression* der);
     std::string to_string(int nesting);
     void check();
+    void toIntermediate(IntermediateGen *intGen);
 
 };
 
@@ -233,6 +250,7 @@ class GreaterEqual : public Expression
     GreaterEqual(Expression* izq, Expression* der);
     std::string to_string(int nesting);
     void check();
+    void toIntermediate(IntermediateGen *intGen);
 
 };
 
@@ -246,6 +264,7 @@ class Equal : public Expression
     Equal(Expression* izq, Expression* der);
     std::string to_string(int nesting);
     void check();
+    void toIntermediate(IntermediateGen *intGen);
 
 };
 
@@ -259,6 +278,7 @@ class NotEqual : public Expression
     NotEqual(Expression* izq, Expression* der);
     std::string to_string(int nesting);
     void check();
+    void toIntermediate(IntermediateGen *intGen);
 
 };
 
@@ -272,6 +292,7 @@ class And : public Expression
     And(Expression* izq, Expression* der);
     std::string to_string(int nesting);
     void check();
+    void toIntermediate(IntermediateGen *intGen);
 
 };
 
@@ -285,6 +306,7 @@ class Or : public Expression
     Or(Expression* izq, Expression* der);
     std::string to_string(int nesting);
     void check();
+    void toIntermediate(IntermediateGen *intGen);
 
 };
 
@@ -297,7 +319,8 @@ class Not : public Expression
     Not(Expression* operando);
     std::string to_string(int nesting);
     void check();
-
+    void toIntermediate(IntermediateGen *intGen);
+    
 };
 
 class SelectorExpr : public Expression
@@ -336,6 +359,7 @@ class IDExpr : public LValueExpr
     IDExpr(std::string nombre);
     std::string to_string(int nesting);
     void check();
+    std::string getTemp() { return _nombre; }
 
 };
 

@@ -150,6 +150,7 @@ class DefFunction : public Definition
 
     std::string to_string(int nesting);
     void check();
+    void toIntermediate(IntermediateGen *intGen);
 
   private:
     std::string               _id;

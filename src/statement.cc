@@ -32,6 +32,19 @@ std::string Assign::to_string(int nesting)
   return str;
 }
 
+void Assign::toIntermediate(IntermediateGen *intGen)
+{
+  for (unsigned int i=0; i < _ids->size(); ++i) {
+    Expression* id   = _ids->at(i);
+    Expression* expr = _expr->at(i);
+
+    id->toIntermediate(intGen);
+    expr->toIntermediate(intGen);
+
+    intGen->gen(":=", expr->getTemp(), " ", id->getTemp());
+  }
+}
+
 void Assign::check()
 {
   Expression * auxid;
@@ -68,7 +81,7 @@ Function::Function(std::string name, std::vector<Type*>* parameterTypes, std::ve
   , _parameterTypes ( parameterTypes )
   , _parameters     ( parameters     )
   , _return         ( returnType     )
-  {}
+  {}  
 
 std::string Function::to_string(int nesting)
 {
@@ -204,6 +217,12 @@ void Write::check()
   }
 }
 
+void Write::toIntermediate(IntermediateGen *intGen)
+{
+  _expr->toIntermediate(intGen);
+  intGen->gen("Wr", _expr->getTemp(), " ", " ");
+}
+
 Read::Read(Expression* id)
   : Statement()
   , _id( id )
@@ -232,6 +251,12 @@ void Read::check()
   }
 
   this->set_type(ExtintoType::getInstance());
+}
+
+void Read::toIntermediate(IntermediateGen *intGen)
+{
+  _id->toIntermediate(intGen);
+  intGen->gen("Rd", " ", " ", _id->getTemp());
 }
 
 Body::Body( std::vector<Statement *>* listSta )
@@ -267,6 +292,13 @@ void Body::check()
     this->set_type(ExtintoType::getInstance());
   } else {
     this->set_type(ErrorType::getInstance());
+  }
+}
+
+void Body::toIntermediate(IntermediateGen *intGen)
+{
+  for(std::vector<Statement*>::iterator it = _listSta->begin(); it != _listSta->end(); it++) {
+    (*it)->toIntermediate(intGen);
   }
 }
 

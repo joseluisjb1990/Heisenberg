@@ -40,6 +40,6 @@ void Program::check()
 
 void Program::toIntermediate(IntermediateGen *intGen)
 {
-  cout << std::endl << "Ahora deberia proceder la generacion de codigo intermedio" << std::endl;
+  _statement->toIntermediate(intGen);
 }
 #endif

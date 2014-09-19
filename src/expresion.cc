@@ -143,6 +143,15 @@ void Sum::check()
   }
 }
 
+void Sum::toIntermediate(IntermediateGen *intGen)
+{
+  izq->toIntermediate(intGen);
+  der->toIntermediate(intGen);
+  std::string temp = intGen->nextTemp();
+  intGen->gen("+",izq->getTemp(), der->getTemp(),temp);  
+  setTemp(temp);
+}
+
 Substraction::Substraction(Expression* izq, Expression* der)
   : izq ( izq )
   , der ( der )
@@ -169,6 +178,15 @@ void Substraction::check()
     error("Cannot apply operator '-' between " + t1->to_string() + " and " + t2->to_string() + "types\n");
     this->set_type(ErrorType::getInstance());
   }
+}
+
+void Substraction::toIntermediate(IntermediateGen *intGen)
+{
+  izq->toIntermediate(intGen);
+  der->toIntermediate(intGen);
+  std::string temp = intGen->nextTemp();
+  intGen->gen("-",izq->getTemp(), der->getTemp(),temp);  
+  setTemp(temp);
 }
 
 Multiplication::Multiplication(Expression* izq, Expression* der)
@@ -199,6 +217,15 @@ void Multiplication::check()
   }
 }
 
+void Multiplication::toIntermediate(IntermediateGen *intGen)
+{
+  izq->toIntermediate(intGen);
+  der->toIntermediate(intGen);
+  std::string temp = intGen->nextTemp();
+  intGen->gen("*",izq->getTemp(), der->getTemp(),temp);  
+  setTemp(temp);
+}
+
 Division::Division(Expression* izq, Expression* der)
   : izq ( izq )
   , der ( der )
@@ -225,6 +252,15 @@ void Division::check()
     error("Cannot apply operator '/' between " + t1->to_string() + " and " + t2->to_string() + "types\n");
     this->set_type(ErrorType::getInstance());
   }
+}
+
+void Division::toIntermediate(IntermediateGen *intGen)
+{
+  izq->toIntermediate(intGen);
+  der->toIntermediate(intGen);
+  std::string temp = intGen->nextTemp();
+  intGen->gen("/",izq->getTemp(), der->getTemp(),temp);  
+  setTemp(temp);
 }
 
 Remainder::Remainder(Expression* izq, Expression* der)
@@ -255,6 +291,15 @@ void Remainder::check()
   }
 }
 
+void Remainder::toIntermediate(IntermediateGen *intGen)
+{
+  izq->toIntermediate(intGen);
+  der->toIntermediate(intGen);
+  std::string temp = intGen->nextTemp();
+  intGen->gen("%",izq->getTemp(), der->getTemp(),temp);  
+  setTemp(temp);
+}
+
 Power::Power(Expression* izq, Expression* der)
   : izq ( izq )
   , der ( der )
@@ -283,6 +328,15 @@ void Power::check()
   }
 }
 
+void Power::toIntermediate(IntermediateGen *intGen)
+{
+  izq->toIntermediate(intGen);
+  der->toIntermediate(intGen);
+  std::string temp = intGen->nextTemp();
+  intGen->gen("**",izq->getTemp(), der->getTemp(),temp);  
+  setTemp(temp);
+}
+
 Minus::Minus(Expression* operando)
   : operando ( operando )
   {}
@@ -304,6 +358,14 @@ void Minus::check()
     error("Cannot apply operator '-' to " + t->to_string() + " type\n");
     this->set_type(ErrorType::getInstance());
   }
+}
+
+void Minus::toIntermediate(IntermediateGen *intGen)
+{
+  operando->toIntermediate(intGen);
+  std::string temp = intGen->nextTemp();
+  intGen->gen("um",operando->getTemp(), " ", temp);  
+  setTemp(temp);
 }
 
 Less::Less(Expression* izq, Expression* der)
@@ -334,6 +396,15 @@ void Less::check()
   }
 }
 
+void Less::toIntermediate(IntermediateGen *intGen)
+{
+  izq->toIntermediate(intGen);
+  der->toIntermediate(intGen);
+  std::string temp = intGen->nextTemp();
+  intGen->gen("<",izq->getTemp(), der->getTemp(),temp);  
+  setTemp(temp);
+}
+
 LessEqual::LessEqual(Expression* izq, Expression* der)
   : izq ( izq )
   , der ( der )
@@ -362,6 +433,14 @@ void LessEqual::check()
   }
 }
 
+void LessEqual::toIntermediate(IntermediateGen *intGen)
+{
+  izq->toIntermediate(intGen);
+  der->toIntermediate(intGen);
+  std::string temp = intGen->nextTemp();
+  intGen->gen("=<",izq->getTemp(), der->getTemp(),temp);  
+  setTemp(temp);
+}
 
 Greater::Greater(Expression* izq, Expression* der)
   : izq ( izq )
@@ -391,6 +470,14 @@ void Greater::check()
   }
 }
 
+void Greater::toIntermediate(IntermediateGen *intGen)
+{
+  izq->toIntermediate(intGen);
+  der->toIntermediate(intGen);
+  std::string temp = intGen->nextTemp();
+  intGen->gen(">",izq->getTemp(), der->getTemp(),temp);  
+  setTemp(temp);
+}
 
 GreaterEqual::GreaterEqual(Expression* izq, Expression* der)
   : izq ( izq )
@@ -420,6 +507,14 @@ void GreaterEqual::check()
   }
 }
 
+void GreaterEqual::toIntermediate(IntermediateGen *intGen)
+{
+  izq->toIntermediate(intGen);
+  der->toIntermediate(intGen);
+  std::string temp = intGen->nextTemp();
+  intGen->gen(">=",izq->getTemp(), der->getTemp(),temp);  
+  setTemp(temp);
+}
 
 Equal::Equal(Expression* izq, Expression* der)
   : izq ( izq )
@@ -449,6 +544,14 @@ void Equal::check()
   }
 }
 
+void Equal::toIntermediate(IntermediateGen *intGen)
+{
+  izq->toIntermediate(intGen);
+  der->toIntermediate(intGen);
+  std::string temp = intGen->nextTemp();
+  intGen->gen("==",izq->getTemp(), der->getTemp(),temp);  
+  setTemp(temp);
+}
 
 NotEqual::NotEqual(Expression* izq, Expression* der)
   : izq ( izq )
@@ -478,6 +581,14 @@ void NotEqual::check()
   }
 }
 
+void NotEqual::toIntermediate(IntermediateGen *intGen)
+{
+  izq->toIntermediate(intGen);
+  der->toIntermediate(intGen);
+  std::string temp = intGen->nextTemp();
+  intGen->gen("=/=",izq->getTemp(), der->getTemp(),temp);  
+  setTemp(temp);
+}
 
 And::And(Expression* izq, Expression* der)
   : izq ( izq )
@@ -507,6 +618,14 @@ void And::check()
   }
 }
 
+void And::toIntermediate(IntermediateGen *intGen)
+{
+  izq->toIntermediate(intGen);
+  der->toIntermediate(intGen);
+  std::string temp = intGen->nextTemp();
+  intGen->gen("&",izq->getTemp(), der->getTemp(),temp);  
+  setTemp(temp);
+}
 
 Or::Or(Expression* izq, Expression* der)
   : izq ( izq )
@@ -536,6 +655,14 @@ void Or::check()
   }
 }
 
+void Or::toIntermediate(IntermediateGen *intGen)
+{
+  izq->toIntermediate(intGen);
+  der->toIntermediate(intGen);
+  std::string temp = intGen->nextTemp();
+  intGen->gen("|",izq->getTemp(), der->getTemp(),temp);  
+  setTemp(temp);
+}
 
 Not::Not(Expression* operando)
   : operando ( operando )
@@ -558,6 +685,14 @@ void Not::check()
     error("Cannot apply operator 'no' to " + t->to_string() + " types\n");
     this->set_type(ErrorType::getInstance());
   }
+}
+
+void Not::toIntermediate(IntermediateGen *intGen)
+{
+  operando->toIntermediate(intGen);
+  std::string temp = intGen->nextTemp();
+  intGen->gen("no",operando->getTemp(), "", temp);  
+  setTemp(temp);
 }
 
 SelectorExpr::SelectorExpr(Expression* condicion, Expression* brazoTrue, Expression* brazoFalse)
