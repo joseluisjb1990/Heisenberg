@@ -1,0 +1,9 @@
+oso() => extinto
+{
+  polar a, b, c, e, f, d;
+  panda p , q, n;
+  a = 3;
+
+  si (negro) { a = 2; }
+  a = 4;
+}
