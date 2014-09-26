@@ -913,10 +913,10 @@ expresion: CONSTPOLAR                            { $$ = new PolarExpr($1);
                                                    }
                                                  }
          | funcionpredef                         { $$ = $1; }
-         | BLANCO                                { $$ = new PandaExpr($1);
+         | BLANCO                                { $$ = new FalseExpr($1);
                                                    $$->set_location(@1.begin.line, @1.begin.column, @1.end.line, @1.end.column);
                                                  }
-         | NEGRO                                 { $$ = new PandaExpr($1);
+         | NEGRO                                 { $$ = new TrueExpr($1);
                                                    $$->set_location(@1.begin.line, @1.begin.column, @1.end.line, @1.end.column);
                                                  }
          | expresion "<"   expresion             { $$ = new Less($1, $3);

@@ -16,6 +16,7 @@ public:
   void gen(std::string op, std::string arg1, std::string arg2, std::string des);
   unsigned int getQuadNumber()  { return _quadNumber++; }
   unsigned int getTempNumber()  { return _tempNumber++; }
+  unsigned int getTemp()        { return _tempNumber; }
   std::string nextTemp()        { return  TEMPCHAR + std::to_string(getTempNumber()); }
 
 private:

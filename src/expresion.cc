@@ -115,6 +115,44 @@ void PandaExpr::check()
   this->set_type(PandaType::getInstance());
 }
 
+void TrueExpr::toIntermediate(IntermediateGen *intGen)
+{
+  intGen->getTempNumber();
+}
+
+void TrueExpr::backpatch(bool con, int jumpDes)
+{
+  if(con)
+  {
+    _trueList = jumpDes;
+  }
+}
+
+void TrueExpr::write(IntermediateGen *intGen)
+{
+  intGen->gen("LO SIGUIENTE FUE GENERADO POR EL TRUEEXPR", "","","");
+  intGen->gen("goto", std::to_string(_trueList), "","");
+}
+
+void FalseExpr::toIntermediate(IntermediateGen *intGen)
+{
+  intGen->getTempNumber();
+}
+
+void FalseExpr::backpatch(bool con, int jumpDes)
+{
+  if(!con)
+  {
+    _falseList = jumpDes;
+  }
+}
+
+void FalseExpr::write(IntermediateGen *intGen)
+{
+  intGen->gen("LO SIGUIENTE FUE GENERADO POR EL FALSEEXPR", "","","");
+  intGen->gen("goto", std::to_string(_falseList), "","");
+}
+
 Sum::Sum(Expression* izq, Expression* der)
   : izq ( izq )
   , der ( der )
@@ -696,8 +734,7 @@ void Not::toIntermediate(IntermediateGen *intGen)
 }
 
 SelectorExpr::SelectorExpr(Expression* condicion, Expression* brazoTrue, Expression* brazoFalse)
-  : Expression()
-  , _condicion( condicion )
+  : _condicion( condicion )
   , _brazoTrue( brazoTrue )
   , _brazoFalse( brazoFalse )
   {}

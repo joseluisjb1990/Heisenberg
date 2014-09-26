@@ -20,6 +20,7 @@ public :
     virtual bool isBody()                { return false;          };
     virtual bool checkReturn(Type* type) { return true;           };
     virtual bool getReturn()             { return false;          };
+    virtual void nextInst(int nextInst)  {}
 };
 
 class Assign : public Statement
@@ -57,6 +58,8 @@ class If : public Statement
     std::string to_string(int nesting);
     void check();
     bool checkReturn(Type* type);
+    void toIntermediate(IntermediateGen *intGen);
+    void nextInst(int nextInst, IntermediateGen *intGen);
 
   private:
     Expression* _condicion;

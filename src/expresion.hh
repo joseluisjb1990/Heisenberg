@@ -15,6 +15,8 @@ class Expression : public Node
     Expression();
     virtual void check() {};
     virtual std::string to_string(int nesting);
+    virtual void backpatch(bool con, int jumpDes) {}
+    virtual void write(IntermediateGen *intGen) {}
     std::string to_string()                 { return "expression";  };
     void setNoMut()                         { _mutID = false;       }
     void setTam(unsigned int tam)           { _tam = tam;           }
@@ -89,7 +91,15 @@ class MalayoExpr : public Constant
 
 };
 
-class PandaExpr : public Constant
+class BoolExpr : public Expression
+{
+public:
+  int _trueList  = -1;
+  int _falseList = -1;
+  virtual void backpatch(bool con, int jumpDes) {}
+};
+
+class PandaExpr : public BoolExpr
 {
   private :
     std::string valor;
@@ -99,8 +109,26 @@ class PandaExpr : public Constant
     std::string to_string(int nesting);
     std::string getValue();
     void check();
-    virtual std::string getTemp() { return valor; 
-}};
+    virtual std::string getTemp() { return valor; }
+};
+
+class TrueExpr : public PandaExpr
+{
+public:
+  TrueExpr(std::string valor) : PandaExpr (valor) {}
+  void toIntermediate(IntermediateGen *intGen);
+  void backpatch(bool con, int jumpDes);
+  void write(IntermediateGen *intGen);
+};
+
+class FalseExpr : public PandaExpr
+{
+public:
+  FalseExpr(std::string valor) : PandaExpr (valor) {}
+  void toIntermediate(IntermediateGen *intGen);
+  void backpatch(bool con, int jumpDes);
+  void write(IntermediateGen *intGen);
+};
 
 class Sum : public Expression
 {
@@ -155,7 +183,6 @@ class Division : public Expression
     std::string to_string(int nesting);
     void check();
     void toIntermediate(IntermediateGen *intGen);
-
 };
 
 class Remainder : public Expression
@@ -198,7 +225,7 @@ class Minus : public Expression
 
 };
 
-class Less : public Expression
+class Less : public BoolExpr
 {
   private :
     Expression* izq;
@@ -212,7 +239,7 @@ class Less : public Expression
 
 };
 
-class LessEqual : public Expression
+class LessEqual : public BoolExpr
 {
   private :
     Expression* izq;
@@ -226,7 +253,7 @@ class LessEqual : public Expression
 
 };
 
-class Greater : public Expression
+class Greater : public BoolExpr
 {
   private :
     Expression* izq;
@@ -240,7 +267,7 @@ class Greater : public Expression
 
 };
 
-class GreaterEqual : public Expression
+class GreaterEqual : public BoolExpr
 {
   private :
     Expression* izq;
@@ -254,7 +281,7 @@ class GreaterEqual : public Expression
 
 };
 
-class Equal : public Expression
+class Equal : public BoolExpr
 {
   private :
     Expression* izq;
@@ -268,7 +295,7 @@ class Equal : public Expression
 
 };
 
-class NotEqual : public Expression
+class NotEqual : public BoolExpr
 {
   private :
     Expression* izq;
@@ -282,7 +309,7 @@ class NotEqual : public Expression
 
 };
 
-class And : public Expression
+class And : public BoolExpr
 {
   private :
     Expression* izq;
@@ -296,7 +323,7 @@ class And : public Expression
 
 };
 
-class Or : public Expression
+class Or : public BoolExpr
 {
   private :
     Expression* izq;
@@ -310,7 +337,7 @@ class Or : public Expression
 
 };
 
-class Not : public Expression
+class Not : public BoolExpr
 {
   private :
     Expression* operando;
@@ -323,7 +350,7 @@ class Not : public Expression
     
 };
 
-class SelectorExpr : public Expression
+class SelectorExpr : public BoolExpr
 {
   private:
     Expression *_condicion;
