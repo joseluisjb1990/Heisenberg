@@ -117,11 +117,13 @@ void PandaExpr::check()
 
 void TrueExpr::toIntermediate(IntermediateGen *intGen)
 {
+  std::cout << "Estoy en el tointermediate de true" << std::endl;
   intGen->getTempNumber();
 }
 
 void TrueExpr::backpatch(bool con, int jumpDes)
 {
+  std::cout << "Estoy en el backpatch de true" << std::endl;
   if(con)
   {
     _trueList = jumpDes;
@@ -130,7 +132,7 @@ void TrueExpr::backpatch(bool con, int jumpDes)
 
 void TrueExpr::write(IntermediateGen *intGen)
 {
-  intGen->gen("LO SIGUIENTE FUE GENERADO POR EL TRUEEXPR", "","","");
+  std::cout << "Estoy en el write de true" << std::endl;
   intGen->gen("goto", std::to_string(_trueList), "","");
 }
 
@@ -149,7 +151,6 @@ void FalseExpr::backpatch(bool con, int jumpDes)
 
 void FalseExpr::write(IntermediateGen *intGen)
 {
-  intGen->gen("LO SIGUIENTE FUE GENERADO POR EL FALSEEXPR", "","","");
   intGen->gen("goto", std::to_string(_falseList), "","");
 }
 

@@ -4,6 +4,6 @@ oso() => extinto
   panda p , q, n;
   a = 3;
 
-  si (negro) { a = 2; }
+  si (blanco) { a = 2; }
   a = 4;
 }

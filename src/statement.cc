@@ -154,6 +154,7 @@ void If::toIntermediate(IntermediateGen *intGen)
 
 void If::nextInst(int nextInst, IntermediateGen *intGen)
 {
+  std::cout << "Estoy en el nextInt de if" << std::endl;
   _condicion->backpatch(false, nextInst);
   _condicion->write(intGen);
   _instrucciones->toIntermediate(intGen);
@@ -313,7 +314,7 @@ void Body::toIntermediate(IntermediateGen *intGen)
 {
   for(std::vector<Statement*>::iterator it = _listSta->begin(); it != _listSta->end(); it++) {
     (*it)->toIntermediate(intGen);
-    (*it)->nextInst(intGen->getTemp());
+    (*it)->nextInst(intGen->getTemp(), intGen);
   }
 }
 

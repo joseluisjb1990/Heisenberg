@@ -20,7 +20,7 @@ public :
     virtual bool isBody()                { return false;          };
     virtual bool checkReturn(Type* type) { return true;           };
     virtual bool getReturn()             { return false;          };
-    virtual void nextInst(int nextInst)  {}
+    virtual void nextInst(int nextInst, IntermediateGen *intGen)  {}
 };
 
 class Assign : public Statement
