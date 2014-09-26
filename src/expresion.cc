@@ -117,41 +117,34 @@ void PandaExpr::check()
 
 void TrueExpr::toIntermediate(IntermediateGen *intGen)
 {
-  std::cout << "Estoy en el tointermediate de true" << std::endl;
-  intGen->getTempNumber();
+  _offset = intGen->genEmpty("goto");
+  cout << _offset << std::endl;
 }
 
-void TrueExpr::backpatch(bool con, int jumpDes)
+void TrueExpr::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
 {
-  std::cout << "Estoy en el backpatch de true" << std::endl;
   if(con)
   {
     _trueList = jumpDes;
+    intGen->gen(_offset, jumpDes);
   }
-}
-
-void TrueExpr::write(IntermediateGen *intGen)
-{
-  std::cout << "Estoy en el write de true" << std::endl;
-  intGen->gen("goto", std::to_string(_trueList), "","");
 }
 
 void FalseExpr::toIntermediate(IntermediateGen *intGen)
 {
-  intGen->getTempNumber();
+  _offset = intGen->genEmpty("goto");
+  cout << _offset << std::endl;
+  std::cout << "Estoy en el tointermediate de false" << std::endl;
 }
 
-void FalseExpr::backpatch(bool con, int jumpDes)
+void FalseExpr::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
 {
   if(!con)
   {
+  std::cout << "Estoy en el backpatch de false" << std::endl;
     _falseList = jumpDes;
+    intGen->gen(_offset, jumpDes);
   }
-}
-
-void FalseExpr::write(IntermediateGen *intGen)
-{
-  intGen->gen("goto", std::to_string(_falseList), "","");
 }
 
 Sum::Sum(Expression* izq, Expression* der)

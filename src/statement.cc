@@ -42,7 +42,6 @@ void Assign::toIntermediate(IntermediateGen *intGen)
     expr->toIntermediate(intGen);
 
     intGen->gen(":=", expr->getTemp(), " ", id->getTemp());
-    intGen->getTempNumber();
   }
 }
 
@@ -149,15 +148,14 @@ bool If::checkReturn(Type* type) { return _instrucciones->checkReturn( type ); }
 void If::toIntermediate(IntermediateGen *intGen)
 {
   _condicion->toIntermediate(intGen);
-  _condicion->backpatch(true, intGen->getTemp());
+  _condicion->backpatch(true, intGen->getQuad(), intGen);
+  _instrucciones->toIntermediate(intGen);
 }
 
 void If::nextInst(int nextInst, IntermediateGen *intGen)
 {
   std::cout << "Estoy en el nextInt de if" << std::endl;
-  _condicion->backpatch(false, nextInst);
-  _condicion->write(intGen);
-  _instrucciones->toIntermediate(intGen);
+  _condicion->backpatch(false, nextInst, intGen);
 }
 
 IfElse::IfElse(Expression* condicion, Statement* brazoTrue, Statement* brazoFalse)
@@ -314,7 +312,7 @@ void Body::toIntermediate(IntermediateGen *intGen)
 {
   for(std::vector<Statement*>::iterator it = _listSta->begin(); it != _listSta->end(); it++) {
     (*it)->toIntermediate(intGen);
-    (*it)->nextInst(intGen->getTemp(), intGen);
+    (*it)->nextInst(intGen->getQuad(), intGen);
   }
 }
 

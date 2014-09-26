@@ -15,7 +15,7 @@ class Expression : public Node
     Expression();
     virtual void check() {};
     virtual std::string to_string(int nesting);
-    virtual void backpatch(bool con, int jumpDes) {}
+    virtual void backpatch(bool con, int jumpDes, IntermediateGen *intGen) {}
     virtual void write(IntermediateGen *intGen) {}
     std::string to_string()                 { return "expression";  };
     void setNoMut()                         { _mutID = false;       }
@@ -94,9 +94,10 @@ class MalayoExpr : public Constant
 class BoolExpr : public Expression
 {
 public:
+  long _offset;
   int _trueList  = -1;
   int _falseList = -1;
-  virtual void backpatch(bool con, int jumpDes) {}
+  virtual void backpatch(bool con, int jumpDes, IntermediateGen *intGen) {}
 };
 
 class PandaExpr : public BoolExpr
@@ -117,8 +118,7 @@ class TrueExpr : public PandaExpr
 public:
   TrueExpr(std::string valor) : PandaExpr (valor) {}
   void toIntermediate(IntermediateGen *intGen);
-  void backpatch(bool con, int jumpDes);
-  void write(IntermediateGen *intGen);
+  void backpatch(bool con, int jumpDes, IntermediateGen *intGen);
 };
 
 class FalseExpr : public PandaExpr
@@ -126,8 +126,7 @@ class FalseExpr : public PandaExpr
 public:
   FalseExpr(std::string valor) : PandaExpr (valor) {}
   void toIntermediate(IntermediateGen *intGen);
-  void backpatch(bool con, int jumpDes);
-  void write(IntermediateGen *intGen);
+  void backpatch(bool con, int jumpDes, IntermediateGen *intGen);
 };
 
 class Sum : public Expression
