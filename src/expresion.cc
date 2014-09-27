@@ -115,25 +115,22 @@ void PandaExpr::check()
   this->set_type(PandaType::getInstance());
 }
 
-void TrueExpr::toIntermediate(IntermediateGen *intGen)
+void TrueExpr::toIntermediateGoto(IntermediateGen *intGen)
 {
-  _offset = intGen->genEmpty("goto");
-  cout << _offset << std::endl;
+  _trueList = intGen->genEmpty("goto");
 }
 
 void TrueExpr::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
 {
   if(con)
   {
-    _trueList = jumpDes;
-    intGen->gen(_offset, jumpDes);
+    intGen->gen(_trueList, jumpDes);
   }
 }
 
-void FalseExpr::toIntermediate(IntermediateGen *intGen)
+void FalseExpr::toIntermediateGoto(IntermediateGen *intGen)
 {
-  _offset = intGen->genEmpty("goto");
-  cout << _offset << std::endl;
+  _falseList = intGen->genEmpty("goto");
   std::cout << "Estoy en el tointermediate de false" << std::endl;
 }
 
@@ -142,8 +139,7 @@ void FalseExpr::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
   if(!con)
   {
   std::cout << "Estoy en el backpatch de false" << std::endl;
-    _falseList = jumpDes;
-    intGen->gen(_offset, jumpDes);
+    intGen->gen(_falseList, jumpDes);
   }
 }
 
@@ -428,6 +424,21 @@ void Less::check()
   }
 }
 
+void Less::toIntermediateGoto(IntermediateGen *intGen)
+{
+  izq->toIntermediate(intGen);
+  der->toIntermediate(intGen);
+
+  _trueList   = intGen->genEmpty("if " + izq->getTemp() + " < " + der->getTemp() + " goto");
+  _falseList  = intGen->genEmpty("goto");
+}
+
+void Less::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
+{
+  if(con) intGen->gen(_trueList , jumpDes); 
+  else    intGen->gen(_falseList, jumpDes);
+}
+
 void Less::toIntermediate(IntermediateGen *intGen)
 {
   izq->toIntermediate(intGen);
@@ -436,6 +447,7 @@ void Less::toIntermediate(IntermediateGen *intGen)
   intGen->gen("<",izq->getTemp(), der->getTemp(),temp);  
   setTemp(temp);
 }
+
 
 LessEqual::LessEqual(Expression* izq, Expression* der)
   : izq ( izq )

@@ -147,14 +147,13 @@ bool If::checkReturn(Type* type) { return _instrucciones->checkReturn( type ); }
 
 void If::toIntermediate(IntermediateGen *intGen)
 {
-  _condicion->toIntermediate(intGen);
+  _condicion->toIntermediateGoto(intGen);
   _condicion->backpatch(true, intGen->getQuad(), intGen);
   _instrucciones->toIntermediate(intGen);
 }
 
 void If::nextInst(int nextInst, IntermediateGen *intGen)
 {
-  std::cout << "Estoy en el nextInt de if" << std::endl;
   _condicion->backpatch(false, nextInst, intGen);
 }
 
