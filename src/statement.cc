@@ -416,6 +416,30 @@ SimpleFor::SimpleFor(std::string id, Expression* begin, Expression* end, Stateme
   , _body( body )
   {}
 
+
+void ComplexFor::toIntermediate(IntermediateGen *intGen)
+{
+  _begin->toIntermediate(intGen);
+  _end->toIntermediate(intGen);
+
+  _step->toIntermediate(intGen);
+
+  intGen->gen(":=", _begin->getTemp(), " ",  _id);
+  unsigned int pos = intGen->getQuad();
+  _nextInst = intGen->genEmpty("if " + _id + " > " + _end->getTemp() + " goto");
+
+  _body->toIntermediate(intGen);
+
+  intGen->gen("+", _id, _step->getTemp(), _id);
+  intGen->gen("goto", " ", " ", std::to_string(pos));
+}
+
+void ComplexFor::nextInst(int nextInst, IntermediateGen *intGen)
+{
+  intGen->gen(_nextInst, nextInst);
+  _body->nextInst(nextInst, intGen);
+}
+
 std::string SimpleFor::to_string(int nesting)
 {
   std::string padding(nesting*2, ' ');
@@ -590,6 +614,12 @@ void Increase::check()
   }
 }
 
+void Increase::toIntermediate(IntermediateGen *intGen)
+{
+  intGen->gen("+",_id,"1",_id);  
+
+}
+
 Decrement::Decrement(std::string id)
   : Statement()
   , _id( id )
@@ -611,6 +641,12 @@ void Decrement::check()
     error("Attempt to decrement variable '"+ _id + "' of type '" + t->to_string() + "' instead of type 'polar'");
     this->set_type(ErrorType::getInstance());
   }
+}
+
+void Decrement::toIntermediate(IntermediateGen *intGen)
+{
+  intGen->gen("-",_id,"1",_id);  
+
 }
 
 Continue::Continue()
@@ -791,6 +827,21 @@ void TagWhile::check()
 }
 
 bool TagWhile::checkReturn(Type* type) {  return _body->checkReturn(type); }
+
+void TagWhile::toIntermediate(IntermediateGen *intGen)
+{
+  int pos = intGen->getQuad();
+  _expr->toIntermediateGoto(intGen);
+  _expr->backpatch(true, intGen->getQuad(), intGen);
+  _body->toIntermediate(intGen);
+  intGen->gen("goto",std::to_string(pos), "", "");  
+
+}
+
+void TagWhile::nextInst(int nextInst, IntermediateGen *intGen)
+{
+  _expr->backpatch(false, nextInst, intGen);
+}
 
 Empty::Empty()
   : Statement()
