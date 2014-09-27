@@ -712,6 +712,22 @@ void While::check()
 
 bool While::checkReturn(Type* type) { return _body->checkReturn(type); }
 
+
+void While::toIntermediate(IntermediateGen *intGen)
+{
+  int pos = intGen->getQuad();
+  _expr->toIntermediateGoto(intGen);
+  _expr->backpatch(true, intGen->getQuad(), intGen);
+  _body->toIntermediate(intGen);
+  intGen->gen("goto",std::to_string(pos), "", "");  
+
+}
+
+void While::nextInst(int nextInst, IntermediateGen *intGen)
+{
+  _expr->backpatch(false, nextInst, intGen);
+}
+
 TagWhile::TagWhile(std::string id, Expression* expr, Statement* body)
   : _id   ( id )
   , _expr ( expr )

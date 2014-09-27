@@ -264,7 +264,9 @@ class While : public Statement
     std::string to_string(int nesting);
     void check();
     bool checkReturn(Type* type);
-
+    void toIntermediate(IntermediateGen *intGen);
+    void nextInst(int nextInst, IntermediateGen *intGen);
+    
   private:
     Expression* _expr;
     Statement*  _body;
