@@ -742,17 +742,21 @@ void And::check()
 
 void And::toIntermediateGoto(IntermediateGen *intGen)
 {
-  izq->toIntermediate(intGen);
-  der->toIntermediate(intGen);
+  izq->toIntermediateGoto(intGen);
+  unsigned int pos = intGen->getQuad();
+  der->toIntermediateGoto(intGen);
 
-  _trueList   = intGen->genEmpty("if " + izq->getTemp() + " & " + der->getTemp() + " goto");
-  _falseList  = intGen->genEmpty("goto");
+  izq->backpatch(true, pos, intGen);
 }
 
 void And::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
 {
-  if(con) intGen->gen(_trueList , jumpDes); 
-  else    intGen->gen(_falseList, jumpDes);
+  if(con) der->backpatch(true , jumpDes, intGen); 
+  else
+  {
+    der->backpatch(false, jumpDes, intGen);
+    izq->backpatch(false, jumpDes, intGen);
+  }
 }
 
 void And::toIntermediate(IntermediateGen *intGen)
@@ -794,17 +798,21 @@ void Or::check()
 
 void Or::toIntermediateGoto(IntermediateGen *intGen)
 {
-  izq->toIntermediate(intGen);
-  der->toIntermediate(intGen);
+  izq->toIntermediateGoto(intGen);
+  unsigned int pos = intGen->getQuad();
+  der->toIntermediateGoto(intGen);
 
-  _trueList   = intGen->genEmpty("if " + izq->getTemp() + " | " + der->getTemp() + " goto");
-  _falseList  = intGen->genEmpty("goto");
+  izq->backpatch(false, pos, intGen);
 }
 
 void Or::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
 {
-  if(con) intGen->gen(_trueList , jumpDes); 
-  else    intGen->gen(_falseList, jumpDes);
+  if(!con) der->backpatch(false , jumpDes, intGen); 
+  else
+  {
+    der->backpatch(true, jumpDes, intGen);
+    izq->backpatch(true, jumpDes, intGen);
+  }
 }
 
 void Or::toIntermediate(IntermediateGen *intGen)
@@ -842,16 +850,26 @@ void Not::check()
 
 void Not::toIntermediateGoto(IntermediateGen *intGen)
 {
-  operando->toIntermediate(intGen);
+  operando->toIntermediateGoto(intGen);
 
-  _trueList   = intGen->genEmpty("if " + operando->getTemp() + " goto");
+  _desTrue = intGen->getQuad();
+  _trueList   = intGen->genEmpty("goto");
+  _desFalse = intGen->getQuad();
   _falseList  = intGen->genEmpty("goto");
 }
 
 void Not::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
 {
-  if(!con) intGen->gen(_trueList , jumpDes); 
-  else    intGen->gen(_falseList, jumpDes);
+  if(!con)
+  {
+    intGen->gen(_trueList , jumpDes);
+    operando->backpatch(true, _desTrue, intGen);
+  }
+  else
+  {
+    intGen->gen(_falseList, jumpDes);
+    operando->backpatch(false, _desFalse, intGen);
+  }
 }
 
 void Not::toIntermediate(IntermediateGen *intGen)

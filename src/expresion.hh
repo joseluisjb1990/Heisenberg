@@ -350,6 +350,8 @@ class Not : public BoolExpr
 {
   private :
     Expression* operando;
+    unsigned int _desTrue;
+    unsigned int _desFalse;
 
   public :
     Not(Expression* operando);

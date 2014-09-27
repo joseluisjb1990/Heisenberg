@@ -21,7 +21,7 @@ public :
     virtual bool checkReturn(Type* type) { return true;           };
     virtual bool getReturn()             { return false;          };
     virtual void nextInst(int nextInst, IntermediateGen *intGen)  {}
-
+    virtual void nextInstContinue(int nextInst, IntermediateGen *intGen)  {}
 };
 
 class Assign : public Statement
@@ -61,6 +61,7 @@ class If : public Statement
     bool checkReturn(Type* type);
     void toIntermediate(IntermediateGen *intGen);
     void nextInst(int nextInst, IntermediateGen *intGen);
+    void nextInstContinue(int nextInst, IntermediateGen *intGen);
 
   private:
     Expression* _condicion;
@@ -77,6 +78,7 @@ class IfElse : public Statement
     bool checkReturn(Type* type);
     void toIntermediate(IntermediateGen *intGen);
     void nextInst(int nextInst, IntermediateGen *intGen);
+    void nextInstContinue(int nextInst, IntermediateGen *intGen);
 
   private:
     Expression* _condicion;
@@ -123,6 +125,7 @@ class Body : public Statement
     void setReturn() { hasReturn = true; }
     bool getReturn() { return hasReturn; }
     void toIntermediate(IntermediateGen *intGen);
+    void nextInstContinue(int nextInst, IntermediateGen *intGen);
 
   private:
     std::vector<Statement *>  * _listSta;
@@ -234,6 +237,9 @@ class Continue : public Statement
     Continue();
     std::string to_string(int nesting);
     void check();
+    void toIntermediate(IntermediateGen *intGen);
+    void nextInstContinue(int nextInst, IntermediateGen *intGen);
+    long _nextInst;
 };
 
 class ContinueID : public Statement
