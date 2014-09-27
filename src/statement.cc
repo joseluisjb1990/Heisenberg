@@ -155,6 +155,7 @@ void If::toIntermediate(IntermediateGen *intGen)
 void If::nextInst(int nextInst, IntermediateGen *intGen)
 {
   _condicion->backpatch(false, nextInst, intGen);
+  _instrucciones->nextInst(nextInst, intGen);
 }
 
 IfElse::IfElse(Expression* condicion, Statement* brazoTrue, Statement* brazoFalse)
@@ -203,12 +204,15 @@ void IfElse::toIntermediate(IntermediateGen *intGen)
   _condicion->backpatch(true, intGen->getQuad(), intGen);
   _brazoTrue->toIntermediate(intGen);
   _nextInst = intGen->genEmpty("goto");
-
+  _condicion->backpatch(false, intGen->getQuad(), intGen);
+  _brazoFalse->toIntermediate(intGen);
 }
 
 void IfElse::nextInst(int nextInst, IntermediateGen *intGen)
 {
-  _condicion->backpatch(false, nextInst, intGen);
+  intGen->gen(_nextInst, nextInst);
+  _brazoTrue->nextInst(nextInst, intGen);
+  _brazoFalse->nextInst(nextInst, intGen);
 }
 
 Write::Write(Expression* expr)
@@ -462,6 +466,27 @@ IdFor::IdFor(std::string id, std::string iterVar, Statement* body)
   , _iterVar( iterVar )
   , _body( body )
   {}
+
+void SimpleFor::toIntermediate(IntermediateGen *intGen)
+{
+  _begin->toIntermediate(intGen);
+  _end->toIntermediate(intGen);
+
+  intGen->gen(":=", _begin->getTemp(), " ",  _id);
+  unsigned int pos = intGen->getQuad();
+  _nextInst = intGen->genEmpty("if " + _id + " > " + _end->getTemp() + " goto");
+
+  _body->toIntermediate(intGen);
+
+  intGen->gen("+", _id, "1", _id);
+  intGen->gen("goto", " ", " ", std::to_string(pos));
+}
+
+void SimpleFor::nextInst(int nextInst, IntermediateGen *intGen)
+{
+  intGen->gen(_nextInst, nextInst);
+  _body->nextInst(nextInst, intGen);
+}
 
 std::string IdFor::to_string(int nesting)
 {

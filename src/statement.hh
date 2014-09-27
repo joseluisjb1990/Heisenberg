@@ -151,12 +151,15 @@ class SimpleFor : public Statement
     std::string to_string(int nesting);
     void check();
     bool checkReturn(Type* type);
+    void toIntermediate(IntermediateGen *intGen);
+    void nextInst(int nextInst, IntermediateGen *intGen);
 
   private:
     std::string _id;
     Expression* _begin;
     Expression* _end;
     Statement*  _body;
+    long        _nextInst;
 };
 
 class IdFor : public Statement

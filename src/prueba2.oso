@@ -4,7 +4,18 @@ oso() => extinto
   panda p , q, n;
   a = 3;
 
-  p = 1 < 2;
-  si (negro) { a = 2; }
+  si (1 < 2) {
+    a = 2; 
+    si(negro) { 
+      b = 3;
+    } 
+  } sino
+  {
+    e = 5;
+    n = negro;
+  }
   a = 4;
+
+
+  para i en (0;4) { a = a + 1; }
 }
