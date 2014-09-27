@@ -21,6 +21,7 @@ public :
     virtual bool checkReturn(Type* type) { return true;           };
     virtual bool getReturn()             { return false;          };
     virtual void nextInst(int nextInst, IntermediateGen *intGen)  {}
+
 };
 
 class Assign : public Statement
@@ -135,6 +136,8 @@ class ComplexFor : public Statement
     std::string to_string(int nesting);
     void check();
     bool checkReturn(Type* type);
+    void toIntermediate(IntermediateGen *intGen);
+    void nextInst(int nextInst, IntermediateGen *intGen);
 
   private:
     std::string _id;
@@ -142,6 +145,7 @@ class ComplexFor : public Statement
     Expression* _end;
     Expression* _step;
     Statement*  _body;
+    long        _nextInst;
 };
 
 class SimpleFor : public Statement
@@ -206,6 +210,7 @@ class Increase : public Statement
     Increase(std::string id);
     std::string to_string(int nesting);
     void check();
+    void toIntermediate(IntermediateGen *intGen);
 
   private:
     std::string _id;
@@ -217,6 +222,7 @@ class Decrement : public Statement
     Decrement(std::string id);
     std::string to_string(int nesting);
     void check();
+    void toIntermediate(IntermediateGen *intGen);
 
   private:
     std::string _id;
@@ -282,6 +288,8 @@ class TagWhile : public Statement
     std::string to_string(int nesting);
     void check();
     bool checkReturn(Type* type);
+    void toIntermediate(IntermediateGen *intGen);
+    void nextInst(int nextInst, IntermediateGen *intGen);
 
   private:
     std::string _id;
