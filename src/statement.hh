@@ -74,11 +74,14 @@ class IfElse : public Statement
     std::string to_string(int nesting);
     void check();
     bool checkReturn(Type* type);
+    void toIntermediate(IntermediateGen *intGen);
+    void nextInst(int nextInst, IntermediateGen *intGen);
 
   private:
     Expression* _condicion;
     Statement* _brazoTrue;
     Statement* _brazoFalse;
+    long       _nextInst;
 
 };
 

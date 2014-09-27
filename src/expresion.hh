@@ -24,6 +24,7 @@ class Expression : public Node
     unsigned int getTam()                   { return _tam;          }
     virtual std::string getTemp()           { return _temp;         }
     virtual void setTemp(std::string temp)  { _temp = temp;         }
+    virtual void toIntermediateGoto(IntermediateGen *intGen) {}
 
   private :
     bool         _mutID = true;
@@ -95,8 +96,8 @@ class BoolExpr : public Expression
 {
 public:
   long _offset;
-  int _trueList  = -1;
-  int _falseList = -1;
+  long _trueList  = -1;
+  long _falseList = -1;
   virtual void backpatch(bool con, int jumpDes, IntermediateGen *intGen) {}
 };
 
@@ -117,7 +118,7 @@ class TrueExpr : public PandaExpr
 {
 public:
   TrueExpr(std::string valor) : PandaExpr (valor) {}
-  void toIntermediate(IntermediateGen *intGen);
+  void toIntermediateGoto(IntermediateGen *intGen);
   void backpatch(bool con, int jumpDes, IntermediateGen *intGen);
 };
 
@@ -125,7 +126,7 @@ class FalseExpr : public PandaExpr
 {
 public:
   FalseExpr(std::string valor) : PandaExpr (valor) {}
-  void toIntermediate(IntermediateGen *intGen);
+  void toIntermediateGoto(IntermediateGen *intGen);
   void backpatch(bool con, int jumpDes, IntermediateGen *intGen);
 };
 
@@ -235,7 +236,8 @@ class Less : public BoolExpr
     std::string to_string(int nesting);
     void check();
     void toIntermediate(IntermediateGen *intGen);
-
+    void toIntermediateGoto(IntermediateGen *intGen);
+    void backpatch(bool con, int jumpDes, IntermediateGen *intGen);
 };
 
 class LessEqual : public BoolExpr
@@ -501,3 +503,5 @@ class GrizzliExpr : public LValueExpr
 };
 
 #endif
+
+

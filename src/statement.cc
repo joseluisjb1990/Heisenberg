@@ -197,6 +197,20 @@ bool IfElse::checkReturn(Type* type)
   return  bt and bf;
 }
 
+void IfElse::toIntermediate(IntermediateGen *intGen)
+{
+  _condicion->toIntermediateGoto(intGen);
+  _condicion->backpatch(true, intGen->getQuad(), intGen);
+  _brazoTrue->toIntermediate(intGen);
+  _nextInst = intGen->genEmpty("goto");
+
+}
+
+void IfElse::nextInst(int nextInst, IntermediateGen *intGen)
+{
+  _condicion->backpatch(false, nextInst, intGen);
+}
+
 Write::Write(Expression* expr)
   : Statement()
   , _expr( expr )
