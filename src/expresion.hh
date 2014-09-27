@@ -407,7 +407,8 @@ class FunctionExpr : public Expression
     FunctionExpr(std::string name, std::vector<Type*>* parameterTypes, std::vector<Expression*>* parameters, Type* returnType);
     std::string to_string(int nesting);
     void check();
-
+    void toIntermediate(IntermediateGen *intGen);
+    
   private:
     std::string               _name;
     std::vector<Type*>*       _parameterTypes;

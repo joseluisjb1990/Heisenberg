@@ -925,6 +925,28 @@ void FunctionExpr::check()
   }
 }
 
+void FunctionExpr::toIntermediate(IntermediateGen *intGen)
+{
+
+  for (unsigned int i=0; i < _parameters->size(); ++i)
+  {
+  	_parameters->at(i)->toIntermediate(intGen);
+
+  }
+
+  for (int i=(_parameters->size()-1); -1 < i; --i)
+  {
+    intGen->gen("param",_parameters->at(i)->getTemp()," "," ");  
+  }
+
+  setTemp("call "+_name + " " + std::to_string(_parameters->size()));
+}
+
+
+
+
+
+
 AKodiakExpr::AKodiakExpr(Expression* parameter)
   : _parameter ( parameter     )
   {}
