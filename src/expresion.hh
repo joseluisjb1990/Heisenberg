@@ -251,7 +251,8 @@ class LessEqual : public BoolExpr
     std::string to_string(int nesting);
     void check();
     void toIntermediate(IntermediateGen *intGen);
-
+    void toIntermediateGoto(IntermediateGen *intGen);
+    void backpatch(bool con, int jumpDes, IntermediateGen *intGen);
 };
 
 class Greater : public BoolExpr
@@ -265,7 +266,8 @@ class Greater : public BoolExpr
     std::string to_string(int nesting);
     void check();
     void toIntermediate(IntermediateGen *intGen);
-
+    void toIntermediateGoto(IntermediateGen *intGen);
+    void backpatch(bool con, int jumpDes, IntermediateGen *intGen);
 };
 
 class GreaterEqual : public BoolExpr
@@ -279,7 +281,8 @@ class GreaterEqual : public BoolExpr
     std::string to_string(int nesting);
     void check();
     void toIntermediate(IntermediateGen *intGen);
-
+    void toIntermediateGoto(IntermediateGen *intGen);
+    void backpatch(bool con, int jumpDes, IntermediateGen *intGen);
 };
 
 class Equal : public BoolExpr
@@ -293,6 +296,8 @@ class Equal : public BoolExpr
     std::string to_string(int nesting);
     void check();
     void toIntermediate(IntermediateGen *intGen);
+    void toIntermediateGoto(IntermediateGen *intGen);
+    void backpatch(bool con, int jumpDes, IntermediateGen *intGen);
 
 };
 
@@ -307,7 +312,8 @@ class NotEqual : public BoolExpr
     std::string to_string(int nesting);
     void check();
     void toIntermediate(IntermediateGen *intGen);
-
+    void toIntermediateGoto(IntermediateGen *intGen);
+    void backpatch(bool con, int jumpDes, IntermediateGen *intGen);
 };
 
 class And : public BoolExpr
@@ -321,7 +327,8 @@ class And : public BoolExpr
     std::string to_string(int nesting);
     void check();
     void toIntermediate(IntermediateGen *intGen);
-
+    void toIntermediateGoto(IntermediateGen *intGen);
+    void backpatch(bool con, int jumpDes, IntermediateGen *intGen);
 };
 
 class Or : public BoolExpr
@@ -335,7 +342,8 @@ class Or : public BoolExpr
     std::string to_string(int nesting);
     void check();
     void toIntermediate(IntermediateGen *intGen);
-
+    void toIntermediateGoto(IntermediateGen *intGen);
+    void backpatch(bool con, int jumpDes, IntermediateGen *intGen);
 };
 
 class Not : public BoolExpr
@@ -348,6 +356,8 @@ class Not : public BoolExpr
     std::string to_string(int nesting);
     void check();
     void toIntermediate(IntermediateGen *intGen);
+    void toIntermediateGoto(IntermediateGen *intGen);
+    void backpatch(bool con, int jumpDes, IntermediateGen *intGen);;
     
 };
 
