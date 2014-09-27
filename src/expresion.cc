@@ -477,6 +477,22 @@ void LessEqual::check()
   }
 }
 
+
+void LessEqual::toIntermediateGoto(IntermediateGen *intGen)
+{
+  izq->toIntermediate(intGen);
+  der->toIntermediate(intGen);
+
+  _trueList   = intGen->genEmpty("if " + izq->getTemp() + " =< " + der->getTemp() + " goto");
+  _falseList  = intGen->genEmpty("goto");
+}
+
+void LessEqual::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
+{
+  if(con) intGen->gen(_trueList , jumpDes); 
+  else    intGen->gen(_falseList, jumpDes);
+}
+
 void LessEqual::toIntermediate(IntermediateGen *intGen)
 {
   izq->toIntermediate(intGen);
@@ -512,6 +528,21 @@ void Greater::check()
     error("Cannot apply operator '>' between " + t1->to_string() + " and " + t2->to_string() + "types\n");
     this->set_type(ErrorType::getInstance());
   }
+}
+
+void Greater::toIntermediateGoto(IntermediateGen *intGen)
+{
+  izq->toIntermediate(intGen);
+  der->toIntermediate(intGen);
+
+  _trueList   = intGen->genEmpty("if " + izq->getTemp() + " > " + der->getTemp() + " goto");
+  _falseList  = intGen->genEmpty("goto");
+}
+
+void Greater::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
+{
+  if(con) intGen->gen(_trueList , jumpDes); 
+  else    intGen->gen(_falseList, jumpDes);
 }
 
 void Greater::toIntermediate(IntermediateGen *intGen)
@@ -551,6 +582,21 @@ void GreaterEqual::check()
   }
 }
 
+void GreaterEqual::toIntermediateGoto(IntermediateGen *intGen)
+{
+  izq->toIntermediate(intGen);
+  der->toIntermediate(intGen);
+
+  _trueList   = intGen->genEmpty("if " + izq->getTemp() + " >= " + der->getTemp() + " goto");
+  _falseList  = intGen->genEmpty("goto");
+}
+
+void GreaterEqual::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
+{
+  if(con) intGen->gen(_trueList , jumpDes); 
+  else    intGen->gen(_falseList, jumpDes);
+}
+
 void GreaterEqual::toIntermediate(IntermediateGen *intGen)
 {
   izq->toIntermediate(intGen);
@@ -588,6 +634,21 @@ void Equal::check()
   }
 }
 
+void Equal::toIntermediateGoto(IntermediateGen *intGen)
+{
+  izq->toIntermediate(intGen);
+  der->toIntermediate(intGen);
+
+  _trueList   = intGen->genEmpty("if " + izq->getTemp() + " == " + der->getTemp() + " goto");
+  _falseList  = intGen->genEmpty("goto");
+}
+
+void Equal::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
+{
+  if(con) intGen->gen(_trueList , jumpDes); 
+  else    intGen->gen(_falseList, jumpDes);
+}
+
 void Equal::toIntermediate(IntermediateGen *intGen)
 {
   izq->toIntermediate(intGen);
@@ -596,6 +657,7 @@ void Equal::toIntermediate(IntermediateGen *intGen)
   intGen->gen("==",izq->getTemp(), der->getTemp(),temp);  
   setTemp(temp);
 }
+
 
 NotEqual::NotEqual(Expression* izq, Expression* der)
   : izq ( izq )
@@ -623,6 +685,21 @@ void NotEqual::check()
     error("Cannot apply operator '=/=' between " + t1->to_string() + " and " + t2->to_string() + "types\n");
     this->set_type(ErrorType::getInstance());
   }
+}
+
+void NotEqual::toIntermediateGoto(IntermediateGen *intGen)
+{
+  izq->toIntermediate(intGen);
+  der->toIntermediate(intGen);
+
+  _trueList   = intGen->genEmpty("if " + izq->getTemp() + " =/= " + der->getTemp() + " goto");
+  _falseList  = intGen->genEmpty("goto");
+}
+
+void NotEqual::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
+{
+  if(con) intGen->gen(_trueList , jumpDes); 
+  else    intGen->gen(_falseList, jumpDes);
 }
 
 void NotEqual::toIntermediate(IntermediateGen *intGen)
@@ -662,6 +739,22 @@ void And::check()
   }
 }
 
+
+void And::toIntermediateGoto(IntermediateGen *intGen)
+{
+  izq->toIntermediate(intGen);
+  der->toIntermediate(intGen);
+
+  _trueList   = intGen->genEmpty("if " + izq->getTemp() + " & " + der->getTemp() + " goto");
+  _falseList  = intGen->genEmpty("goto");
+}
+
+void And::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
+{
+  if(con) intGen->gen(_trueList , jumpDes); 
+  else    intGen->gen(_falseList, jumpDes);
+}
+
 void And::toIntermediate(IntermediateGen *intGen)
 {
   izq->toIntermediate(intGen);
@@ -699,6 +792,21 @@ void Or::check()
   }
 }
 
+void Or::toIntermediateGoto(IntermediateGen *intGen)
+{
+  izq->toIntermediate(intGen);
+  der->toIntermediate(intGen);
+
+  _trueList   = intGen->genEmpty("if " + izq->getTemp() + " | " + der->getTemp() + " goto");
+  _falseList  = intGen->genEmpty("goto");
+}
+
+void Or::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
+{
+  if(con) intGen->gen(_trueList , jumpDes); 
+  else    intGen->gen(_falseList, jumpDes);
+}
+
 void Or::toIntermediate(IntermediateGen *intGen)
 {
   izq->toIntermediate(intGen);
@@ -707,6 +815,7 @@ void Or::toIntermediate(IntermediateGen *intGen)
   intGen->gen("|",izq->getTemp(), der->getTemp(),temp);  
   setTemp(temp);
 }
+
 
 Not::Not(Expression* operando)
   : operando ( operando )
@@ -731,6 +840,20 @@ void Not::check()
   }
 }
 
+void Not::toIntermediateGoto(IntermediateGen *intGen)
+{
+  operando->toIntermediate(intGen);
+
+  _trueList   = intGen->genEmpty("if " + operando->getTemp() + " goto");
+  _falseList  = intGen->genEmpty("goto");
+}
+
+void Not::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
+{
+  if(!con) intGen->gen(_trueList , jumpDes); 
+  else    intGen->gen(_falseList, jumpDes);
+}
+
 void Not::toIntermediate(IntermediateGen *intGen)
 {
   operando->toIntermediate(intGen);
@@ -738,6 +861,7 @@ void Not::toIntermediate(IntermediateGen *intGen)
   intGen->gen("no",operando->getTemp(), "", temp);  
   setTemp(temp);
 }
+
 
 SelectorExpr::SelectorExpr(Expression* condicion, Expression* brazoTrue, Expression* brazoFalse)
   : _condicion( condicion )
