@@ -158,6 +158,11 @@ void If::nextInst(int nextInst, IntermediateGen *intGen)
   _instrucciones->nextInst(nextInst, intGen);
 }
 
+void If::nextInstContinue(int nextInst, IntermediateGen *intGen)
+{
+  _instrucciones->nextInstContinue(nextInst, intGen);
+}
+
 IfElse::IfElse(Expression* condicion, Statement* brazoTrue, Statement* brazoFalse)
   : Statement()
   , _condicion  ( condicion  )
@@ -213,6 +218,12 @@ void IfElse::nextInst(int nextInst, IntermediateGen *intGen)
   intGen->gen(_nextInst, nextInst);
   _brazoTrue->nextInst(nextInst, intGen);
   _brazoFalse->nextInst(nextInst, intGen);
+}
+
+void IfElse::nextInstContinue(int nextInst, IntermediateGen *intGen)
+{
+  _brazoTrue->nextInstContinue(nextInst, intGen);
+  _brazoFalse->nextInstContinue(nextInst, intGen);
 }
 
 Write::Write(Expression* expr)
@@ -330,6 +341,14 @@ void Body::toIntermediate(IntermediateGen *intGen)
   for(std::vector<Statement*>::iterator it = _listSta->begin(); it != _listSta->end(); it++) {
     (*it)->toIntermediate(intGen);
     (*it)->nextInst(intGen->getQuad(), intGen);
+  }
+}
+
+void Body::nextInstContinue(int nextInt, IntermediateGen *intGen)
+{
+  std::cout << "estoy en el nextInstContinue de body";
+  for(std::vector<Statement*>::iterator it = _listSta->begin(); it != _listSta->end(); it++) {
+    (*it)->nextInstContinue(nextInt, intGen);
   }
 }
 
@@ -670,6 +689,17 @@ void Continue::check()
   }
 }
 
+void Continue::toIntermediate(IntermediateGen *intGen)
+{
+  _nextInst = intGen->genEmpty("goto");
+}
+
+void Continue::nextInstContinue(int nextInst, IntermediateGen *intGen)
+{
+  std::cout << "estoy en el nextInstContinue de Continue " << nextInst << std::endl;
+  intGen->gen(_nextInst, nextInst);
+}
+
 ContinueID::ContinueID(std::string id)
   : Statement()
   , _id( id )
@@ -780,6 +810,7 @@ void While::toIntermediate(IntermediateGen *intGen)
   _expr->toIntermediateGoto(intGen);
   _expr->backpatch(true, intGen->getQuad(), intGen);
   _body->toIntermediate(intGen);
+  _body->nextInstContinue(pos, intGen);
   intGen->gen("goto",std::to_string(pos), "", "");  
 
 }
@@ -787,6 +818,7 @@ void While::toIntermediate(IntermediateGen *intGen)
 void While::nextInst(int nextInst, IntermediateGen *intGen)
 {
   _expr->backpatch(false, nextInst, intGen);
+  _body->nextInst(nextInst, intGen);
 }
 
 TagWhile::TagWhile(std::string id, Expression* expr, Statement* body)
@@ -834,6 +866,7 @@ void TagWhile::toIntermediate(IntermediateGen *intGen)
   _expr->toIntermediateGoto(intGen);
   _expr->backpatch(true, intGen->getQuad(), intGen);
   _body->toIntermediate(intGen);
+  _body->nextInstContinue(pos, intGen);
   intGen->gen("goto",std::to_string(pos), "", "");  
 
 }
@@ -841,6 +874,7 @@ void TagWhile::toIntermediate(IntermediateGen *intGen)
 void TagWhile::nextInst(int nextInst, IntermediateGen *intGen)
 {
   _expr->backpatch(false, nextInst, intGen);
+  _body->nextInst(nextInst, intGen);
 }
 
 Empty::Empty()
