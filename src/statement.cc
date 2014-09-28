@@ -163,6 +163,11 @@ void If::nextInstContinue(int nextInst, IntermediateGen *intGen)
   _instrucciones->nextInstContinue(nextInst, intGen);
 }
 
+void If::nextInstBreak(int nextInst, IntermediateGen *intGen)
+{
+  _instrucciones->nextInstBreak(nextInst, intGen);
+}
+
 IfElse::IfElse(Expression* condicion, Statement* brazoTrue, Statement* brazoFalse)
   : Statement()
   , _condicion  ( condicion  )
@@ -224,6 +229,12 @@ void IfElse::nextInstContinue(int nextInst, IntermediateGen *intGen)
 {
   _brazoTrue->nextInstContinue(nextInst, intGen);
   _brazoFalse->nextInstContinue(nextInst, intGen);
+}
+
+void IfElse::nextInstBreak(int nextInst, IntermediateGen *intGen)
+{
+  _brazoTrue  ->nextInstBreak(nextInst, intGen);
+  _brazoFalse ->nextInstBreak(nextInst, intGen);
 }
 
 Write::Write(Expression* expr)
@@ -346,9 +357,15 @@ void Body::toIntermediate(IntermediateGen *intGen)
 
 void Body::nextInstContinue(int nextInt, IntermediateGen *intGen)
 {
-  std::cout << "estoy en el nextInstContinue de body";
   for(std::vector<Statement*>::iterator it = _listSta->begin(); it != _listSta->end(); it++) {
     (*it)->nextInstContinue(nextInt, intGen);
+  }
+}
+
+void Body::nextInstBreak(int nextInt, IntermediateGen *intGen)
+{
+  for(std::vector<Statement*>::iterator it = _listSta->begin(); it != _listSta->end(); it++) {
+    (*it)->nextInstBreak(nextInt, intGen);
   }
 }
 
@@ -696,7 +713,6 @@ void Continue::toIntermediate(IntermediateGen *intGen)
 
 void Continue::nextInstContinue(int nextInst, IntermediateGen *intGen)
 {
-  std::cout << "estoy en el nextInstContinue de Continue " << nextInst << std::endl;
   intGen->gen(_nextInst, nextInst);
 }
 
@@ -741,6 +757,17 @@ void Break::check()
     this->set_type(ErrorType::getInstance());
     error("'roloePea' statement outside an iteration");
   }
+}
+
+void Break::toIntermediate(IntermediateGen *intGen)
+{
+  _nextInst = intGen->genEmpty("goto");
+}
+
+void Break::nextInstBreak(int nextInst, IntermediateGen *intGen)
+{
+  std::cout << "Estoy generando codigo intermedio para el break " << nextInst << std::endl;
+  intGen->gen(_nextInst, nextInst);
 }
 
 BreakID::BreakID(std::string id)
@@ -818,7 +845,7 @@ void While::toIntermediate(IntermediateGen *intGen)
 void While::nextInst(int nextInst, IntermediateGen *intGen)
 {
   _expr->backpatch(false, nextInst, intGen);
-  _body->nextInst(nextInst, intGen);
+  _body->nextInstBreak(nextInst, intGen);
 }
 
 TagWhile::TagWhile(std::string id, Expression* expr, Statement* body)

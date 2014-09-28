@@ -46,8 +46,6 @@ class PolarExpr : public Constant
     std::string getValue();
     void check();
     virtual std::string getTemp() { return valor; }
-
-
 };
 
 class KodiakExpr : public Constant
@@ -482,7 +480,7 @@ class CuevaExpr : public LValueExpr
     void check();
 
   private:
-    std::string                     _cueva;
+    std::string               _cueva;
     std::vector<Expression*>* _dimensions;
 
 };
