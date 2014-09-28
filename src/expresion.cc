@@ -1188,6 +1188,36 @@ void CuevaExpr::check()
   this->set_type(t);
 }
 
-void EmptyExpr::check() { this->set_type(ErrorType::getInstance()); }
+void CuevaExpr::toIntermediate(IntermediateGen *intGen)
+{
 
+  std::vector<string> temps;
+
+  for (unsigned int i=0; i < _dimensions->size(); ++i)
+  {
+  	_dimensions->at(i)->toIntermediate(intGen);
+    std::string temp = intGen->nextTemp();
+
+  	intGen->gen("*",_dimensions->at(i)->getTemp(), std::to_string(_dimensions->at(i)->getTam()),temp);  
+  	temps.push_back(temp);
+  }
+
+  std::string temp = intGen->nextTemp();
+  std::string aux = temps[0]; 
+
+  for (unsigned int i=0; i < temps.size()-1; ++i)
+  {
+  	intGen->gen("+",aux,  temps[i+1] ,temp);
+  	aux  = temp;  
+	temp = intGen->nextTemp();
+
+  }
+
+  intGen->gen("[]",_cueva, aux, temp); 
+  setTemp(temp); 
+
+}
+
+void EmptyExpr::check() { this->set_type(ErrorType::getInstance()); }
+	
 #endif
