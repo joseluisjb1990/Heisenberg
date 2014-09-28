@@ -5,13 +5,13 @@
 #include<string>
 #include<fstream>
 #include<stdio.h>
-
+#include"TablaSimbolos.hh"
 class Generator {};
 
 class IntermediateGen : public Generator
 {
 public:
-  IntermediateGen(const std::string &file);
+  IntermediateGen(const std::string &file, TablaSimbolos * symbolTable);
   void close();
   void gen(std::string op, std::string arg1, std::string arg2, std::string des);
   void gen(long offset, int jumpDes);
@@ -22,7 +22,7 @@ public:
   long offset()                 { return _file.tellp(); } 
   std::string nextTemp()        { return  TEMPCHAR + std::to_string(getTempNumber());   }
   void emptySlot()              { _file << std::string(30, ' ') << '\n'; _quadNumber++; }
-
+  TablaSimbolos *_symbolTable;
 private:
   std::string _nameTempFile;
   std::ofstream _file;

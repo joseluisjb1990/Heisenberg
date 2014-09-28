@@ -5,13 +5,14 @@
 
 using namespace std;
 
-IntermediateGen::IntermediateGen(const std::string &file)
+IntermediateGen::IntermediateGen(const std::string &file, TablaSimbolos * symbolTable)
   : Generator()
   { 
     _nameTempFile = file + ".temp";
     _file.open( _nameTempFile.c_str(), std::ofstream::out); 
     _quadNumber = 0;
     _tempNumber = 0;
+    _symbolTable = symbolTable;
   }
 
 void IntermediateGen::close()

@@ -478,7 +478,8 @@ class CuevaExpr : public LValueExpr
     std::string to_string(int nesting);
     void addDimension(Expression* dimension);
     void check();
-
+    void toIntermediate(IntermediateGen *intGen);
+    
   private:
     std::string               _cueva;
     std::vector<Expression*>* _dimensions;
