@@ -728,7 +728,7 @@ lvalue: ID maybecueva             {
                                       Contenido* c = driver.tabla.find_symbol($1, Cueva);
                                       if(c) {
                                         if(nullptr != $2) {
-                                          $$ = new CuevaExpr($1, $2);
+                                          $$ = new CuevaExpr($1, $2, c);
                                         } else {
                                           $$ = new IDExpr($1);
                                         }
@@ -767,7 +767,7 @@ lvalue: ID maybecueva             {
                                         $$->set_location(@1.begin.line, @1.begin.column, @3.end.line, @3.end.column);
                                       } else {
                                         c = driver.tabla.find_scope($3, Cueva, ALCANCE_LVALUE);
-                                        CuevaExpr* cueva = new CuevaExpr($3, $4);
+                                        CuevaExpr* cueva = new CuevaExpr($3, $4, c);
                                         cueva->set_location(@3.begin.line, @3.begin.column, @4.end.line, @4.end.column);
                                         cueva->set_type(c->getTipo());
                                         $$ = new PardoExpr($1, cueva);
@@ -817,7 +817,7 @@ lvalue: ID maybecueva             {
                                         $$->set_location(@1.begin.line, @1.begin.column, @3.end.line, @3.end.column);
                                       } else {
                                         c = driver.tabla.find_scope($3, Cueva, ALCANCE_LVALUE);
-                                        CuevaExpr* cueva = new CuevaExpr($3, $4);
+                                        CuevaExpr* cueva = new CuevaExpr($3, $4, c);
                                         cueva->set_location(@3.begin.line, @3.begin.column, @4.end.line, @4.end.column);
                                         cueva->set_type(c->getTipo());
                                         $$ = new GrizzliExpr($1, cueva);

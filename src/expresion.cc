@@ -1158,6 +1158,14 @@ CuevaExpr::CuevaExpr(std::string cueva, std::vector<Expression*>* dimensions)
   , _dimensions ( dimensions )
   {}
 
+CuevaExpr::CuevaExpr(std::string cueva, std::vector<Expression*>* dimensions, Contenido *tableRow)
+  : LValueExpr()
+  , _cueva       ( cueva       )
+  , _dimensions  ( dimensions  )
+  { _tableRow = tableRow; 
+    _cuevaType = dynamic_cast<CuevaType *> (tableRow->getTipo());
+  }
+
 std::string CuevaExpr::to_string(int nesting)
 {
   std::string padding(nesting*2, ' ');
@@ -1190,16 +1198,17 @@ void CuevaExpr::check()
 
 void CuevaExpr::toIntermediate(IntermediateGen *intGen)
 {
-
   std::vector<string> temps;
-
+  Type *t = _cuevaType->getTipo();
+  CuevaType* ct;
   for (unsigned int i=0; i < _dimensions->size(); ++i)
   {
   	_dimensions->at(i)->toIntermediate(intGen);
     std::string temp = intGen->nextTemp();
 
-  	intGen->gen("*",_dimensions->at(i)->getTemp(), std::to_string(_dimensions->at(i)->getTam()),temp);  
+  	intGen->gen("*",_dimensions->at(i)->getTemp(), std::to_string(t->getSize()), temp);  
   	temps.push_back(temp);
+    if(t->isArray()) { ct = dynamic_cast<CuevaType* > (t); t = ct->getTipo(); }
   }
 
   std::string temp = intGen->nextTemp();

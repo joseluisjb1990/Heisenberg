@@ -5,6 +5,7 @@
 #include <iostream>
 #include "type.hh"
 #include "node.hh"
+#include "TablaSimbolos.hh"
 
 using namespace std;
 
@@ -475,15 +476,18 @@ class CuevaExpr : public LValueExpr
 {
   public:
     CuevaExpr(std::string cueva, std::vector<Expression*>* dimensions);
+    CuevaExpr(std::string cueva, std::vector<Expression*>* dimensions, Contenido *tableRow);
     std::string to_string(int nesting);
     void addDimension(Expression* dimension);
     void check();
     void toIntermediate(IntermediateGen *intGen);
+    Contenido* getTableRow()  { return _tableRow; }
     
   private:
     std::string               _cueva;
     std::vector<Expression*>* _dimensions;
-
+    Contenido *_tableRow;
+    CuevaType *_cuevaType;
 };
 
 class PardoExpr : public LValueExpr

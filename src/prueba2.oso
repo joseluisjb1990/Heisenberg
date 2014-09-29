@@ -6,7 +6,7 @@ oso() => extinto
 {
   polar a, b, c, e, f, d;
   panda p , q, n;
-  cueva [5] de cueva [9] de cueva [10] de polar hola;
+  cueva  [10] de polar hola;
 
-  a = hola[[2+2][3][1+2]];
+  a = hola[1+2];
 }
