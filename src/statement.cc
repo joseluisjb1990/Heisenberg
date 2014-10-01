@@ -78,19 +78,6 @@ void Assign::check()
   else    set_type(ErrorType::getInstance());
 }
 
-void Assign::toIntermediate(IntermediateGen *intGen)
-{
-  for (unsigned int i=0; i < _ids->size(); ++i) {
-    Expression* id   = _ids->at(i);
-    Expression* expr = _expr->at(i);
-
-    id->toIntermediate(intGen);
-    expr->toIntermediate(intGen);
-
-    intGen->gen(":=", expr->getTemp(), " ", id->getTemp());
-  }
-}
-
 Function::Function(std::string name, std::vector<Type*>* parameterTypes, std::vector<Expression*>* parameters, Type* returnType)
   : Statement()
   , _name           ( name           )
