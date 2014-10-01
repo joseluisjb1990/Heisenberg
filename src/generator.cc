@@ -25,6 +25,11 @@ void IntermediateGen::gen(std::string op, std::string arg1, std::string arg2, st
   _file << getQuadNumber() << ":  " << op << " " << arg1 << " " << arg2 << " " << des << std::endl;
 }
 
+void IntermediateGen::gen(std::string id)
+{
+  _file << id << ":  " << std::endl;
+}
+
 long IntermediateGen::genEmpty(std::string op)
 {
   _file << getQuadNumber() << ":  " << op << " ";

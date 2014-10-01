@@ -359,7 +359,7 @@ class Not : public BoolExpr
     void check();
     void toIntermediate(IntermediateGen *intGen);
     void toIntermediateGoto(IntermediateGen *intGen);
-    void backpatch(bool con, int jumpDes, IntermediateGen *intGen);;
+    void backpatch(bool con, int jumpDes, IntermediateGen *intGen);
     
 };
 
@@ -373,7 +373,6 @@ class SelectorExpr : public BoolExpr
   public:
     SelectorExpr(Expression* condicion, Expression* brazoTrue, Expression* brazoFalse);
     std::string to_string(int nesting);
-
 };
 
 class LValueExpr : public Expression

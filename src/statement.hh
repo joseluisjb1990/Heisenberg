@@ -180,11 +180,14 @@ class IdFor : public Statement
     std::string to_string(int nesting);
     void check();
     bool checkReturn(Type* type);
+    void toIntermediate(IntermediateGen *intGen);
+    void nextInst(int nextInst, IntermediateGen *intGen);
 
   private:
     std::string _id;
     std::string _iterVar;
     Statement*  _body;
+    long        _nextInst;
 };
 
 class Return : public Statement
@@ -205,7 +208,8 @@ class ReturnExpr : public Statement
     void check();
     bool checkReturn(Type* type);
     bool isReturn() { return true; };
-
+    void toIntermediate(IntermediateGen *intGen);
+    
   private:
     Expression* _expr;
 

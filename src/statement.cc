@@ -78,6 +78,19 @@ void Assign::check()
   else    set_type(ErrorType::getInstance());
 }
 
+void Assign::toIntermediate(IntermediateGen *intGen)
+{
+  for (unsigned int i=0; i < _ids->size(); ++i) {
+    Expression* id   = _ids->at(i);
+    Expression* expr = _expr->at(i);
+
+    id->toIntermediate(intGen);
+    expr->toIntermediate(intGen);
+
+    intGen->gen(":=", expr->getTemp(), " ", id->getTemp());
+  }
+}
+
 Function::Function(std::string name, std::vector<Type*>* parameterTypes, std::vector<Expression*>* parameters, Type* returnType)
   : Statement()
   , _name           ( name           )
@@ -447,15 +460,6 @@ void ComplexFor::check()
 
 bool ComplexFor::checkReturn(Type* type) { return _body->checkReturn(type); }
 
-SimpleFor::SimpleFor(std::string id, Expression* begin, Expression* end, Statement* body)
-  : Statement()
-  , _id( id )
-  , _begin( begin )
-  , _end( end )
-  , _body( body )
-  {}
-
-
 void ComplexFor::toIntermediate(IntermediateGen *intGen)
 {
   _begin->toIntermediate(intGen);
@@ -490,6 +494,14 @@ std::string SimpleFor::to_string(int nesting)
         ;
 }
 
+SimpleFor::SimpleFor(std::string id, Expression* begin, Expression* end, Statement* body)
+  : Statement()
+  , _id( id )
+  , _begin( begin )
+  , _end( end )
+  , _body( body )
+  {}
+
 void SimpleFor::check()
 {
   _begin->check();
@@ -523,13 +535,6 @@ void SimpleFor::check()
 
 bool SimpleFor::checkReturn(Type* type) { return _body->checkReturn(type); }
 
-IdFor::IdFor(std::string id, std::string iterVar, Statement* body)
-  : Statement()
-  , _id( id )
-  , _iterVar( iterVar )
-  , _body( body )
-  {}
-
 void SimpleFor::toIntermediate(IntermediateGen *intGen)
 {
   _begin->toIntermediate(intGen);
@@ -550,6 +555,13 @@ void SimpleFor::nextInst(int nextInst, IntermediateGen *intGen)
   intGen->gen(_nextInst, nextInst);
   _body->nextInst(nextInst, intGen);
 }
+
+IdFor::IdFor(std::string id, std::string iterVar, Statement* body)
+  : Statement()
+  , _id( id )
+  , _iterVar( iterVar )
+  , _body( body )
+  {}
 
 std::string IdFor::to_string(int nesting)
 {
@@ -574,6 +586,30 @@ void IdFor::check()
 }
 
 bool IdFor::checkReturn(Type* type) { return _body->checkReturn(type); }
+
+void IdFor::toIntermediate(IntermediateGen *intGen)
+{
+
+  std::string temp = intGen->nextTemp();
+
+  intGen->gen(":=", "0", " ",  temp);
+  unsigned int pos = intGen->getQuad();
+  _nextInst = intGen->genEmpty("if " + temp + " = " + "tama;o arreglo" + " goto");  ///
+
+
+  _body->toIntermediate(intGen);
+
+
+  intGen->gen("+",temp,"1",temp); 
+  intGen->gen("goto", " ", " ", std::to_string(pos));  
+
+}
+
+void IdFor::nextInst(int nextInst, IntermediateGen *intGen)
+{
+  intGen->gen(_nextInst, nextInst);
+  _body->nextInst(nextInst, intGen);
+}
 
 Return::Return()
   : Statement()
@@ -629,6 +665,12 @@ bool ReturnExpr::checkReturn(Type* type)
     error("type '" + get_type()->to_string() + "' of return statement does not match the function return type '" + type->to_string() + "'");
     return false;
   } else return true;
+}
+
+void ReturnExpr::toIntermediate(IntermediateGen *intGen)
+{
+   _expr->toIntermediate(intGen);
+  intGen->gen("return",_expr->getTemp(), "","");  
 }
 
 Increase::Increase(std::string id)
