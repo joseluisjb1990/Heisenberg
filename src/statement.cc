@@ -32,19 +32,6 @@ std::string Assign::to_string(int nesting)
   return str;
 }
 
-void Assign::toIntermediate(IntermediateGen *intGen)
-{
-  for (unsigned int i=0; i < _ids->size(); ++i) {
-    Expression* id   = _ids->at(i);
-    Expression* expr = _expr->at(i);
-
-    id->toIntermediate(intGen);
-    expr->toIntermediate(intGen);
-
-    intGen->gen(":=", expr->getTemp(), " ", id->getTemp());
-  }
-}
-
 void Assign::check()
 {
   Expression * auxid;
@@ -73,6 +60,19 @@ void Assign::check()
 
   if (ok) set_type(ExtintoType::getInstance());
   else    set_type(ErrorType::getInstance());
+}
+
+void Assign::toIntermediate(IntermediateGen *intGen)
+{
+  for (unsigned int i=0; i < _ids->size(); ++i) {
+    Expression* id   = _ids->at(i);
+    Expression* expr = _expr->at(i);
+
+    id->toIntermediate(intGen);
+    expr->toIntermediate(intGen);
+
+    intGen->gen(":=", expr->getTemp(), " ", id->getTemp());
+  }
 }
 
 Function::Function(std::string name, std::vector<Type*>* parameterTypes, std::vector<Expression*>* parameters, Type* returnType)
@@ -444,15 +444,6 @@ void ComplexFor::check()
 
 bool ComplexFor::checkReturn(Type* type) { return _body->checkReturn(type); }
 
-SimpleFor::SimpleFor(std::string id, Expression* begin, Expression* end, Statement* body)
-  : Statement()
-  , _id( id )
-  , _begin( begin )
-  , _end( end )
-  , _body( body )
-  {}
-
-
 void ComplexFor::toIntermediate(IntermediateGen *intGen)
 {
   _begin->toIntermediate(intGen);
@@ -486,6 +477,14 @@ std::string SimpleFor::to_string(int nesting)
         + padding + "Cuerpo:\n"                          + _body->to_string(nesting+1) + "\n"
         ;
 }
+
+SimpleFor::SimpleFor(std::string id, Expression* begin, Expression* end, Statement* body)
+  : Statement()
+  , _id( id )
+  , _begin( begin )
+  , _end( end )
+  , _body( body )
+  {}
 
 void SimpleFor::check()
 {
@@ -626,6 +625,12 @@ bool ReturnExpr::checkReturn(Type* type)
     error("type '" + get_type()->to_string() + "' of return statement does not match the function return type '" + type->to_string() + "'");
     return false;
   } else return true;
+}
+
+void ReturnExpr::toIntermediate(IntermediateGen *intGen)
+{
+   _expr->toIntermediate(intGen);
+  intGen->gen("return",_expr->getTemp(), "","");  
 }
 
 Increase::Increase(std::string id)

@@ -960,11 +960,6 @@ void FunctionExpr::toIntermediate(IntermediateGen *intGen)
   setTemp("call "+_name + " " + std::to_string(_parameters->size()));
 }
 
-
-
-
-
-
 AKodiakExpr::AKodiakExpr(Expression* parameter)
   : _parameter ( parameter     )
   {}

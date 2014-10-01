@@ -14,6 +14,7 @@ public:
   IntermediateGen(const std::string &file, TablaSimbolos * symbolTable);
   void close();
   void gen(std::string op, std::string arg1, std::string arg2, std::string des);
+  void gen(std::string id);
   void gen(long offset, int jumpDes);
   long genEmpty(std::string op);
   unsigned int getQuadNumber()  { return _quadNumber++; }

@@ -205,7 +205,8 @@ class ReturnExpr : public Statement
     void check();
     bool checkReturn(Type* type);
     bool isReturn() { return true; };
-
+    void toIntermediate(IntermediateGen *intGen);
+    
   private:
     Expression* _expr;
 
