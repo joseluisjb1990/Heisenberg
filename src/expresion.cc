@@ -898,6 +898,12 @@ IDExpr::IDExpr(std::string nombre)
   , _nombre( nombre )
   {}
 
+IDExpr::IDExpr(std::string nombre, Contenido* c)
+  : LValueExpr()
+  , _nombre   ( nombre  )
+  , _tableRow ( c       )
+  {}
+
 std::string IDExpr::to_string(int nesting)
 {
   std::string padding(nesting*2, ' ');
@@ -905,6 +911,11 @@ std::string IDExpr::to_string(int nesting)
 }
 
 void IDExpr::check(){};
+
+void IDExpr::toIntermediate(IntermediateGen* intGen)
+{
+  std::cout << _tableRow->to_string() << std::endl;
+}
 
 FunctionExpr::FunctionExpr(std::string name, std::vector<Type*>* parameterTypes, std::vector<Expression*>* parameters, Type* returnType)
   : Expression()
@@ -1102,6 +1113,20 @@ PardoExpr::PardoExpr(LValueExpr* pardo, CuevaExpr* campo)
   , _campo ( campo )
   {}
 
+PardoExpr::PardoExpr(LValueExpr* pardo, IDExpr* campo, Contenido* c)
+  : LValueExpr()
+  , _pardo    ( pardo )
+  , _campo    ( campo )
+  , _tableRow ( c )
+  {}
+
+PardoExpr::PardoExpr(LValueExpr* pardo, CuevaExpr* campo, Contenido* c)
+  : LValueExpr()
+  , _pardo    ( pardo )
+  , _campo    ( campo )
+  , _tableRow ( c )
+  {}
+
 std::string PardoExpr::to_string(int nesting)
 {
   std::string padding(nesting*2, ' ');
@@ -1121,6 +1146,15 @@ void PardoExpr::check()
   this->set_type(tipo);
 }
 
+void PardoExpr::toIntermediate(IntermediateGen* intGen)
+{
+  if (_pardo  )  _pardo->toIntermediate(intGen);
+
+  std::string temp = intGen->nextTemp();
+  intGen->gen("+", std::to_string(_tableRow->getOffset()), _pardo->getTemp(), temp);
+  setTemp(temp);
+}
+
 GrizzliExpr::GrizzliExpr(LValueExpr* grizzli, IDExpr* campo)
   : LValueExpr()
   , _grizzli ( grizzli )
@@ -1131,6 +1165,20 @@ GrizzliExpr::GrizzliExpr(LValueExpr* grizzli, CuevaExpr* campo)
   : LValueExpr()
   , _grizzli ( grizzli )
   , _campo   ( campo   )
+  {}
+
+GrizzliExpr::GrizzliExpr(LValueExpr* grizzli, IDExpr* campo, Contenido* c)
+  : LValueExpr()
+  , _grizzli    ( grizzli )
+  , _campo      ( campo   )
+  , _tableRow   ( c       )
+  {}
+
+GrizzliExpr::GrizzliExpr(LValueExpr* grizzli, CuevaExpr* campo, Contenido* c)
+  : LValueExpr()
+  , _grizzli    ( grizzli )
+  , _campo      ( campo   )
+  , _tableRow   ( c       )
   {}
 
 std::string GrizzliExpr::to_string(int nesting)

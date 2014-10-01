@@ -26,6 +26,7 @@ class Expression : public Node
     virtual std::string getTemp()           { return _temp;         }
     virtual void setTemp(std::string temp)  { _temp = temp;         }
     virtual void toIntermediateGoto(IntermediateGen *intGen) {}
+    virtual bool isStruct()                 { return false;         }
 
   private :
     bool         _mutID = true;
@@ -392,14 +393,15 @@ class IDExpr : public LValueExpr
 {
   private:
     std::string _nombre;
-
+    Contenido * _tableRow;
 
   public:
     IDExpr(std::string nombre);
+    IDExpr(std::string nombre, Contenido* c);
     std::string to_string(int nesting);
     void check();
+    void toIntermediate(IntermediateGen* intGen);
     std::string getTemp() { return _nombre; }
-
 };
 
 class FunctionExpr : public Expression
@@ -495,13 +497,17 @@ class PardoExpr : public LValueExpr
   public:
     PardoExpr(LValueExpr* pardo, IDExpr* campo);
     PardoExpr(LValueExpr* pardo, CuevaExpr* campo);
+    PardoExpr(LValueExpr* pardo, IDExpr* campo, Contenido* c);
+    PardoExpr(LValueExpr* pardo, CuevaExpr* campo, Contenido* c);
     std::string to_string(int nesting);
     void check();
+    void toIntermediate(IntermediateGen* intGen);
+    bool isStruct() { return true; }
 
   private:
-   LValueExpr* _pardo;
-   LValueExpr* _campo;
-
+    LValueExpr* _pardo;
+    LValueExpr* _campo;
+    Contenido *_tableRow;
 };
 
 class GrizzliExpr : public LValueExpr
@@ -509,13 +515,15 @@ class GrizzliExpr : public LValueExpr
   public:
     GrizzliExpr(LValueExpr* grizzli, IDExpr* campo);
     GrizzliExpr(LValueExpr* grizzli, CuevaExpr* campo);
+    GrizzliExpr(LValueExpr* grizzli, IDExpr* campo, Contenido* c);
+    GrizzliExpr(LValueExpr* grizzli, CuevaExpr* campo, Contenido* c);
     std::string to_string(int nesting);
     void check();
 
   private:
-   LValueExpr* _grizzli;
-   LValueExpr* _campo;
-
+   LValueExpr*  _grizzli;
+   LValueExpr*  _campo;
+   Contenido*   _tableRow;
 };
 
 #endif

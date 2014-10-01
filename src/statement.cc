@@ -41,7 +41,10 @@ void Assign::toIntermediate(IntermediateGen *intGen)
     id->toIntermediate(intGen);
     expr->toIntermediate(intGen);
 
-    intGen->gen(":=", expr->getTemp(), " ", id->getTemp());
+    if(expr->isStruct())
+      intGen->gen("*:=", expr->getTemp(), " ", id->getTemp());
+    else
+      intGen->gen(":=", expr->getTemp(), " ", id->getTemp());
   }
 }
 

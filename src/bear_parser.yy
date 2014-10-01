@@ -704,7 +704,7 @@ lvalue: ID maybecueva             {
                                     Contenido* c = driver.tabla.find_symbol($1, Var);
                                     if(c) {
                                       if(nullptr == $2) {
-                                        $$ = new IDExpr($1);
+                                        $$ = new IDExpr($1, c);
                                         if(!c->getMutabilidad()) $$->setNoMut();
                                         $$->set_location(@1.begin.line, @1.begin.column, @1.end.line, @1.end.column);
                                         $$->set_type(c->getTipo());
@@ -730,7 +730,7 @@ lvalue: ID maybecueva             {
                                         if(nullptr != $2) {
                                           $$ = new CuevaExpr($1, $2, c);
                                         } else {
-                                          $$ = new IDExpr($1);
+                                          $$ = new IDExpr($1, c);
                                         }
                                         $$->set_location(@1.begin.line, @1.begin.column, @2.end.line, @2.end.column);
                                         $$->set_type(c->getTipo());
@@ -760,17 +760,17 @@ lvalue: ID maybecueva             {
                                     Contenido* c;
                                       if (nullptr == $4) {
                                         c = driver.tabla.find_scope($3, Campo, ALCANCE_LVALUE);
-                                        IDExpr* id = new IDExpr($3);
+                                        IDExpr* id = new IDExpr($3, c);
                                         id->set_location(@3.begin.line, @3.begin.column, @3.end.line, @3.end.column);
                                         id->set_type(c->getTipo());
-                                        $$ = new PardoExpr($1, id);
+                                        $$ = new PardoExpr($1, id, c);
                                         $$->set_location(@1.begin.line, @1.begin.column, @3.end.line, @3.end.column);
                                       } else {
                                         c = driver.tabla.find_scope($3, Cueva, ALCANCE_LVALUE);
                                         CuevaExpr* cueva = new CuevaExpr($3, $4, c);
                                         cueva->set_location(@3.begin.line, @3.begin.column, @4.end.line, @4.end.column);
                                         cueva->set_type(c->getTipo());
-                                        $$ = new PardoExpr($1, cueva);
+                                        $$ = new PardoExpr($1, cueva, c);
                                         $$->set_location(@1.begin.line, @1.begin.column, @4.end.line, @4.end.column);
                                       }
 
@@ -810,17 +810,17 @@ lvalue: ID maybecueva             {
                                     Contenido* c;
                                       if (nullptr == $4) {
                                         c = driver.tabla.find_scope($3, Campo, ALCANCE_LVALUE);
-                                        IDExpr* id = new IDExpr($3);
+                                        IDExpr* id = new IDExpr($3, c);
                                         id->set_location(@3.begin.line, @3.begin.column, @3.end.line, @3.end.column);
                                         id->set_type(c->getTipo());
-                                        $$ = new GrizzliExpr($1, id);
+                                        $$ = new GrizzliExpr($1, id, c);
                                         $$->set_location(@1.begin.line, @1.begin.column, @3.end.line, @3.end.column);
                                       } else {
                                         c = driver.tabla.find_scope($3, Cueva, ALCANCE_LVALUE);
                                         CuevaExpr* cueva = new CuevaExpr($3, $4, c);
                                         cueva->set_location(@3.begin.line, @3.begin.column, @4.end.line, @4.end.column);
                                         cueva->set_type(c->getTipo());
-                                        $$ = new GrizzliExpr($1, cueva);
+                                        $$ = new GrizzliExpr($1, cueva, c);
                                         $$->set_location(@1.begin.line, @1.begin.column, @4.end.line, @4.end.column);
                                       }
 
