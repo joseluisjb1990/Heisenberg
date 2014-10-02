@@ -519,13 +519,6 @@ void SimpleFor::check()
 
 bool SimpleFor::checkReturn(Type* type) { return _body->checkReturn(type); }
 
-IdFor::IdFor(std::string id, std::string iterVar, Statement* body)
-  : Statement()
-  , _id( id )
-  , _iterVar( iterVar )
-  , _body( body )
-  {}
-
 void SimpleFor::toIntermediate(IntermediateGen *intGen)
 {
   _begin->toIntermediate(intGen);
@@ -546,6 +539,13 @@ void SimpleFor::nextInst(int nextInst, IntermediateGen *intGen)
   intGen->gen(_nextInst, nextInst);
   _body->nextInst(nextInst, intGen);
 }
+
+IdFor::IdFor(std::string id, std::string iterVar, Statement* body)
+  : Statement()
+  , _id( id )
+  , _iterVar( iterVar )
+  , _body( body )
+  {}
 
 std::string IdFor::to_string(int nesting)
 {
@@ -570,6 +570,30 @@ void IdFor::check()
 }
 
 bool IdFor::checkReturn(Type* type) { return _body->checkReturn(type); }
+
+void IdFor::toIntermediate(IntermediateGen *intGen)
+{
+
+  std::string temp = intGen->nextTemp();
+
+  intGen->gen(":=", "0", " ",  temp);
+  unsigned int pos = intGen->getQuad();
+  _nextInst = intGen->genEmpty("if " + temp + " = " + "tama;o arreglo" + " goto");  ///
+
+
+  _body->toIntermediate(intGen);
+
+
+  intGen->gen("+",temp,"1",temp); 
+  intGen->gen("goto", " ", " ", std::to_string(pos));  
+
+}
+
+void IdFor::nextInst(int nextInst, IntermediateGen *intGen)
+{
+  intGen->gen(_nextInst, nextInst);
+  _body->nextInst(nextInst, intGen);
+}
 
 Return::Return()
   : Statement()
