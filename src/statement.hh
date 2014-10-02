@@ -177,6 +177,7 @@ class IdFor : public Statement
 {
   public:
     IdFor(std::string id, std::string iterVar, Statement* body);
+    IdFor(std::string id, std::string iterVar, Statement* body, Contenido* c);
     std::string to_string(int nesting);
     void check();
     bool checkReturn(Type* type);
@@ -188,6 +189,7 @@ class IdFor : public Statement
     std::string _iterVar;
     Statement*  _body;
     long        _nextInst;
+    Contenido*  _tableRow;
 };
 
 class Return : public Statement

@@ -550,6 +550,14 @@ IdFor::IdFor(std::string id, std::string iterVar, Statement* body)
   , _body( body )
   {}
 
+IdFor::IdFor(std::string id, std::string iterVar, Statement* body, Contenido* c)
+  : Statement()
+  , _id      ( id      )
+  , _iterVar ( iterVar )
+  , _body    ( body    )
+  , _tableRow( c       )
+  {}
+
 std::string IdFor::to_string(int nesting)
 {
   std::string padding(nesting*2, ' ');
@@ -576,20 +584,21 @@ bool IdFor::checkReturn(Type* type) { return _body->checkReturn(type); }
 
 void IdFor::toIntermediate(IntermediateGen *intGen)
 {
-
-  std::string temp = intGen->nextTemp();
+  CuevaType*  t     = dynamic_cast<CuevaType *> (_tableRow->getTipo());
+  std::string tc    = std::to_string(t->getTipo()->getSize());
+  std::string temp  = intGen->nextTemp();
 
   intGen->gen(":=", "0", " ",  temp);
   unsigned int pos = intGen->getQuad();
-  _nextInst = intGen->genEmpty("if " + temp + " = " + "tama;o arreglo" + " goto");  ///
+  _nextInst = intGen->genEmpty("if " + temp + " = " + std::to_string(t->getLongitud() -1) + " goto");
 
+  intGen->gen("*", tc, temp, temp);
+  intGen->gen("[]", _iterVar, temp, _id);
 
   _body->toIntermediate(intGen);
 
-
   intGen->gen("+",temp,"1",temp); 
   intGen->gen("goto", " ", " ", std::to_string(pos));  
-
 }
 
 void IdFor::nextInst(int nextInst, IntermediateGen *intGen)

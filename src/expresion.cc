@@ -912,10 +912,7 @@ std::string IDExpr::to_string(int nesting)
 
 void IDExpr::check(){};
 
-void IDExpr::toIntermediate(IntermediateGen* intGen)
-{
-  std::cout << _tableRow->to_string() << std::endl;
-}
+void IDExpr::toIntermediate(IntermediateGen* intGen) {}
 
 FunctionExpr::FunctionExpr(std::string name, std::vector<Type*>* parameterTypes, std::vector<Expression*>* parameters, Type* returnType)
   : Expression()

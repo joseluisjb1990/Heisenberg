@@ -600,7 +600,8 @@ instruccion: defvariable                                                 { $$ = 
                                                                            }
                                                                          }
             bloqueespecial                                               { driver.tabla.exit_scope();
-                                                                           $$ = new IdFor($2, $4, $6);
+                                                                           Contenido* c = driver.tabla.find_symbol($4, Cueva);
+                                                                           $$ = new IdFor($2, $4, $6, c);
                                                                            $$->set_location(@1.begin.line, @1.begin.column, @6.end.line, @6.end.column);
                                                                          }
            | PARA ID error ID                                            { Contenido* c = driver.tabla.find_symbol($4, Cueva);
