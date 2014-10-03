@@ -118,6 +118,25 @@ void Function::check()
   }
 }
 
+void Function::toIntermediate(IntermediateGen *intGen)
+{
+
+  for (unsigned int i=0; i < _parameters->size(); ++i)
+  {
+    _parameters->at(i)->toIntermediate(intGen);
+
+  }
+
+  for (int i=(_parameters->size()-1); -1 < i; --i)
+  {
+    intGen->gen("param",_parameters->at(i)->getTemp()," "," ");  
+  }
+
+  std::string temp = intGen->nextTemp();
+  intGen->gen("call",_name,std::to_string(_parameters->size()),temp); 
+  setTemp(temp);
+}
+
 If::If(Expression* condicion, Statement* instrucciones)
   : Statement()
   , _condicion     ( condicion     )

@@ -742,7 +742,6 @@ void And::check()
 
 void And::toIntermediateGoto(IntermediateGen *intGen)
 {
-  std::cout << "Estoy en el intermediateGoto de And" << std::endl;
   izq->toIntermediateGoto(intGen);
   unsigned int pos = intGen->getQuad();
   der->toIntermediateGoto(intGen);
@@ -962,6 +961,40 @@ void FunctionExpr::check()
   }
 }
 
+void FunctionExpr::toIntermediateGoto(IntermediateGen *intGen)
+{
+
+  for (unsigned int i=0; i < _parameters->size(); ++i)
+  {
+    _parameters->at(i)->toIntermediate(intGen);
+
+  }
+
+  for (int i=(_parameters->size()-1); -1 < i; --i)
+  {
+    intGen->gen("param",_parameters->at(i)->getTemp()," "," ");  
+  }
+
+  std::string temp = intGen->nextTemp();
+  intGen->gen("call",_name,std::to_string(_parameters->size()),temp); 
+  setTemp(temp);
+  _trueList   = intGen->genEmpty("if " + temp + " goto");
+  _falseList  = intGen->genEmpty("goto");
+}
+
+
+void FunctionExpr::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
+{
+  if(con) intGen->gen(_trueList , jumpDes); 
+  else    intGen->gen(_falseList, jumpDes);
+}
+
+
+
+
+
+
+
 void FunctionExpr::toIntermediate(IntermediateGen *intGen)
 {
 
@@ -980,6 +1013,8 @@ void FunctionExpr::toIntermediate(IntermediateGen *intGen)
   intGen->gen("call",_name,std::to_string(_parameters->size()),temp); 
   setTemp(temp);
 }
+
+
 
 AKodiakExpr::AKodiakExpr(Expression* parameter)
   : _parameter ( parameter     )

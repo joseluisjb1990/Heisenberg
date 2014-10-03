@@ -41,6 +41,21 @@ void DefWithInit::check()
   else          set_type(_tipo);
 }
 
+void DefWithInit::toIntermediate(IntermediateGen *intGen)
+{
+  for (unsigned int i=0; i < _ids->size(); ++i) {
+    std::string id   = _ids->at(i);
+    Expression* expr = _expr->at(i);
+
+    expr->toIntermediate(intGen);
+
+    if(expr->isStruct())
+      intGen->gen("*:=", expr->getTemp(), " ", id);
+    else
+      intGen->gen(":=", expr->getTemp(), " ", id);
+  }
+}
+
 ConstDef::ConstDef(Type* tipo, std::vector<std::string>* ids, std::vector<Expression*>* expr)
   : DefWithInit(tipo, ids, expr)
   {}

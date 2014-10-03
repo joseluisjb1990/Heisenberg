@@ -47,12 +47,16 @@ class Function : public Statement
     Function(std::string name, std::vector<Type*>* parameterTypes, std::vector<Expression*>* parameters, Type* returnType);
     std::string to_string(int nesting);
     void check();
-
+    void toIntermediate(IntermediateGen *intGen);
+    std::string getTemp()           { return _temp; }
+    void setTemp(std::string temp)  { _temp = temp; }
+  
   private:
     std::string               _name;
     std::vector<Type*>*       _parameterTypes;
     std::vector<Expression*>* _parameters;
     Type*                     _return;
+    std::string  _temp;
 };
 
 class If : public Statement
