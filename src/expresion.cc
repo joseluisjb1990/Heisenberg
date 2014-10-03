@@ -976,7 +976,9 @@ void FunctionExpr::toIntermediate(IntermediateGen *intGen)
     intGen->gen("param",_parameters->at(i)->getTemp()," "," ");  
   }
 
-  setTemp("call "+_name + " " + std::to_string(_parameters->size()));
+  std::string temp = intGen->nextTemp();
+  intGen->gen("call",_name,std::to_string(_parameters->size()),temp); 
+  setTemp(temp);
 }
 
 AKodiakExpr::AKodiakExpr(Expression* parameter)
@@ -1004,6 +1006,15 @@ void AKodiakExpr::check()
   }
 }
 
+void AKodiakExpr::toIntermediate(IntermediateGen *intGen)
+{
+  _parameter->toIntermediate(intGen);
+  std::string temp = intGen->nextTemp();
+  intGen->gen("param",_parameter->getTemp(),""," ");  
+  intGen->gen("call","aKodiak ","1",temp);  
+  setTemp(temp);
+}
+
 APolarExpr::APolarExpr(Expression* parameter)
   : _parameter ( parameter     )
   {}
@@ -1027,6 +1038,15 @@ void APolarExpr::check()
     error("Cannot apply function 'a_panda' to parameter of type '" + t->to_string() + "'");
     this->set_type(ErrorType::getInstance());
   }
+}
+
+void APolarExpr::toIntermediate(IntermediateGen *intGen)
+{
+  _parameter->toIntermediate(intGen);
+  std::string temp = intGen->nextTemp();
+  intGen->gen("param",_parameter->getTemp(),""," ");  
+  intGen->gen("call","aPolar ","1",temp);  
+  setTemp(temp);
 }
 
 AMalayoExpr::AMalayoExpr(Expression* parameter)
@@ -1054,6 +1074,15 @@ void AMalayoExpr::check()
   }
 }
 
+void AMalayoExpr::toIntermediate(IntermediateGen *intGen)
+{
+  _parameter->toIntermediate(intGen);
+  std::string temp = intGen->nextTemp();
+  intGen->gen("param",_parameter->getTemp(),""," ");  
+  intGen->gen("call","aMalayo ","1",temp);  
+  setTemp(temp);
+}
+
 APandaExpr::APandaExpr(Expression* parameter)
   : _parameter ( parameter     )
   {}
@@ -1079,6 +1108,15 @@ void APandaExpr::check()
   }
 }
 
+void APandaExpr::toIntermediate(IntermediateGen *intGen)
+{
+  _parameter->toIntermediate(intGen);
+  std::string temp = intGen->nextTemp();
+  intGen->gen("param",_parameter->getTemp(),""," ");  
+  intGen->gen("call","aPanda ","1",temp);  
+  setTemp(temp);
+}
+
 LonExpr::LonExpr(Expression* parameter)
   : _parameter ( parameter     )
   {}
@@ -1102,6 +1140,15 @@ void LonExpr::check()
     error("Cannot apply function 'lon' to parameter of type '" + t->to_string() + "'");
     this->set_type(ErrorType::getInstance());
   }
+}
+
+void LonExpr::toIntermediate(IntermediateGen *intGen)
+{
+  _parameter->toIntermediate(intGen);
+  std::string temp = intGen->nextTemp();
+  intGen->gen("param",_parameter->getTemp(),""," ");  
+  intGen->gen("call","lon ","1",temp);  
+  setTemp(temp);
 }
 
 PardoExpr::PardoExpr(LValueExpr* pardo, IDExpr* campo)
