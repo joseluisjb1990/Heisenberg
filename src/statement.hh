@@ -23,6 +23,7 @@ public :
     virtual void nextInst(int nextInst, IntermediateGen *intGen)  {}
     virtual void nextInstContinue(int nextInst, IntermediateGen *intGen)  {}
     virtual void nextInstBreak(int nextInst, IntermediateGen *intGen)  {}
+    virtual void toIntermediateTag(IntermediateGen *intGen, std::string tag, int pos) {}
 };
 
 class Assign : public Statement
@@ -128,6 +129,7 @@ class Body : public Statement
     void setReturn() { hasReturn = true; }
     bool getReturn() { return hasReturn; }
     void toIntermediate(IntermediateGen *intGen);
+    void toIntermediateTag(IntermediateGen *intGen, std::string tag, int pos);
     void nextInstContinue(int nextInst, IntermediateGen *intGen);
     void nextInstBreak(int nextInst, IntermediateGen *intGen);
 
@@ -258,6 +260,7 @@ class ContinueID : public Statement
     ContinueID(std::string id);
     std::string to_string(int nesting);
     void check();
+    void toIntermediateTag(IntermediateGen *intGen, std::string tag, int pos);
 
   private:
     std::string _id;

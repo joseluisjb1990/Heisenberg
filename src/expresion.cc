@@ -742,6 +742,7 @@ void And::check()
 
 void And::toIntermediateGoto(IntermediateGen *intGen)
 {
+  std::cout << "Estoy en el intermediateGoto de And" << std::endl;
   izq->toIntermediateGoto(intGen);
   unsigned int pos = intGen->getQuad();
   der->toIntermediateGoto(intGen);
@@ -912,7 +913,17 @@ std::string IDExpr::to_string(int nesting)
 
 void IDExpr::check(){};
 
-void IDExpr::toIntermediate(IntermediateGen* intGen) {}
+void IDExpr::toIntermediateGoto(IntermediateGen *intGen)
+{
+  _trueList   = intGen->genEmpty("if " + _nombre + " goto");
+  _falseList  = intGen->genEmpty("goto");
+}
+
+void IDExpr::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
+{
+  if(con) intGen->gen(_trueList , jumpDes); 
+  else    intGen->gen(_falseList, jumpDes);
+}
 
 FunctionExpr::FunctionExpr(std::string name, std::vector<Type*>* parameterTypes, std::vector<Expression*>* parameters, Type* returnType)
   : Expression()
