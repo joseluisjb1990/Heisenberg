@@ -1131,6 +1131,15 @@ void LonExpr::check()
   }
 }
 
+void LonExpr::toIntermediate(IntermediateGen *intGen)
+{
+  _parameter->toIntermediate(intGen);
+  std::string temp = intGen->nextTemp();
+  intGen->gen("param",_parameter->getTemp(),""," ");  
+  intGen->gen("call","lon ","1",temp);  
+  setTemp(temp);
+}
+
 PardoExpr::PardoExpr(LValueExpr* pardo, IDExpr* campo)
   : LValueExpr()
   , _pardo ( pardo )

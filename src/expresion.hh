@@ -461,7 +461,7 @@ class APandaExpr : public Expression
     std::string to_string(int nesting);
     void check();
     void toIntermediate(IntermediateGen *intGen);
-    
+
   private:
     Expression* _parameter;
 };
@@ -472,7 +472,8 @@ class LonExpr : public Expression
     LonExpr(Expression* parameter);
     std::string to_string(int nesting);
     void check();
-
+    void toIntermediate(IntermediateGen *intGen);
+    
   private:
     Expression* _parameter;
 };
