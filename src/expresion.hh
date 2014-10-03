@@ -424,6 +424,7 @@ class AKodiakExpr : public Expression
     AKodiakExpr(Expression* parameter);
     std::string to_string(int nesting);
     void check();
+    void toIntermediate(IntermediateGen *intGen);
 
   private:
     Expression* _parameter;
@@ -435,6 +436,7 @@ class APolarExpr : public Expression
     APolarExpr(Expression* parameter);
     std::string to_string(int nesting);
     void check();
+    void toIntermediate(IntermediateGen *intGen);
 
   private:
     Expression* _parameter;
@@ -446,6 +448,7 @@ class AMalayoExpr : public Expression
     AMalayoExpr(Expression* parameter);
     std::string to_string(int nesting);
     void check();
+    void toIntermediate(IntermediateGen *intGen);
 
   private:
     Expression* _parameter;
@@ -457,7 +460,8 @@ class APandaExpr : public Expression
     APandaExpr(Expression* parameter);
     std::string to_string(int nesting);
     void check();
-
+    void toIntermediate(IntermediateGen *intGen);
+    
   private:
     Expression* _parameter;
 };
