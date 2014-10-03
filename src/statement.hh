@@ -24,6 +24,7 @@ public :
     virtual void nextInstContinue(int nextInst, IntermediateGen *intGen)  {}
     virtual void nextInstBreak(int nextInst, IntermediateGen *intGen)  {}
     virtual void toIntermediateTag(IntermediateGen *intGen, std::string tag, int pos) {}
+    virtual void toIntermediateTagBreak(IntermediateGen *intGen, std::string tag, int pos) {}
 };
 
 class Assign : public Statement
@@ -65,6 +66,8 @@ class If : public Statement
     void nextInst(int nextInst, IntermediateGen *intGen);
     void nextInstContinue(int nextInst, IntermediateGen *intGen);
     void nextInstBreak(int nextInst, IntermediateGen *intGen);
+    void toIntermediateTag(IntermediateGen *intGen, std::string tag, int pos);
+    void toIntermediateTagBreak(IntermediateGen *intGen, std::string tag, int pos);
 
   private:
     Expression* _condicion;
@@ -83,6 +86,8 @@ class IfElse : public Statement
     void nextInst(int nextInst, IntermediateGen *intGen);
     void nextInstContinue(int nextInst, IntermediateGen *intGen);
     void nextInstBreak(int nextInst, IntermediateGen *intGen);
+    void toIntermediateTag(IntermediateGen *intGen, std::string tag, int pos);
+    void toIntermediateTagBreak(IntermediateGen *intGen, std::string tag, int pos);
 
   private:
     Expression* _condicion;
@@ -130,6 +135,7 @@ class Body : public Statement
     bool getReturn() { return hasReturn; }
     void toIntermediate(IntermediateGen *intGen);
     void toIntermediateTag(IntermediateGen *intGen, std::string tag, int pos);
+    void toIntermediateTagBreak(IntermediateGen *intGen, std::string tag, int pos);
     void nextInstContinue(int nextInst, IntermediateGen *intGen);
     void nextInstBreak(int nextInst, IntermediateGen *intGen);
 
@@ -261,6 +267,8 @@ class ContinueID : public Statement
     std::string to_string(int nesting);
     void check();
     void toIntermediateTag(IntermediateGen *intGen, std::string tag, int pos);
+    void toIntermediate(IntermediateGen *intGen);
+    long _nextInst;
 
   private:
     std::string _id;
@@ -283,9 +291,12 @@ class BreakID : public Statement
     BreakID(std::string id);
     std::string to_string(int nesting);
     void check();
+    void toIntermediateTagBreak(IntermediateGen *intGen, std::string tag, int pos);
+    void toIntermediate(IntermediateGen *intGen);
 
   private:
     std::string _id;
+    long _nextInst;
 };
 
 class While : public Statement
@@ -297,7 +308,8 @@ class While : public Statement
     bool checkReturn(Type* type);
     void toIntermediate(IntermediateGen *intGen);
     void nextInst(int nextInst, IntermediateGen *intGen);
-    
+    void toIntermediateTag(IntermediateGen *intGen, std::string tag, int pos);
+    void toIntermediateTagBreak(IntermediateGen *intGen, std::string tag, int pos);
   private:
     Expression* _expr;
     Statement*  _body;
@@ -312,6 +324,8 @@ class TagWhile : public Statement
     bool checkReturn(Type* type);
     void toIntermediate(IntermediateGen *intGen);
     void nextInst(int nextInst, IntermediateGen *intGen);
+    void toIntermediateTag(IntermediateGen *intGen, std::string tag, int pos);
+    void toIntermediateTagBreak(IntermediateGen *intGen, std::string tag, int pos);
 
   private:
     std::string _id;

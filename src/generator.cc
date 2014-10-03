@@ -46,4 +46,7 @@ void IntermediateGen::gen(long offset, int jumpDes)
   _file.write(c.c_str(), c.size());
   _file.seekp(actualPos);
 }
+
+void IntermediateGen::genComment(std::string comment) { _file << comment << std::endl;  }
+void IntermediateGen::genSpace()                      { _file << std::endl;             }
 #endif

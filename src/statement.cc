@@ -4,6 +4,9 @@
 #include <iostream>
 #include "type.hh"
 
+#define SEPSIZE 100
+#define SEP     '-'
+
 extern TablaSimbolos* tablaSimbolos;
 
 using namespace std;
@@ -360,9 +363,15 @@ void Body::toIntermediate(IntermediateGen *intGen)
 
 void Body::toIntermediateTag(IntermediateGen *intGen, std::string tag, int pos)
 {
-  std::cout << "Estoy en el toIntermediateTag de Body" << std::endl;
   for(std::vector<Statement*>::iterator it = _listSta->begin(); it != _listSta->end(); it++) {
     (*it)->toIntermediateTag(intGen, tag, pos);
+  }
+}
+
+void Body::toIntermediateTagBreak(IntermediateGen *intGen, std::string tag, int pos)
+{
+  for(std::vector<Statement*>::iterator it = _listSta->begin(); it != _listSta->end(); it++) {
+    (*it)->toIntermediateTagBreak(intGen, tag, pos);
   }
 }
 
@@ -787,10 +796,19 @@ void ContinueID::check()
   }
 }
 
+void ContinueID::toIntermediate(IntermediateGen *intGen)
+{
+   intGen->genComment("// Codigo generado por el continue con tag. id = " + _id);
+   _nextInst = intGen->genEmpty("goto");
+   intGen->genSpace();
+}
+
 void ContinueID::toIntermediateTag(IntermediateGen *intGen, std::string tag, int pos)
 {
   if(tag.compare(_id) == 0)
-    intGen->gen("goto", std::to_string(pos), "", "");
+  {
+    intGen->gen(_nextInst, pos);
+  }
 }
 
 Break::Break()
@@ -844,6 +862,21 @@ void BreakID::check()
   {
     this->set_type(ErrorType::getInstance());
     error("'roloePea' statement outside an iteration");
+  }
+}
+
+void BreakID::toIntermediate(IntermediateGen *intGen)
+{
+  intGen->genComment("// Codigo generado por el break con tag. id = " + _id);
+  _nextInst = intGen->genEmpty("goto");
+  intGen->genSpace();
+}
+
+void BreakID::toIntermediateTagBreak(IntermediateGen *intGen, std::string tag, int pos)
+{
+  if(tag.compare(_id) == 0)
+  {
+    intGen->gen(_nextInst, pos);
   }
 }
 
@@ -956,9 +989,23 @@ void TagWhile::toIntermediate(IntermediateGen *intGen)
 void TagWhile::nextInst(int nextInst, IntermediateGen *intGen)
 {
   _expr->backpatch(false, nextInst, intGen);
-  _body->nextInst(nextInst, intGen);
+  _body->nextInstBreak(nextInst, intGen);
+  _body->toIntermediateTagBreak(intGen, _id, nextInst);
 }
 
+void While::toIntermediateTag   (IntermediateGen *intGen, std::string tag, int pos) { _body         ->toIntermediateTag(intGen, tag, pos); }
+void TagWhile::toIntermediateTag(IntermediateGen *intGen, std::string tag, int pos) { _body         ->toIntermediateTag(intGen, tag, pos); }
+void If::toIntermediateTag      (IntermediateGen *intGen, std::string tag, int pos) { _instrucciones->toIntermediateTag(intGen, tag, pos); }
+void IfElse::toIntermediateTag  (IntermediateGen *intGen, std::string tag, int pos) { _brazoTrue    ->toIntermediateTag(intGen, tag, pos); 
+                                                                                      _brazoFalse   ->toIntermediateTag(intGen, tag, pos);
+                                                                                    }
+
+void While::toIntermediateTagBreak   (IntermediateGen *intGen, std::string tag, int pos) { _body          ->toIntermediateTagBreak(intGen, tag, pos); }
+void TagWhile::toIntermediateTagBreak(IntermediateGen *intGen, std::string tag, int pos) { _body          ->toIntermediateTagBreak(intGen, tag, pos); }
+void If::toIntermediateTagBreak      (IntermediateGen *intGen, std::string tag, int pos) { _instrucciones ->toIntermediateTagBreak(intGen, tag, pos); }
+void IfElse::toIntermediateTagBreak  (IntermediateGen *intGen, std::string tag, int pos) { _brazoTrue     ->toIntermediateTagBreak(intGen, tag, pos); 
+                                                                                           _brazoFalse    ->toIntermediateTagBreak(intGen, tag, pos);
+                                                                                         }
 Empty::Empty()
   : Statement()
   {}
