@@ -43,6 +43,17 @@ long IntermediateGen::genEmpty(std::string op)
   return r;
 }
 
+
+void IntermediateGen::gen(long offset, int jumpDes, std::string com)
+{
+  long actualPos = IntermediateGen::offset();
+  _file.seekp(offset);
+  std::string c = std::to_string(jumpDes);
+  _file.write(c.c_str(), c.size());
+  _file.write(com.c_str(), com.size());
+  _file.seekp(actualPos);
+}
+
 void IntermediateGen::gen(long offset, int jumpDes)
 {
   long actualPos = IntermediateGen::offset();
