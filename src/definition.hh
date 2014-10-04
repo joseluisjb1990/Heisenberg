@@ -32,7 +32,8 @@ class DefWithInit : public Definition
     DefWithInit(Type* tipo, std::vector<std::string>* ids, std::vector<Expression*>* expr);
     std::string to_string(int nesting);
     void check();
-
+    void toIntermediate(IntermediateGen *intGen);
+    
   private:
     Type* _tipo;
     std::vector<std::string>*_ids;

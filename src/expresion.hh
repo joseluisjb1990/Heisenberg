@@ -413,6 +413,10 @@ class FunctionExpr : public Expression
     std::string to_string(int nesting);
     void check();
     void toIntermediate(IntermediateGen *intGen);
+    void toIntermediateGoto(IntermediateGen *intGen);
+    void backpatch(bool con, int jumpDes, IntermediateGen *intGen);
+    long _trueList  = -1;
+    long _falseList = -1;
     
   private:
     std::string               _name;
