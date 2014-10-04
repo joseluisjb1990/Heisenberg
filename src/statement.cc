@@ -45,9 +45,9 @@ void Assign::toIntermediate(IntermediateGen *intGen)
     expr->toIntermediate(intGen);
 
     if(expr->isStruct())
-      intGen->gen("*:=", expr->getTemp(), " ", id->getTemp());
+      intGen->gen("*:=" , expr->getTemp() , " " , id->getTemp(), "   // Asignacion indirecta, linea " + std::to_string(get_first_line()));
     else
-      intGen->gen(":=", expr->getTemp(), " ", id->getTemp());
+      intGen->gen(":="  , expr->getTemp() , " " , id->getTemp(), "   // Asignacion directa, linea " + std::to_string(get_first_line()));
   }
 }
 
@@ -235,6 +235,7 @@ bool IfElse::checkReturn(Type* type)
 
 void IfElse::toIntermediate(IntermediateGen *intGen)
 {
+  intGen->genComment("// Codigo generado por el selector if-then-else, linea " + std::to_string(get_first_line()));
   _condicion->toIntermediateGoto(intGen);
   _condicion->backpatch(true, intGen->getQuad(), intGen);
   _brazoTrue->toIntermediate(intGen);
@@ -297,7 +298,7 @@ void Write::check()
 void Write::toIntermediate(IntermediateGen *intGen)
 {
   _expr->toIntermediate(intGen);
-  intGen->gen("Wr", _expr->getTemp(), " ", " ");
+  intGen->gen("Wr", _expr->getTemp(), " ", " ", "   // Escritura por salida estandar, linea " + std::to_string(get_first_line()));
 }
 
 Read::Read(Expression* id)
@@ -333,7 +334,7 @@ void Read::check()
 void Read::toIntermediate(IntermediateGen *intGen)
 {
   _id->toIntermediate(intGen);
-  intGen->gen("Rd", " ", " ", _id->getTemp());
+  intGen->gen("Rd", " ", " ", _id->getTemp(), "   // Lectura por entrada estandar, linea " + std::to_string(get_first_line()));
 }
 
 Body::Body( std::vector<Statement *>* listSta )
@@ -485,6 +486,7 @@ bool ComplexFor::checkReturn(Type* type) { return _body->checkReturn(type); }
 
 void ComplexFor::toIntermediate(IntermediateGen *intGen)
 {
+  intGen->genComment("// Codigo de la iteracion acotada, linea " + std::to_string(get_first_line()));
   _begin->toIntermediate(intGen);
   _end->toIntermediate(intGen);
 
@@ -560,6 +562,7 @@ bool SimpleFor::checkReturn(Type* type) { return _body->checkReturn(type); }
 
 void SimpleFor::toIntermediate(IntermediateGen *intGen)
 {
+  intGen->genComment("// Codigo intermedio para la iteracion acotada, linea " + std::to_string(get_first_line()));
   _begin->toIntermediate(intGen);
   _end->toIntermediate(intGen);
 
@@ -620,6 +623,7 @@ bool IdFor::checkReturn(Type* type) { return _body->checkReturn(type); }
 
 void IdFor::toIntermediate(IntermediateGen *intGen)
 {
+  intGen->genComment("// Codigo intermedio para la iteracion acotada, linea " + std::to_string(get_first_line()));
   CuevaType*  t     = dynamic_cast<CuevaType *> (_tableRow->getTipo());
   std::string tc    = std::to_string(t->getTipo()->getSize());
   std::string temp  = intGen->nextTemp();
@@ -704,7 +708,7 @@ bool ReturnExpr::checkReturn(Type* type)
 void ReturnExpr::toIntermediate(IntermediateGen *intGen)
 {
    _expr->toIntermediate(intGen);
-  intGen->gen("return",_expr->getTemp(), "","");  
+  intGen->gen("return",_expr->getTemp(), "","", "   // Retorno de funcion, linea " + std::to_string(get_first_line()));  
 }
 
 Increase::Increase(std::string id)
@@ -731,7 +735,7 @@ void Increase::check()
 
 void Increase::toIntermediate(IntermediateGen *intGen)
 {
-  intGen->gen("+",_id,"1",_id);  
+  intGen->gen("+",_id,"1",_id, "   // Incremento, linea " + std::to_string(get_first_line()));  
 
 }
 
@@ -760,7 +764,7 @@ void Decrement::check()
 
 void Decrement::toIntermediate(IntermediateGen *intGen)
 {
-  intGen->gen("-",_id,"1",_id);  
+  intGen->gen("-",_id,"1",_id, "// Decremento, linea " + std::to_string(get_first_line()));  
 
 }
 
