@@ -20,9 +20,13 @@ public :
     virtual bool isBody()                { return false;          };
     virtual bool checkReturn(Type* type) { return true;           };
     virtual bool getReturn()             { return false;          };
+    virtual void setTemp(std::string temp)  { _temp = temp;         }
     virtual void nextInst(int nextInst, IntermediateGen *intGen)  {}
     virtual void nextInstContinue(int nextInst, IntermediateGen *intGen)  {}
     virtual void nextInstBreak(int nextInst, IntermediateGen *intGen)  {}
+
+    private:
+            std::string  _temp;
 };
 
 class Assign : public Statement
@@ -45,6 +49,7 @@ class Function : public Statement
     Function(std::string name, std::vector<Type*>* parameterTypes, std::vector<Expression*>* parameters, Type* returnType);
     std::string to_string(int nesting);
     void check();
+    void toIntermediate(IntermediateGen *intGen);
 
   private:
     std::string               _name;

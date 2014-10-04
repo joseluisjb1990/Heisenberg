@@ -40,6 +40,14 @@ void Program::check()
 
 void Program::toIntermediate(IntermediateGen *intGen)
 {
+
+
+    for (unsigned int i=0; i < _definitions->size(); ++i)
+  {
+    _definitions->at(i)->toIntermediate(intGen);
+
+  }
+  
   _statement->toIntermediate(intGen);
 }
 #endif
