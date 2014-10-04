@@ -393,14 +393,17 @@ class IDExpr : public LValueExpr
   private:
     std::string _nombre;
     Contenido * _tableRow;
+    long _trueList;
+    long _falseList;
 
   public:
     IDExpr(std::string nombre);
     IDExpr(std::string nombre, Contenido* c);
     std::string to_string(int nesting);
     void check();
-    void toIntermediate(IntermediateGen* intGen);
     std::string getTemp() { return _nombre; }
+    void toIntermediateGoto(IntermediateGen *intGen);
+    void backpatch(bool con, int jumpDes, IntermediateGen *intGen);
 };
 
 class FunctionExpr : public Expression

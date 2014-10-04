@@ -20,13 +20,12 @@ public :
     virtual bool isBody()                { return false;          };
     virtual bool checkReturn(Type* type) { return true;           };
     virtual bool getReturn()             { return false;          };
-    virtual void setTemp(std::string temp)  { _temp = temp;         }
     virtual void nextInst(int nextInst, IntermediateGen *intGen)  {}
     virtual void nextInstContinue(int nextInst, IntermediateGen *intGen)  {}
     virtual void nextInstBreak(int nextInst, IntermediateGen *intGen)  {}
+    virtual void toIntermediateTag(IntermediateGen *intGen, std::string tag, int pos) {}
 
-    private:
-            std::string  _temp;
+  
 };
 
 class Assign : public Statement
@@ -50,12 +49,15 @@ class Function : public Statement
     std::string to_string(int nesting);
     void check();
     void toIntermediate(IntermediateGen *intGen);
-
+    std::string getTemp()           { return _temp; }
+    void setTemp(std::string temp)  { _temp = temp; }
+  
   private:
     std::string               _name;
     std::vector<Type*>*       _parameterTypes;
     std::vector<Expression*>* _parameters;
     Type*                     _return;
+    std::string  _temp;
 };
 
 class If : public Statement
@@ -133,6 +135,7 @@ class Body : public Statement
     void setReturn() { hasReturn = true; }
     bool getReturn() { return hasReturn; }
     void toIntermediate(IntermediateGen *intGen);
+    void toIntermediateTag(IntermediateGen *intGen, std::string tag, int pos);
     void nextInstContinue(int nextInst, IntermediateGen *intGen);
     void nextInstBreak(int nextInst, IntermediateGen *intGen);
 
@@ -263,6 +266,7 @@ class ContinueID : public Statement
     ContinueID(std::string id);
     std::string to_string(int nesting);
     void check();
+    void toIntermediateTag(IntermediateGen *intGen, std::string tag, int pos);
 
   private:
     std::string _id;

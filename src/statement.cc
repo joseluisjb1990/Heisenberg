@@ -377,6 +377,14 @@ void Body::toIntermediate(IntermediateGen *intGen)
   }
 }
 
+void Body::toIntermediateTag(IntermediateGen *intGen, std::string tag, int pos)
+{
+  std::cout << "Estoy en el toIntermediateTag de Body" << std::endl;
+  for(std::vector<Statement*>::iterator it = _listSta->begin(); it != _listSta->end(); it++) {
+    (*it)->toIntermediateTag(intGen, tag, pos);
+  }
+}
+
 void Body::nextInstContinue(int nextInt, IntermediateGen *intGen)
 {
   for(std::vector<Statement*>::iterator it = _listSta->begin(); it != _listSta->end(); it++) {
@@ -794,8 +802,14 @@ void ContinueID::check()
   else
   {
     this->set_type(ErrorType::getInstance());
-    error("'fondoBlanco' statement outside an itaration");
+    error("'fondoBlanco' statement outside an iteration");
   }
+}
+
+void ContinueID::toIntermediateTag(IntermediateGen *intGen, std::string tag, int pos)
+{
+  if(tag.compare(_id) == 0)
+    intGen->gen("goto", std::to_string(pos), "", "");
 }
 
 Break::Break()
@@ -954,8 +968,8 @@ void TagWhile::toIntermediate(IntermediateGen *intGen)
   _expr->backpatch(true, intGen->getQuad(), intGen);
   _body->toIntermediate(intGen);
   _body->nextInstContinue(pos, intGen);
+  _body->toIntermediateTag(intGen, _id, pos);
   intGen->gen("goto",std::to_string(pos), "", "");  
-
 }
 
 void TagWhile::nextInst(int nextInst, IntermediateGen *intGen)
