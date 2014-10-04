@@ -50,9 +50,11 @@ void DefWithInit::toIntermediate(IntermediateGen *intGen)
     expr->toIntermediate(intGen);
 
     if(expr->isStruct())
-      intGen->gen("*:=", expr->getTemp(), " ", id);
+      intGen->gen("*:=", expr->getTemp(), " ", id,
+                              "   // Asignacion Indirecta, linea " + std::to_string(get_first_line()));  
     else
-      intGen->gen(":=", expr->getTemp(), " ", id);
+      intGen->gen(":=", expr->getTemp(), " ", id,
+                              "   // Asignacion Directa, linea " + std::to_string(get_first_line()));  
   }
 }
 
