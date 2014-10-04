@@ -176,7 +176,8 @@ void Sum::toIntermediate(IntermediateGen *intGen)
   izq->toIntermediate(intGen);
   der->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
-  intGen->gen("+",izq->getTemp(), der->getTemp(),temp);  
+  intGen->gen("+",izq->getTemp(), der->getTemp(),temp, 
+              "   // Suma, linea " + std::to_string(get_first_line()));  
   setTemp(temp);
 }
 

@@ -623,13 +623,15 @@ void IdFor::toIntermediate(IntermediateGen *intGen)
   CuevaType*  t     = dynamic_cast<CuevaType *> (_tableRow->getTipo());
   std::string tc    = std::to_string(t->getTipo()->getSize());
   std::string temp  = intGen->nextTemp();
+  std::string temp2  = intGen->nextTemp();
 
   intGen->gen(":=", "0", " ",  temp);
+  
   unsigned int pos = intGen->getQuad();
   _nextInst = intGen->genEmpty("if " + temp + " = " + std::to_string(t->getLongitud() -1) + " goto");
 
-  intGen->gen("*", tc, temp, temp);
-  intGen->gen("[]", _iterVar, temp, _id);
+  intGen->gen("*", tc, temp, temp2);
+  intGen->gen("[]", _iterVar, temp2, _id);
 
   _body->toIntermediate(intGen);
 

@@ -20,6 +20,11 @@ void IntermediateGen::close()
   if(_file != NULL) _file.close();
 }
 
+void IntermediateGen::gen(std::string op, std::string arg1, std::string arg2, std::string des, std::string com)
+{
+  _file << getQuadNumber() << ":  " << op << " " << arg1 << " " << arg2 << " " << des << com << std::endl;
+}
+
 void IntermediateGen::gen(std::string op, std::string arg1, std::string arg2, std::string des)
 {
   _file << getQuadNumber() << ":  " << op << " " << arg1 << " " << arg2 << " " << des << std::endl;
