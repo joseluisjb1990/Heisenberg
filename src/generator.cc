@@ -22,12 +22,32 @@ void IntermediateGen::close()
 
 void IntermediateGen::gen(std::string op, std::string arg1, std::string arg2, std::string des, std::string com)
 {
-  _file << getQuadNumber() << ":  " << op << " " << arg1 << " " << arg2 << " " << des << com << std::endl;
+  std::string r = write(op, arg1, arg2, des);
+  _file   << r 
+          << std::string(  40 
+                        - r.size()
+                        , ' '
+                        )
+            << com
+            << std::endl
+            ;
 }
 
 void IntermediateGen::gen(std::string op, std::string arg1, std::string arg2, std::string des)
 {
-  _file << getQuadNumber() << ":  " << op << " " << arg1 << " " << arg2 << " " << des << std::endl;
+  _file <<  write(op, arg1, arg2, des) << std::endl;
+}
+
+std::string IntermediateGen::write(std::string op, std::string arg1, std::string arg2, std::string des)
+{
+  std::string r = std::to_string(getQuadNumber());
+  
+  return r 
+        +  ":  " 
+        +  op  + " " 
+        + arg1 + " " 
+        + arg2 + " " 
+        + des;
 }
 
 void IntermediateGen::gen(std::string id)
@@ -37,21 +57,11 @@ void IntermediateGen::gen(std::string id)
 
 long IntermediateGen::genEmpty(std::string op)
 {
-  _file << getQuadNumber() << ":  " << op << " ";
+  std::string s = write(op, " "," ","");
+  _file << s;
   long r = offset();
   _file << std::string(10, ' ') << std::endl;
   return r;
-}
-
-
-void IntermediateGen::gen(long offset, int jumpDes, std::string com)
-{
-  long actualPos = IntermediateGen::offset();
-  _file.seekp(offset);
-  std::string c = std::to_string(jumpDes);
-  _file.write(c.c_str(), c.size());
-  _file.write(com.c_str(), com.size());
-  _file.seekp(actualPos);
 }
 
 void IntermediateGen::gen(long offset, int jumpDes)

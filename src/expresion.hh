@@ -27,7 +27,7 @@ class Expression : public Node
     virtual void setTemp(std::string temp)  { _temp = temp;         }
     virtual void toIntermediateGoto(IntermediateGen *intGen) {}
     virtual bool isStruct()                 { return false;         }
-
+    virtual bool isIdExpr()                 { return false;         }
   private :
     bool         _mutID = true;
     unsigned int _tam   = 0;
@@ -404,6 +404,7 @@ class IDExpr : public LValueExpr
     std::string getTemp() { return _nombre; }
     void toIntermediateGoto(IntermediateGen *intGen);
     void backpatch(bool con, int jumpDes, IntermediateGen *intGen);
+    bool isIdExpr()       { return true;    }
 };
 
 class FunctionExpr : public Expression

@@ -16,7 +16,6 @@ public:
   void gen(std::string op, std::string arg1, std::string arg2, std::string des, std::string com);
   void gen(std::string op, std::string arg1, std::string arg2, std::string des);
   void gen(std::string id);
-  void gen(long offset, int jumpDes, std::string com);
   void gen(long offset, int jumpDes);
   void genComment(std::string comment);
   long genEmpty(std::string op);
@@ -33,5 +32,6 @@ private:
   std::ofstream _file;
   unsigned int _tempNumber;
   unsigned int _quadNumber;
+  std::string write(std::string op, std::string arg1, std::string arg2, std::string des);
 };
 #endif

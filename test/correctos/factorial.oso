@@ -11,7 +11,7 @@ factorial(polar n) => polar
 
 oso() => extinto
 {
-  escribir("Por favor, introduzca el numero al que \n desea calcularle el factorial");
+  escribir("X = ");
   polar N = 0;
   leer (N);
   polar original = N;

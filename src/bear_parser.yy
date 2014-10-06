@@ -914,8 +914,24 @@ expresion: CONSTPOLAR                            { $$ = new PolarExpr($1);
                                                      for (unsigned int i=0; i < parametros->size(); ++i) {
                                                        tipos->push_back(parametros->at(i)->get_tipo());
                                                      }
-                                                     $$ = new FunctionExpr($1, tipos, $3, tipoRetorno, parametros);
-                                                     $$->set_location(@1.begin.line, @1.begin.column, @4.end.line, @4.end.column);
+                                                     Parameter* p;
+                                                     Expression* e;
+                                                     bool error = false;
+                                                     for (unsigned int i=0; i < $3->size(); ++i) {
+                                                       e = $3->at(i);
+                                                       p = parametros->at(i);
+                                                       if(p->get_ref()) if(!e->isIdExpr())
+                                                       {
+                                                          driver.error(@1, @4, "Cannot call a function with a expression as a reference");
+                                                          $$ = new EmptyExpr();
+                                                          error = true;
+                                                          break;
+                                                       }
+                                                     }
+                                                     if(!error) { 
+                                                        $$ = new FunctionExpr($1, tipos, $3, tipoRetorno, parametros);
+                                                        $$->set_location(@1.begin.line, @1.begin.column, @4.end.line, @4.end.column);
+                                                     }
                                                    }
                                                  }
          | funcionpredef                         { $$ = $1; }
