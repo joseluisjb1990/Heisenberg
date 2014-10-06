@@ -45,9 +45,11 @@ void Assign::toIntermediate(IntermediateGen *intGen)
     expr->toIntermediate(intGen);
 
     if(expr->isStruct())
-      intGen->gen("*:=" , expr->getTemp() , " " , id->getTemp(), "   // Asignacion indirecta, linea " + std::to_string(get_first_line()));
+      intGen->gen("*:=" , expr->getTemp() , " " , id->getTemp(), 
+          "   // Asignacion indirecta, linea " + std::to_string(get_first_line()));
     else
-      intGen->gen(":="  , expr->getTemp() , " " , id->getTemp(), "   // Asignacion directa, linea " + std::to_string(get_first_line()));
+      intGen->gen(":="  , expr->getTemp() , " " , id->getTemp(), 
+            "   // Asignacion directa, linea " + std::to_string(get_first_line()));
   }
 }
 
@@ -320,7 +322,8 @@ void Write::check()
 void Write::toIntermediate(IntermediateGen *intGen)
 {
   _expr->toIntermediate(intGen);
-  intGen->gen("Wr", _expr->getTemp(), " ", " ", "   // Escritura por salida estandar, linea " + std::to_string(get_first_line()));
+  intGen->gen("Wr", _expr->getTemp(), " ", " ", 
+    "   // Escritura por salida estandar, linea " + std::to_string(get_first_line()));
 }
 
 Read::Read(Expression* id)
@@ -356,7 +359,8 @@ void Read::check()
 void Read::toIntermediate(IntermediateGen *intGen)
 {
   _id->toIntermediate(intGen);
-  intGen->gen("Rd", " ", " ", _id->getTemp(), "   // Lectura por entrada estandar, linea " + std::to_string(get_first_line()));
+  intGen->gen("Rd", " ", " ", _id->getTemp(), 
+      "   // Lectura por entrada estandar, linea " + std::to_string(get_first_line()));
 }
 
 Body::Body( std::vector<Statement *>* listSta )
@@ -514,14 +518,14 @@ void ComplexFor::toIntermediate(IntermediateGen *intGen)
 
   _step->toIntermediate(intGen);
 
-  intGen->gen(":=", _begin->getTemp(), " ",  _id);
+  intGen->gen(":=", _begin->getTemp(), " ",  _id, "   // Variable de Iteracion ");
   unsigned int pos = intGen->getQuad();
   _nextInst = intGen->genEmpty("if " + _id + " > " + _end->getTemp() + " goto");
 
   _body->toIntermediate(intGen);
 
-  intGen->gen("+", _id, _step->getTemp(), _id);
-  intGen->gen("goto", " ", " ", std::to_string(pos));
+  intGen->gen("+", _id, _step->getTemp(), _id, "   // Incremento del Iterador");
+  intGen->gen("goto", " ", " ", std::to_string(pos), "   // Fin de la Iteracion");
 }
 
 void ComplexFor::nextInst(int nextInst, IntermediateGen *intGen)
@@ -588,14 +592,15 @@ void SimpleFor::toIntermediate(IntermediateGen *intGen)
   _begin->toIntermediate(intGen);
   _end->toIntermediate(intGen);
 
-  intGen->gen(":=", _begin->getTemp(), " ",  _id);
+  intGen->gen(":=", _begin->getTemp(), " ",  _id, "   // Variable de Iteracion ");
   unsigned int pos = intGen->getQuad();
   _nextInst = intGen->genEmpty("if " + _id + " > " + _end->getTemp() + " goto");
 
   _body->toIntermediate(intGen);
 
-  intGen->gen("+", _id, "1", _id);
-  intGen->gen("goto", " ", " ", std::to_string(pos));
+  intGen->gen("+", _id, "1", _id, "   // Incremento del Iterador");
+  intGen->gen("goto", " ", " ", std::to_string(pos), "   // Fin de la Iteracion");
+
 }
 
 void SimpleFor::nextInst(int nextInst, IntermediateGen *intGen)
