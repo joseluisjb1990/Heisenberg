@@ -89,6 +89,20 @@ Function::Function(std::string name, std::vector<Type*>* parameterTypes, std::ve
   , _return         ( returnType     )
   {}  
 
+Function::Function( std::string name
+                  , std::vector<Type*>* parameterTypes
+                  , std::vector<Expression*>* parameters
+                  , Type* returnType
+                  , std::vector<bool>* parametros
+                  )
+  : Statement()
+  , _name           ( name           )
+  , _parameterTypes ( parameterTypes )
+  , _parameters     ( parameters     )
+  , _return         ( returnType     )
+  , _defParametros  ( parametros     )
+  {}  
+
 std::string Function::to_string(int nesting)
 {
   std::string padding(nesting*2, ' ');
@@ -120,7 +134,6 @@ void Function::check()
 
 void Function::toIntermediate(IntermediateGen *intGen)
 {
-
   for (unsigned int i=0; i < _parameters->size(); ++i)
   {
     _parameters->at(i)->toIntermediate(intGen);
@@ -129,7 +142,16 @@ void Function::toIntermediate(IntermediateGen *intGen)
 
   for (int i=(_parameters->size()-1); -1 < i; --i)
   {
-    intGen->gen("param",_parameters->at(i)->getTemp()," "," ");  
+    Expression* p = _parameters->at(i);
+    if(_defParametros->at(i))
+    {
+      std::string t = intGen->nextTemp();
+      intGen->gen("&", p->getTemp(), " ", t); 
+      intGen->gen("param", t," "," ");
+    } else
+    {
+      intGen->gen("param", p->getTemp()," "," ");  
+    } 
   }
 
   std::string temp = intGen->nextTemp();

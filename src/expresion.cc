@@ -946,6 +946,20 @@ FunctionExpr::FunctionExpr(std::string name, std::vector<Type*>* parameterTypes,
   , _return         ( returnType     )
   {}
 
+FunctionExpr::FunctionExpr( std::string name
+                          , std::vector<Type*>* parameterTypes
+                          , std::vector<Expression*>* parameters
+                          , Type* returnType
+                          , std::vector<Parameter*>* defParametros
+                          )
+  : Expression()
+  , _name           ( name           )
+  , _parameterTypes ( parameterTypes )
+  , _parameters     ( parameters     )
+  , _return         ( returnType     )
+  , _defParametros  ( defParametros  )
+  {}
+
 std::string FunctionExpr::to_string(int nesting)
 {
   std::string padding(nesting*2, ' ');
@@ -977,7 +991,13 @@ void FunctionExpr::check()
 
 void FunctionExpr::toIntermediateGoto(IntermediateGen *intGen)
 {
+  toIntermediateAux(intGen);
+  _trueList   = intGen->genEmpty("if " + getTemp() + " goto");
+  _falseList  = intGen->genEmpty("goto");
+}
 
+void FunctionExpr::toIntermediateAux(IntermediateGen *intGen)
+{
   for (unsigned int i=0; i < _parameters->size(); ++i)
   {
     _parameters->at(i)->toIntermediate(intGen);
@@ -986,16 +1006,22 @@ void FunctionExpr::toIntermediateGoto(IntermediateGen *intGen)
 
   for (int i=(_parameters->size()-1); -1 < i; --i)
   {
-    intGen->gen("param",_parameters->at(i)->getTemp()," "," ");  
+    Expression* p = _parameters->at(i);
+    if(_defParametros->at(i)->get_ref())
+    {
+      std::string t = intGen->nextTemp();
+      intGen->gen("&", p->getTemp(), " ", t); 
+      intGen->gen("param", t," "," ");
+    } else
+    {
+      intGen->gen("param", p->getTemp()," "," ");  
+    } 
   }
 
   std::string temp = intGen->nextTemp();
   intGen->gen("call",_name,std::to_string(_parameters->size()),temp); 
   setTemp(temp);
-  _trueList   = intGen->genEmpty("if " + temp + " goto");
-  _falseList  = intGen->genEmpty("goto");
 }
-
 
 void FunctionExpr::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
 {
@@ -1005,27 +1031,8 @@ void FunctionExpr::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
 
 void FunctionExpr::toIntermediate(IntermediateGen *intGen)
 {
-
-  for (unsigned int i=0; i < _parameters->size(); ++i)
-  {
-  	_parameters->at(i)->toIntermediate(intGen);
-
-  }
-
-  for (int i=(_parameters->size()-1); -1 < i; --i)
-  {
-    intGen->gen("param",_parameters->at(i)->getTemp()," "," ",
-                  "   // Parametro " + std::to_string(i+1));    
-  }
-
-  std::string temp = intGen->nextTemp();
-  intGen->gen("call",_name,std::to_string(_parameters->size()),temp,
-                    "   // Llamada a Funcion, linea " + std::to_string(get_first_line()));    
-
-  setTemp(temp);
+  toIntermediateAux(intGen);
 }
-
-
 
 AKodiakExpr::AKodiakExpr(Expression* parameter)
   : _parameter ( parameter     )
@@ -1304,6 +1311,12 @@ void GrizzliExpr::check()
   _campo->check();
   Type* tipo = _campo->get_type();
   this->set_type(tipo);
+}
+
+void GrizzliExpr::toIntermediate(IntermediateGen *intGen)
+{
+  _grizzli->toIntermediate(intGen);
+  setTemp(_grizzli->getTemp());
 }
 
 CuevaExpr::CuevaExpr(std::string cueva, std::vector<Expression*>* dimensions)

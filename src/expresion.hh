@@ -409,10 +409,21 @@ class IDExpr : public LValueExpr
 class FunctionExpr : public Expression
 {
   public:
-    FunctionExpr(std::string name, std::vector<Type*>* parameterTypes, std::vector<Expression*>* parameters, Type* returnType);
+    FunctionExpr(   std::string name
+                  , std::vector<Type*>* parameterTypes
+                  , std::vector<Expression*>* parameters
+                  , Type* returnType
+                  );
+    FunctionExpr( std::string name
+                , std::vector<Type*>* parameterTypes
+                , std::vector<Expression*>* parameters
+                , Type* returnType
+                , std::vector<Parameter*>* defParametros
+                );
     std::string to_string(int nesting);
     void check();
     void toIntermediate(IntermediateGen *intGen);
+    void toIntermediateAux(IntermediateGen *intGen);
     void toIntermediateGoto(IntermediateGen *intGen);
     void backpatch(bool con, int jumpDes, IntermediateGen *intGen);
     long _trueList  = -1;
@@ -423,6 +434,7 @@ class FunctionExpr : public Expression
     std::vector<Type*>*       _parameterTypes;
     std::vector<Expression*>* _parameters;
     Type*                     _return;
+    std::vector<Parameter*>*  _defParametros;
 };
 
 class AKodiakExpr : public Expression
@@ -529,6 +541,7 @@ class GrizzliExpr : public LValueExpr
     GrizzliExpr(LValueExpr* grizzli, IDExpr* campo, Contenido* c);
     GrizzliExpr(LValueExpr* grizzli, CuevaExpr* campo, Contenido* c);
     std::string to_string(int nesting);
+    void toIntermediate(IntermediateGen *intGen);
     void check();
 
   private:

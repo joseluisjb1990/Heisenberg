@@ -535,11 +535,16 @@ instruccion: defvariable                                                 { $$ = 
                                                                            } else {
                                                                              Type* tipoRetorno = f->getTipo();
                                                                              std::vector<Parameter*>* parametros = f->get_parameters();
-                                                                             std::vector<Type*>* tipos = new std::vector<Type*>();
+                                                                             std::vector<bool>* boolParam = new std::vector<bool> ();
+                                                                             std::vector<Type*>* tipos    = new std::vector<Type*>();
+                                                                             Parameter* p;
                                                                              for (unsigned int i=0; i < parametros->size(); ++i) {
-                                                                               tipos->push_back(parametros->at(i)->get_tipo());
+                                                                               p = parametros->at(i);
+                                                                               tipos->push_back(p->get_tipo());
+                                                                               if(p->get_ref()) boolParam->push_back(true );
+                                                                               else             boolParam->push_back(false);
                                                                              }
-                                                                             $$ = new Function($1, tipos, $3, tipoRetorno);
+                                                                             $$ = new Function($1, tipos, $3, tipoRetorno, boolParam);
                                                                              $$->set_location(@1.begin.line, @1.begin.column, @4.end.line, @4.end.column);
                                                                            }
                                                                          }
@@ -909,7 +914,7 @@ expresion: CONSTPOLAR                            { $$ = new PolarExpr($1);
                                                      for (unsigned int i=0; i < parametros->size(); ++i) {
                                                        tipos->push_back(parametros->at(i)->get_tipo());
                                                      }
-                                                     $$ = new FunctionExpr($1, tipos, $3, tipoRetorno);
+                                                     $$ = new FunctionExpr($1, tipos, $3, tipoRetorno, parametros);
                                                      $$->set_location(@1.begin.line, @1.begin.column, @4.end.line, @4.end.column);
                                                    }
                                                  }

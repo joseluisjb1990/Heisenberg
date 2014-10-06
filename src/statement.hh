@@ -45,6 +45,7 @@ class Function : public Statement
 {
   public:
     Function(std::string name, std::vector<Type*>* parameterTypes, std::vector<Expression*>* parameters, Type* returnType);
+    Function(std::string name, std::vector<Type*>* parameterTypes, std::vector<Expression*>* parameters, Type* returnType, std::vector<bool>* parametros);
     std::string to_string(int nesting);
     void check();
     void toIntermediate(IntermediateGen *intGen);
@@ -56,7 +57,8 @@ class Function : public Statement
     std::vector<Type*>*       _parameterTypes;
     std::vector<Expression*>* _parameters;
     Type*                     _return;
-    std::string  _temp;
+    std::string               _temp;
+    std::vector<bool>*        _defParametros;
 };
 
 class If : public Statement
@@ -111,7 +113,6 @@ class Write : public Statement
 
   private:
     Expression* _expr;
-
 };
 
 class Read : public Statement
