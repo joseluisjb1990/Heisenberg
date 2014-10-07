@@ -148,16 +148,17 @@ void Function::toIntermediate(IntermediateGen *intGen)
     if(_defParametros->at(i))
     {
       std::string t = intGen->nextTemp();
-      intGen->gen("&", p->getTemp(), " ", t); 
-      intGen->gen("param", t," "," ");
+      intGen->gen("&", p->getTemp(), " ", t, "   // Acceso a Memoria");  
+      intGen->gen("param", t," "," ", "   // Parametro " + std::to_string(i+1));
     } else
     {
-      intGen->gen("param", p->getTemp()," "," ");  
+      intGen->gen("param", p->getTemp()," "," ", "   // Parametro " + std::to_string(i+1)); 
     } 
   }
 
   std::string temp = intGen->nextTemp();
-  intGen->gen("call",_name,std::to_string(_parameters->size()),temp); 
+  intGen->gen("call",_name,std::to_string(_parameters->size()),temp,
+  	"   // Llamada a Funcion, linea " + std::to_string(get_first_line()));
   setTemp(temp);
 }
 
@@ -656,18 +657,18 @@ void IdFor::toIntermediate(IntermediateGen *intGen)
   std::string temp  = intGen->nextTemp();
   std::string temp2  = intGen->nextTemp();
 
-  intGen->gen(":=", "0", " ",  temp);
+  intGen->gen(":=", "0", " ",  temp, "   // Variable de Iteracion ");
   
   unsigned int pos = intGen->getQuad();
   _nextInst = intGen->genEmpty("if " + temp + " = " + std::to_string(t->getLongitud() -1) + " goto");
 
-  intGen->gen("*", tc, temp, temp2);
-  intGen->gen("[]", _iterVar, temp2, _id);
+  intGen->gen("*", tc, temp, temp2, "   // Desplazamiento Arreglo");  
+  intGen->gen("[]", _iterVar, temp2, _id, "   // Acceso al Arreglo, linea ");
 
   _body->toIntermediate(intGen);
 
-  intGen->gen("+",temp,"1",temp); 
-  intGen->gen("goto", " ", " ", std::to_string(pos));  
+  intGen->gen("+",temp,"1",temp, "   // Incremento del Iterador");
+  intGen->gen("goto", " ", " ", std::to_string(pos), "   // Fin de la Iteracion");
 }
 
 void IdFor::nextInst(int nextInst, IntermediateGen *intGen)
@@ -735,7 +736,8 @@ bool ReturnExpr::checkReturn(Type* type)
 void ReturnExpr::toIntermediate(IntermediateGen *intGen)
 {
    _expr->toIntermediate(intGen);
-  intGen->gen("return",_expr->getTemp(), "","", "   // Retorno de funcion, linea " + std::to_string(get_first_line()));  
+  intGen->gen("return",_expr->getTemp(), "","", 
+  	"   // Retorno de funcion, linea " + std::to_string(get_first_line()));  
 }
 
 Increase::Increase(std::string id)
@@ -978,7 +980,7 @@ void While::toIntermediate(IntermediateGen *intGen)
   _expr->backpatch(true, intGen->getQuad(), intGen);
   _body->toIntermediate(intGen);
   _body->nextInstContinue(pos, intGen);
-  intGen->gen("goto",std::to_string(pos), "", "");  
+  intGen->gen("goto",std::to_string(pos), "", "","   // Fin de la Iteracion");  
 
 }
 
@@ -1035,7 +1037,7 @@ void TagWhile::toIntermediate(IntermediateGen *intGen)
   _body->toIntermediate(intGen);
   _body->nextInstContinue(pos, intGen);
   _body->toIntermediateTag(intGen, _id, pos);
-  intGen->gen("goto",std::to_string(pos), "", "");  
+  intGen->gen("goto",std::to_string(pos), "", "", "   // Fin de la Iteracion");  
 }
 
 void TagWhile::nextInst(int nextInst, IntermediateGen *intGen)

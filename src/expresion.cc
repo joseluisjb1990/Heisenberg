@@ -1010,16 +1010,17 @@ void FunctionExpr::toIntermediateAux(IntermediateGen *intGen)
     if(_defParametros->at(i)->get_ref())
     {
       std::string t = intGen->nextTemp();
-      intGen->gen("&", p->getTemp(), " ", t); 
-      intGen->gen("param", t," "," ");
+      intGen->gen("&", p->getTemp(), " ", t, "   // Acceso a Memoria");  
+      intGen->gen("param", t," "," ", "   // Parametro " + std::to_string(i+1)); 
     } else
     {
-      intGen->gen("param", p->getTemp()," "," ");  
+      intGen->gen("param", p->getTemp()," "," ", "   // Parametro " + std::to_string(i+1));  
     } 
   }
 
   std::string temp = intGen->nextTemp();
-  intGen->gen("call",_name,std::to_string(_parameters->size()),temp); 
+  intGen->gen("call",_name,std::to_string(_parameters->size()),temp,
+       "   // Llamada a Funcion, linea " + std::to_string(get_first_line()));
   setTemp(temp);
 }
 
