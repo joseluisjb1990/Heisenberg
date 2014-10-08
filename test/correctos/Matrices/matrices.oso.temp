@@ -1,0 +1,122 @@
+0:  := 10   TAM                            // Asignacion Directa, linea 0
+es_primo:  
+1:  if n =< 1 goto     3         
+2:  goto     4         
+3:  return blanco                          // Retorno de funcion, linea 5
+// Codigo intermedio para la iteracion acotada, linea 7
+4:  := 2   i                               // Variable de Iteracion 
+5:  if i > n goto     12        
+6:  / n i #0                               // Division, linea 9
+7:  if #0 == 0 goto     9         
+8:  goto     10        
+9:  return blanco                          // Retorno de funcion, linea 9
+10:  + i 1 i                               // Incremento del Iterador
+11:  goto     5                            // Fin de la Iteracion
+12:  return negro                          // Retorno de funcion, linea 12
+pMat:  
+// Codigo intermedio para la iteracion acotada, linea 17
+13:  := 0   #1                             // Variable de Iteracion 
+14:  if #1 = -1 goto     32        
+15:  * 400 #1 #2                           // Desplazamiento Arreglo
+16:  [] numeros #2 matriz                  // Acceso al Arreglo, linea 
+// Codigo intermedio para la iteracion acotada, linea 19
+17:  := 0   #3                             // Variable de Iteracion 
+18:  if #3 = 9 goto     30        
+19:  * 40 #3 #4                            // Desplazamiento Arreglo
+20:  [] matriz #4 arreglo                  // Acceso al Arreglo, linea 
+// Codigo intermedio para la iteracion acotada, linea 21
+21:  := 0   #5                             // Variable de Iteracion 
+22:  if #5 = 9 goto     28        
+23:  * 4 #5 #6                             // Desplazamiento Arreglo
+24:  [] arreglo #6 elem                    // Acceso al Arreglo, linea 
+25:  Wr elem                               // Escritura por salida estandar, linea 23
+26:  + #5 1 #5                             // Incremento del Iterador
+27:  goto     22                           // Fin de la Iteracion
+28:  + #3 1 #3                             // Incremento del Iterador
+29:  goto     18                           // Fin de la Iteracion
+30:  + #1 1 #1                             // Incremento del Iterador
+31:  goto     14                           // Fin de la Iteracion
+oso:  
+32:  := 0   n                              // Asignacion Directa, linea 33
+// Codigo intermedio para la iteracion acotada, linea 35
+33:  := 0   i                              // Variable de Iteracion 
+34:  if i > 10 goto     55        
+// Codigo intermedio para la iteracion acotada, linea 36
+35:  := 0   j                              // Variable de Iteracion 
+36:  if j > 10 goto     53        
+// Codigo intermedio para la iteracion acotada, linea 37
+37:  := 0   k                              // Variable de Iteracion 
+38:  if k > 10 goto     51        
+39:  * i 400 #7                            // Desplazamiento Arreglo, linea 38
+40:  * j 40 #8                             // Desplazamiento Arreglo, linea 38
+41:  * k 4 #9                              // Desplazamiento Arreglo, linea 38
+42:  + #7 #8 #10                           // Suma de Desplazamientos
+43:  + #10 #9 #11                          // Suma de Desplazamientos
+44:  [] numeros #11 #12                    // Acceso al Arreglo, linea 38
+45:  + i j #13                             // Suma, linea 38
+46:  + #13 k #14                           // Suma, linea 38
+47:  / #14 10 #15                          // Division, linea 38
+48:  := #15   #12                          // Asignacion directa, linea 38
+49:  + k 1 k                               // Incremento del Iterador
+50:  goto     38                           // Fin de la Iteracion
+51:  + j 1 j                               // Incremento del Iterador
+52:  goto     36                           // Fin de la Iteracion
+53:  + i 1 i                               // Incremento del Iterador
+54:  goto     34                           // Fin de la Iteracion
+55:  := 0   i                              // Asignacion Directa, linea 43
+56:  := 0   j                              // Asignacion Directa, linea 43
+57:  := 0   k                              // Asignacion Directa, linea 43
+Iteracion indeterminada con tag = mas_lejano
+58:  if i < 10 goto     60        
+59:  goto     103       
+60:  := 0   j                              // Asignacion directa, linea 47
+Iteracion indeterminada con tag = nivel_uno
+61:  if j < 10 goto     63        
+62:  goto     101       
+63:  + i j #16                             // Suma, linea 50
+64:  / #16 3 #17                           // Division, linea 50
+65:  % #17 10 #18                          // Modulo, linea 50
+66:  := #18   k                            // Asignacion directa, linea 50
+67:  * i 400 #19                           // Desplazamiento Arreglo, linea 51
+68:  * j 40 #20                            // Desplazamiento Arreglo, linea 51
+69:  * k 4 #21                             // Desplazamiento Arreglo, linea 51
+70:  + #19 #20 #22                         // Suma de Desplazamientos
+71:  + #22 #21 #23                         // Suma de Desplazamientos
+72:  [] numeros #23 #24                    // Acceso al Arreglo, linea 51
+73:  param #24                             // Parametro 1
+74:  call es_primo 1 #25                   // Llamada a Funcion, linea 51
+75:  if #25 goto     77        
+76:  goto     78        
+// Codigo generado por el break con tag. id = mas_lejano
+77:  goto     103       
+
+78:  := 0   k                              // Asignacion directa, linea 52
+79:  if k < 10 goto     81        
+80:  goto     99        
+81:  * i j #26                             // Multiplication, linea 55
+82:  ** k 2 #27                            // Potenciación, linea 55
+83:  * #26 #27 #28                         // Multiplication, linea 55
+84:  % #28 10 #29                          // Modulo, linea 55
+85:  := #29   z                            // Asignacion Directa, linea 55
+86:  * i 400 #30                           // Desplazamiento Arreglo, linea 56
+87:  * j 40 #31                            // Desplazamiento Arreglo, linea 56
+88:  * k 4 #32                             // Desplazamiento Arreglo, linea 56
+89:  + #30 #31 #33                         // Suma de Desplazamientos
+90:  + #33 #32 #34                         // Suma de Desplazamientos
+91:  [] numeros #34 #35                    // Acceso al Arreglo, linea 56
+92:  param #35                             // Parametro 1
+93:  call es_primo 1 #36                   // Llamada a Funcion, linea 56
+94:  if #36 goto     96        
+95:  goto     97        
+// Codigo generado por el break con tag. id = nivel_uno
+96:  goto     101       
+
+97:  + k 1 k                               // Incremento, linea 57
+98:  goto 79                               // Fin de la Iteracion
+99:  + j 1 j                               // Incremento, linea 59
+100:  goto 61                              // Fin de la Iteracion con tag =nivel_uno
+101:  + i 1 i                              // Incremento, linea 61
+102:  goto 58                              // Fin de la Iteracion con tag =mas_lejano
+103:  param numeros                        // Parametro 1
+104:  call pMat 1 #37                      // Llamada a Funcion, linea 64
+105:  end   

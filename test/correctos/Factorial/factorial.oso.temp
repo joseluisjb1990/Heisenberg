@@ -1,0 +1,23 @@
+factorial:  
+0:  := 1   acc                             // Asignacion Directa, linea 3
+1:  if n > 0 goto     3         
+2:  goto     8         
+3:  * acc n #0                             // Multiplication, linea 6
+4:  := #0   acc                            // Asignacion directa, linea 6
+5:  - n 1 #1                               // Resta, linea 7
+6:  := #1   n                              // Asignacion directa, linea 7
+7:  goto 1                                 // Fin de la Iteracion
+8:  return acc                             // Retorno de funcion, linea 9
+oso:  
+9:  Wr "X = "                              // Escritura por salida estandar, linea 14
+10:  := 0   N                              // Asignacion Directa, linea 15
+11:  Rd     N                              // Lectura por entrada estandar, linea 16
+12:  := N   original                       // Asignacion Directa, linea 17
+13:  param N                               // Parametro 1
+14:  call factorial 1 #2                   // Llamada a Funcion, linea 18
+15:  := #2   N                             // Asignacion directa, linea 18
+16:  Wr "El factorial de "                 // Escritura por salida estandar, linea 19
+17:  Wr original                           // Escritura por salida estandar, linea 19
+18:  Wr "es "                              // Escritura por salida estandar, linea 19
+19:  Wr N                                  // Escritura por salida estandar, linea 19
+20:  end   

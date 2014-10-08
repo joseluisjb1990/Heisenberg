@@ -1031,13 +1031,14 @@ bool TagWhile::checkReturn(Type* type) {  return _body->checkReturn(type); }
 
 void TagWhile::toIntermediate(IntermediateGen *intGen)
 {
+  intGen->genComment("Iteracion indeterminada con tag = " + _id);
   int pos = intGen->getQuad();
   _expr->toIntermediateGoto(intGen);
   _expr->backpatch(true, intGen->getQuad(), intGen);
   _body->toIntermediate(intGen);
   _body->nextInstContinue(pos, intGen);
   _body->toIntermediateTag(intGen, _id, pos);
-  intGen->gen("goto",std::to_string(pos), "", "", "   // Fin de la Iteracion");  
+  intGen->gen("goto",std::to_string(pos), "", "", "   // Fin de la Iteracion con tag = " + _id);
 }
 
 void TagWhile::nextInst(int nextInst, IntermediateGen *intGen)

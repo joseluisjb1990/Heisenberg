@@ -1,0 +1,65 @@
+const polar TAM = 10;
+
+es_primo( polar n ) => panda
+{
+  si( n =< 1 ) { vomita blanco; }
+
+  para i en (2;n)
+  {
+    si ((n / i) == 0) { vomita blanco; }
+  }
+
+  vomita negro;
+}
+
+pMat(cueva[] de cueva [10] de cueva [10] de polar numeros) => extinto
+{
+  para matriz en numeros
+  {
+     para arreglo en matriz
+     {
+       para elem en arreglo
+       {
+         escribir(elem);
+       }
+     }
+  }
+}
+
+oso() => extinto
+{
+  cueva [10] de cueva [10] de cueva[10] de polar numeros;
+
+  polar n= 0;
+
+  para i en (0;10) {
+    para j en (0;10) {
+      para k en (0;10) {
+        numeros[i][j][k] = (i + j + k) / 10;
+      }
+    }
+  }
+
+  polar i, j, k = 0, 0, 0;
+
+  mas_lejano : mientras( i < 10 )
+               {
+                  j = 0;
+                  nivel_uno : mientras( j < 10 )
+                              {
+                                k = ((i + j) / 3)%10;
+                                si(es_primo(numeros[i][j][k])) { roloePea mas_lejano; }
+                                k = 0;
+                                mientras(k < 10)
+                                {
+                                  polar z = (i * j * k**2)%10;
+                                  si(es_primo(numeros[i][j][k])) { roloePea nivel_uno; }
+                                  k++;
+                                }
+                                j++;
+                              }
+                  i++;
+               }
+
+  pMat(numeros);
+}

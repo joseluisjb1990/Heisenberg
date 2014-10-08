@@ -1,0 +1,57 @@
+buscar_menor:  
+0:  * min 4 #0                             // Desplazamiento Arreglo, linea 5
+1:  [] cueva_elem #0 #1                    // Acceso al Arreglo, linea 5
+2:  := #1   min                            // Asignacion directa, linea 5
+// Codigo intermedio para la iteracion acotada, linea 7
+3:  + min 1 #2                             // Suma, linea 7
+4:  := #2   i                              // Variable de Iteracion 
+5:  if i > max goto     15        
+6:  * i 4 #3                               // Desplazamiento Arreglo, linea 8
+7:  [] cueva_elem #3 #4                    // Acceso al Arreglo, linea 8
+8:  if #4 < min goto     10        
+9:  goto     13        
+10:  * i 4 #5                              // Desplazamiento Arreglo, linea 8
+11:  [] cueva_elem #5 #6                   // Acceso al Arreglo, linea 8
+12:  := #6   min                           // Asignacion directa, linea 8
+13:  + i 1 i                               // Incremento del Iterador
+14:  goto     5                            // Fin de la Iteracion
+15:  return min                            // Retorno de funcion, linea 10
+cambiar:  
+16:  * i 4 #7                              // Desplazamiento Arreglo, linea 15
+17:  [] cueva_elem #7 #8                   // Acceso al Arreglo, linea 15
+18:  := #8   inter                         // Asignacion Directa, linea 15
+19:  * i 4 #9                              // Desplazamiento Arreglo, linea 16
+20:  [] cueva_elem #9 #10                  // Acceso al Arreglo, linea 16
+21:  * j 4 #11                             // Desplazamiento Arreglo, linea 16
+22:  [] cueva_elem #11 #12                 // Acceso al Arreglo, linea 16
+23:  := #12   #10                          // Asignacion directa, linea 16
+24:  * j 4 #13                             // Desplazamiento Arreglo, linea 17
+25:  [] cueva_elem #13 #14                 // Acceso al Arreglo, linea 17
+26:  * i 4 #15                             // Desplazamiento Arreglo, linea 17
+27:  [] cueva_elem #15 #16                 // Acceso al Arreglo, linea 17
+28:  := #16   #14                          // Asignacion directa, linea 17
+oso:  
+// Codigo intermedio para la iteracion acotada, linea 26
+29:  := 0   i                              // Variable de Iteracion 
+30:  if i > 4 goto     42        
+31:  param 4                               // Parametro 3
+32:  param i                               // Parametro 2
+33:  param elementos                       // Parametro 1
+34:  call buscar_menor 3 #17               // Llamada a Funcion, linea 28
+35:  := #17   ind                          // Asignacion Directa, linea 28
+36:  param ind                             // Parametro 3
+37:  param i                               // Parametro 2
+38:  param elementos                       // Parametro 1
+39:  call cambiar 3 #18                    // Llamada a Funcion, linea 29
+40:  + i 1 i                               // Incremento del Iterador
+41:  goto     30                           // Fin de la Iteracion
+42:  Wr "El arreglo ordenado \n"           // Escritura por salida estandar, linea 32
+// Codigo intermedio para la iteracion acotada, linea 34
+43:  := 0   i                              // Variable de Iteracion 
+44:  if i > 5 goto     50        
+45:  * i 4 #19                             // Desplazamiento Arreglo, linea 34
+46:  [] elementos #19 #20                  // Acceso al Arreglo, linea 34
+47:  Wr #20                                // Escritura por salida estandar, linea 34
+48:  + i 1 i                               // Incremento del Iterador
+49:  goto     44                           // Fin de la Iteracion
+50:  end   

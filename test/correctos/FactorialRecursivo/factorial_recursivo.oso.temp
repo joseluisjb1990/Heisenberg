@@ -1,0 +1,36 @@
+factorial:  
+// Codigo generado por el selector if-then-else, linea 5
+0:  if n < 0 goto     2         
+1:  goto     6         
+2:  Wr "ERROR"                             // Escritura por salida estandar, linea 5
+3:  um 1   #0                              // Unario, linea 5
+4:  return #0                              // Retorno de funcion, linea 5
+5:  goto     12        
+6:  := 1   res                             // Asignacion Directa, linea 6
+7:  & res   #1                             // Acceso a Memoria
+8:  param #1                               // Parametro 2
+9:  param n                                // Parametro 1
+10:  call factorial_cola 2 #2              // Llamada a Funcion, linea 6
+11:  return res                            // Retorno de funcion, linea 6
+factorial_cola:  
+12:  if n > 0 goto     14        
+13:  goto     21        
+14:  * res n #3                            // Multiplication, linea 11
+15:  := #3   res                           // Asignacion directa, linea 11
+16:  - n 1 #4                              // Resta, linea 11
+17:  & res   #5                            // Acceso a Memoria
+18:  param #5                              // Parametro 2
+19:  param #4                              // Parametro 1
+20:  call factorial_cola 2 #6              // Llamada a Funcion, linea 11
+oso:  
+21:  Wr "N :"                              // Escritura por salida estandar, linea 19
+22:  := 0   N                              // Asignacion Directa, linea 20
+23:  Rd     N                              // Lectura por entrada estandar, linea 21
+24:  param N                               // Parametro 1
+25:  call factorial 1 #7                   // Llamada a Funcion, linea 23
+26:  := #7   res                           // Asignacion Directa, linea 23
+27:  Wr "El factorial de "                 // Escritura por salida estandar, linea 26
+28:  Wr N                                  // Escritura por salida estandar, linea 26
+29:  Wr "es "                              // Escritura por salida estandar, linea 26
+30:  Wr res                                // Escritura por salida estandar, linea 26
+31:  end   

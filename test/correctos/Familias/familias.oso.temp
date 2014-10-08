@@ -1,0 +1,62 @@
+0:  := 3   CANT                            // Asignacion Directa, linea 0
+lPer:  
+1:  Wr "\nPersona\n"                       // Escritura por salida estandar, linea 18
+2:  + 0 per #0
+3:  Rd     #0                              // Lectura por entrada estandar, linea 19
+4:  Wr "\nPersona\n"                       // Escritura por salida estandar, linea 21
+5:  + 4 per #1
+6:  Rd     #1                              // Lectura por entrada estandar, linea 22
+iPer:  
+7:  Wr "\nCedula : "                       // Escritura por salida estandar, linea 27
+8:  + 0 per #2
+9:  Wr #2                                  // Escritura por salida estandar, linea 27
+10:  Wr "\nEdad   : "                      // Escritura por salida estandar, linea 28
+11:  + 0 per #3
+12:  Wr #3                                 // Escritura por salida estandar, linea 28
+lFam:  
+13:  Wr "\nHijo\n"                         // Escritura por salida estandar, linea 33
+14:  + 0 fam #4
+15:  param #4                              // Parametro 1
+16:  call lPer 1 #5                        // Llamada a Funcion, linea 34
+17:  Wr "\nMadre\n"                        // Escritura por salida estandar, linea 36
+18:  + 8 fam #6
+19:  param #6                              // Parametro 1
+20:  call lPer 1 #7                        // Llamada a Funcion, linea 37
+21:  Wr "\nPadre\n"                        // Escritura por salida estandar, linea 39
+22:  + 16 fam #8
+23:  param #8                              // Parametro 1
+24:  call lPer 1 #9                        // Llamada a Funcion, linea 40
+iFam:  
+25:  Wr "\nHijo"                           // Escritura por salida estandar, linea 45
+26:  + 0 fam #10
+27:  param #10                             // Parametro 1
+28:  call iPer 1 #11                       // Llamada a Funcion, linea 46
+29:  Wr "\nMadre"                          // Escritura por salida estandar, linea 48
+30:  + 8 fam #12
+31:  param #12                             // Parametro 1
+32:  call iPer 1 #13                       // Llamada a Funcion, linea 49
+33:  Wr "\nPadre"                          // Escritura por salida estandar, linea 51
+34:  + 16 fam #14
+35:  param #14                             // Parametro 1
+36:  call iPer 1 #15                       // Llamada a Funcion, linea 52
+oso:  
+// Codigo intermedio para la iteracion acotada, linea 58
+37:  := 0   #16                            // Variable de Iteracion 
+38:  if #16 = 2 goto     46        
+39:  * 24 #16 #17                          // Desplazamiento Arreglo
+40:  [] familias #17 fam                   // Acceso al Arreglo, linea 
+41:  Wr "\nFamilia\n"                      // Escritura por salida estandar, linea 60
+42:  param fam                             // Parametro 1
+43:  call lFam 1 #18                       // Llamada a Funcion, linea 61
+44:  + #16 1 #16                           // Incremento del Iterador
+45:  goto     38                           // Fin de la Iteracion
+// Codigo intermedio para la iteracion acotada, linea 64
+46:  := 0   i                              // Variable de Iteracion 
+47:  if i > 2 goto     54        
+48:  * i 24 #19                            // Desplazamiento Arreglo, linea 66
+49:  [] familias #19 #20                   // Acceso al Arreglo, linea 66
+50:  param #20                             // Parametro 1
+51:  call iFam 1 #21                       // Llamada a Funcion, linea 66
+52:  + i 1 i                               // Incremento del Iterador
+53:  goto     47                           // Fin de la Iteracion
+54:  end   

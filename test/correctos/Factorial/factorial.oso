@@ -1,0 +1,20 @@
+factorial(polar n) => polar
+{
+  polar acc = 1;
+  mientras(n > 0)
+  {
+    acc = acc * n;
+    n = n - 1;
+  }
+  vomita acc;
+}
+
+oso() => extinto
+{
+  escribir("X = ");
+  polar N = 0;
+  leer (N);
+  polar original = N;
+  N = factorial(N);
+  escribir("El factorial de "); escribir(original); escribir("es "); escribir(N);
+}

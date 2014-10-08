@@ -237,11 +237,6 @@ void DefFunction::check()
 void DefFunction::toIntermediate(IntermediateGen *intGen)
 {
   intGen->gen(_id);  
-  for (std::vector<Parameter*>::iterator it = _parameters->begin(); it != _parameters->end(); ++it)
-  {
-    Parameter *p = *it;
-    if(p->get_ref()) { std::string temp = intGen->nextTemp(); intGen->gen("&", p->get_id(), " ", temp); }
-  }
   _statements->toIntermediate(intGen);
 }
 
