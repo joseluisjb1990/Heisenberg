@@ -1,8 +1,0 @@
---<3 Este programa se encarga de imprimir en la
-     salida estándar "¡Hola, Mundo! <3"
-<3->
-
-oso() => extinto
-{
-  escribir("Hola Mundo! :D <3");
-}
