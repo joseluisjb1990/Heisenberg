@@ -548,6 +548,16 @@ instruccion: defvariable                                                 { $$ = 
                                                                              $$->set_location(@1.begin.line, @1.begin.column, @4.end.line, @4.end.column);
                                                                            }
                                                                          }
+           | ID "("")" ";"                                               { Funcion* f = driver.tabla.get_function($1);
+                                                                           if (!f) {
+                                                                             driver.error(@1,@3,"Function " + $1 + " is not defined.");
+                                                                             $$ = new Empty();
+                                                                           } else {
+                                                                             Type* tipoRetorno = f->getTipo();
+                                                                             $$ = new Function($1, nullptr, nullptr, tipoRetorno, nullptr);
+                                                                             $$->set_location(@1.begin.line, @1.begin.column, @3.end.line, @3.end.column);
+                                                                           }
+                                                                         }
            | SI expresion bloque                                         {
                                                                            $$ = new If($2, $3);
                                                                            $$->set_location(@1.begin.line, @1.begin.column, @3.end.line, @3.end.column);
@@ -932,6 +942,16 @@ expresion: CONSTPOLAR                            { $$ = new PolarExpr($1);
                                                         $$ = new FunctionExpr($1, tipos, $3, tipoRetorno, parametros);
                                                         $$->set_location(@1.begin.line, @1.begin.column, @4.end.line, @4.end.column);
                                                      }
+                                                   }
+                                                 }
+         | ID "("")"                             { Funcion* f = driver.tabla.get_function($1);
+                                                   if (!f) {
+                                                     driver.error(@1,@3,"Function " + $1 + " is not defined.");
+                                                     $$ = new EmptyExpr();
+                                                   } else {
+                                                     Type* tipoRetorno = f->getTipo();
+                                                     $$ = new FunctionExpr($1, nullptr, nullptr, tipoRetorno, nullptr);
+                                                     $$->set_location(@1.begin.line, @1.begin.column, @3.end.line, @3.end.column);
                                                    }
                                                  }
          | funcionpredef                         { $$ = $1; }

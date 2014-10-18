@@ -123,8 +123,9 @@ std::string DecFunction::to_string(int nesting)
 {
   std::string padding(nesting*2, ' ');
   std::string str =  padding + "Declaración de función\n" + padding + "Nombre:\n" + padding + "  " + _name + "\n" + padding + "Parametros:\n";
-  for (unsigned int i=0; i<_parametros->size(); ++i)
-    str += _parametros->at(i)->to_string(nesting+1) + '\n';
+  if(_parametros)
+    for (unsigned int i=0; i<_parametros->size(); ++i)
+      str += _parametros->at(i)->to_string(nesting+1) + '\n';
 
   str += padding + "Retorna:\n" + _tipoRetorno->to_string(nesting + 1) + '\n';
   return str;
@@ -133,11 +134,12 @@ std::string DecFunction::to_string(int nesting)
 void DecFunction::check()
 {
   bool ok = true;
-  for(std::vector<Parameter*>::iterator it = _parametros->begin(); it != _parametros->end(); ++it)
-  {
-    (*it)->check();
-    if((*it)->get_type() == ErrorType::getInstance()) ok = false;
-  }
+  if(_parametros)
+    for(std::vector<Parameter*>::iterator it = _parametros->begin(); it != _parametros->end(); ++it)
+    {
+      (*it)->check();
+      if((*it)->get_type() == ErrorType::getInstance()) ok = false;
+    }
 
   if(ok) set_type(_tipoRetorno);
   else   set_type(ErrorType::getInstance());
@@ -203,8 +205,9 @@ std::string DefFunction::to_string(int nesting)
 {
   std::string padding(nesting*2, ' ');
   std::string str = padding + "Definición de funcion\n" + padding + "Nombre:\n" + padding + "  " + _id + "\n" + padding + "Parametros:\n";
-  for (unsigned int i=0; i< _parameters->size(); ++i)
-    str += _parameters->at(i)->to_string(nesting+1) + '\n';
+  if(_parameters)
+    for (unsigned int i=0; i< _parameters->size(); ++i)
+      str += _parameters->at(i)->to_string(nesting+1) + '\n';
 
   str += padding + "Retorna:\n" + _type->to_string(nesting + 1)  + '\n';
   str += padding + "Instrucción:\n" + _statements->to_string(nesting+1) + '\n';
@@ -215,11 +218,12 @@ void DefFunction::check()
 {
   bool ok = true;
 
-  for(std::vector<Parameter*>::iterator it = _parameters->begin(); it != _parameters->end(); it++)
-  {
-    (*it)->check();
-    if((*it)->get_type() == ErrorType::getInstance()) ok = false;
-  }
+  if(_parameters)
+    for(std::vector<Parameter*>::iterator it = _parameters->begin(); it != _parameters->end(); it++)
+    {
+      (*it)->check();
+      if((*it)->get_type() == ErrorType::getInstance()) ok = false;
+    }
 
   _statements->check();
   _statements->checkReturn(_type);

@@ -109,24 +109,26 @@ std::string Function::to_string(int nesting)
 {
   std::string padding(nesting*2, ' ');
   std::string str = padding + "Función\n" + padding + "Nombre:\n" + padding + padding + _name + "\n" + padding + "Parametros:\n";
-  for (unsigned int i=0; i < _parameters->size(); ++i)
-    str += _parameters->at(i)->to_string(nesting+1) + "\n";
-  return str;
+  if(_parameters)
+   for (unsigned int i=0; i < _parameters->size(); ++i)
+     str += _parameters->at(i)->to_string(nesting+1) + "\n";
+   return str;
 }
 
 void Function::check()
 {
   bool ok = true;
-  for(unsigned int i=0; i < _parameters->size(); ++i) {
-    _parameters->at(i)->check();
-    Type* tipo = _parameterTypes->at(i);
-    Type* tipoParam = _parameters->at(i)->get_type();
-    if (!tipo->compareStructure(tipoParam)) {
-      if (tipoParam != ErrorType::getInstance())
-        ok = false;
-        error("Trying to pass a parameter of type '" + tipoParam->to_string() + "' to function '" + _name + "' instead of '" + tipo->to_string() + "'");
+  if(_parameters)
+    for(unsigned int i=0; i < _parameters->size(); ++i) {
+      _parameters->at(i)->check();
+      Type* tipo = _parameterTypes->at(i);
+      Type* tipoParam = _parameters->at(i)->get_type();
+      if (!tipo->compareStructure(tipoParam)) {
+        if (tipoParam != ErrorType::getInstance())
+          ok = false;
+          error("Trying to pass a parameter of type '" + tipoParam->to_string() + "' to function '" + _name + "' instead of '" + tipo->to_string() + "'");
+      }
     }
-  }
   if (ok) {
     this->set_type(_return);
   } else {
@@ -136,29 +138,34 @@ void Function::check()
 
 void Function::toIntermediate(IntermediateGen *intGen)
 {
-  for (unsigned int i=0; i < _parameters->size(); ++i)
-  {
-    _parameters->at(i)->toIntermediate(intGen);
-
-  }
-
-  for (int i=(_parameters->size()-1); -1 < i; --i)
-  {
-    Expression* p = _parameters->at(i);
-    if(_defParametros->at(i))
+  if(_parameters)
+    for (unsigned int i=0; i < _parameters->size(); ++i)
     {
-      std::string t = intGen->nextTemp();
-      intGen->gen("&", p->getTemp(), " ", t, "   // Acceso a Memoria");  
-      intGen->gen("param", t," "," ", "   // Parametro " + std::to_string(i+1));
-    } else
+      _parameters->at(i)->toIntermediate(intGen);
+
+    }
+
+  if(_parameters)
+    for (int i=(_parameters->size()-1); -1 < i; --i)
     {
-      intGen->gen("param", p->getTemp()," "," ", "   // Parametro " + std::to_string(i+1)); 
-    } 
-  }
+      Expression* p = _parameters->at(i);
+      if(_defParametros->at(i))
+      {
+        std::string t = intGen->nextTemp();
+        intGen->gen("&", p->getTemp(), " ", t, "   // Acceso a Memoria");  
+        intGen->gen("param", t," "," ", "   // Parametro " + std::to_string(i+1));
+      } else
+      {
+        intGen->gen("param", p->getTemp()," "," ", "   // Parametro " + std::to_string(i+1)); 
+      } 
+    }
 
   std::string temp = intGen->nextTemp();
-  intGen->gen("call",_name,std::to_string(_parameters->size()),temp,
-  	"   // Llamada a Funcion, linea " + std::to_string(get_first_line()));
+  if(_parameters)
+    intGen->gen("call",_name,std::to_string(_parameters->size()),temp,"   // Llamada a Funcion, linea " + std::to_string(get_first_line()));
+  else
+    intGen->gen("call",_name,"0",temp,"   // Llamada a Funcion, linea " + std::to_string(get_first_line()));
+    
   setTemp(temp);
 }
 
