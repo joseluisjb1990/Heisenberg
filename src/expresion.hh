@@ -28,6 +28,9 @@ class Expression : public Node
     virtual void toIntermediateGoto(IntermediateGen *intGen) {}
     virtual bool isStruct()                 { return false;         }
     virtual bool isIdExpr()                 { return false;         }
+    virtual bool isArray()                  { return false;         }
+    virtual std::string getArrayName()      { return "";            }
+
   private :
     bool         _mutID = true;
     unsigned int _tam   = 0;
@@ -509,7 +512,9 @@ class CuevaExpr : public LValueExpr
     void addDimension(Expression* dimension);
     void check();
     void toIntermediate(IntermediateGen *intGen);
-    Contenido* getTableRow()  { return _tableRow; }
+    Contenido* getTableRow()        { return _tableRow; }
+    std::string getArrayName()      { return _cueva;    }
+    bool isArray()                  { return true;      }
     
   private:
     std::string               _cueva;

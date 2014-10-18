@@ -44,12 +44,17 @@ void Assign::toIntermediate(IntermediateGen *intGen)
     id->toIntermediate(intGen);
     expr->toIntermediate(intGen);
 
-    if(expr->isStruct())
-      intGen->gen("*:=" , expr->getTemp() , " " , id->getTemp(), 
-          "   // Asignacion indirecta, linea " + std::to_string(get_first_line()));
+    if(id->isArray())
+    {
+      std::string temp = intGen->nextTemp();
+      intGen->gen("[]", id->getTemp(), id->getArrayName(), temp);
+      id->setTemp(temp);
+    }
+
+    if(expr->isArray())
+      intGen->gen("[]=", expr->getArrayName(), expr->getTemp() , id->getTemp(),"   // Asignacion indirecta, linea " + std::to_string(get_first_line()));
     else
-      intGen->gen(":="  , expr->getTemp() , " " , id->getTemp(), 
-            "   // Asignacion directa, linea " + std::to_string(get_first_line()));
+      intGen->gen(":=", expr->getTemp() , " " , id->getTemp(), "   // Asignacion directa, linea " + std::to_string(get_first_line()));
   }
 }
 

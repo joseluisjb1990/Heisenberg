@@ -1271,7 +1271,7 @@ void PardoExpr::toIntermediate(IntermediateGen* intGen)
   if (_pardo  )  _pardo->toIntermediate(intGen);
 
   std::string temp = intGen->nextTemp();
-  intGen->gen("+", std::to_string(_tableRow->getOffset()), _pardo->getTemp(), temp);
+  intGen->gen("[]", std::to_string(_tableRow->getOffset()), _pardo->getTemp(), temp);
   setTemp(temp);
 }
 
@@ -1391,16 +1391,12 @@ void CuevaExpr::toIntermediate(IntermediateGen *intGen)
 
   for (unsigned int i=0; i < temps.size()-1; ++i)
   {
-  	intGen->gen("+",aux,  temps[i+1] ,temp,
-                            "   // Suma de Desplazamientos");  
+  	intGen->gen("+",aux,  temps[i+1] ,temp, "   // Suma de Desplazamientos");  
   	aux  = temp;  
-	temp = intGen->nextTemp();
-
+	  temp = intGen->nextTemp();
   }
 
-  intGen->gen("[]",_cueva, aux, temp,
-                        "   // Acceso al Arreglo, linea " + std::to_string(get_first_line()));   
-  setTemp(temp); 
+  setTemp(aux); 
 
 }
 
