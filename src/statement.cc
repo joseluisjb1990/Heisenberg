@@ -330,8 +330,9 @@ void Write::check()
 void Write::toIntermediate(IntermediateGen *intGen)
 {
   _expr->toIntermediate(intGen);
-  intGen->gen("Wr", _expr->getTemp(), " ", " ", 
-    "   // Escritura por salida estandar, linea " + std::to_string(get_first_line()));
+  intGen->gen("param", _expr->getTemp(), "", "");
+  std::string temp = intGen->nextTemp();
+  intGen->gen("call", "escribir", "1", temp, "   // Escritura por salida estandar, linea " + std::to_string(get_first_line()));
 }
 
 Read::Read(Expression* id)
@@ -367,8 +368,9 @@ void Read::check()
 void Read::toIntermediate(IntermediateGen *intGen)
 {
   _id->toIntermediate(intGen);
-  intGen->gen("Rd", " ", " ", _id->getTemp(), 
-      "   // Lectura por entrada estandar, linea " + std::to_string(get_first_line()));
+  intGen->gen("param", _id->getTemp(), "", "");
+  std::string temp = intGen->nextTemp();
+  intGen->gen("call", "leer", "1", temp, "   // Lectura por entrada estandar, linea " + std::to_string(get_first_line()));
 }
 
 Body::Body( std::vector<Statement *>* listSta )

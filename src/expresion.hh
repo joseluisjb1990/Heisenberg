@@ -74,8 +74,10 @@ class HormigueroExpr : public Constant
     std::string to_string(int nesting);
     std::string getValue();
     void check();
-    virtual std::string getTemp() { return valor; }
-
+    void toIntermediate(IntermediateGen* intGen) { std::string temp = intGen->nextTemp(); 
+                                                   intGen->gen(":=", valor, "", temp);
+                                                   setTemp(temp);
+                                                 };
 };
 
 class MalayoExpr : public Constant
