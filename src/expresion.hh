@@ -5,6 +5,7 @@
 #include <iostream>
 #include "type.hh"
 #include "node.hh"
+#include "quad.hh"
 #include "TablaSimbolos.hh"
 
 using namespace std;
@@ -101,9 +102,9 @@ class BoolExpr : public Expression
 {
 public:
   long _offset;
-  long _trueList  = -1;
-  long _falseList = -1;
-  virtual void backpatch(bool con, int jumpDes, IntermediateGen *intGen) {}
+  unsigned int _trueList  = 0;
+  unsigned int _falseList = 0;
+  virtual void backpatch(bool con, int jumpDes, IntermediateGen *intGen) { if(!con) intGen->patch(_falseList, jumpDes); }
 };
 
 class PandaExpr : public BoolExpr
@@ -242,7 +243,6 @@ class Less : public BoolExpr
     void check();
     void toIntermediate(IntermediateGen *intGen);
     void toIntermediateGoto(IntermediateGen *intGen);
-    void backpatch(bool con, int jumpDes, IntermediateGen *intGen);
 };
 
 class LessEqual : public BoolExpr
@@ -257,7 +257,6 @@ class LessEqual : public BoolExpr
     void check();
     void toIntermediate(IntermediateGen *intGen);
     void toIntermediateGoto(IntermediateGen *intGen);
-    void backpatch(bool con, int jumpDes, IntermediateGen *intGen);
 };
 
 class Greater : public BoolExpr
@@ -272,7 +271,6 @@ class Greater : public BoolExpr
     void check();
     void toIntermediate(IntermediateGen *intGen);
     void toIntermediateGoto(IntermediateGen *intGen);
-    void backpatch(bool con, int jumpDes, IntermediateGen *intGen);
 };
 
 class GreaterEqual : public BoolExpr
@@ -287,7 +285,6 @@ class GreaterEqual : public BoolExpr
     void check();
     void toIntermediate(IntermediateGen *intGen);
     void toIntermediateGoto(IntermediateGen *intGen);
-    void backpatch(bool con, int jumpDes, IntermediateGen *intGen);
 };
 
 class Equal : public BoolExpr
@@ -302,8 +299,6 @@ class Equal : public BoolExpr
     void check();
     void toIntermediate(IntermediateGen *intGen);
     void toIntermediateGoto(IntermediateGen *intGen);
-    void backpatch(bool con, int jumpDes, IntermediateGen *intGen);
-
 };
 
 class NotEqual : public BoolExpr
@@ -318,7 +313,6 @@ class NotEqual : public BoolExpr
     void check();
     void toIntermediate(IntermediateGen *intGen);
     void toIntermediateGoto(IntermediateGen *intGen);
-    void backpatch(bool con, int jumpDes, IntermediateGen *intGen);
 };
 
 class And : public BoolExpr
@@ -408,8 +402,8 @@ class IDExpr : public LValueExpr
     void check();
     std::string getTemp() { return _nombre; }
     void toIntermediateGoto(IntermediateGen *intGen);
-    void backpatch(bool con, int jumpDes, IntermediateGen *intGen);
     bool isIdExpr()       { return true;    }
+    virtual void backpatch(bool con, int jumpDes, IntermediateGen *intGen) { if(!con) intGen->patch(_falseList, jumpDes); }
 };
 
 class FunctionExpr : public Expression

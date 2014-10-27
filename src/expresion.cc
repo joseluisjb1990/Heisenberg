@@ -117,27 +117,27 @@ void PandaExpr::check()
 
 void TrueExpr::toIntermediateGoto(IntermediateGen *intGen)
 {
-  _trueList = intGen->genEmpty("goto");
+  // _trueList = intGen->genEmpty("goto");
 }
 
 void TrueExpr::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
 {
   if(con)
   {
-    intGen->gen(_trueList, jumpDes);
+    // intGen->gen(_trueList, jumpDes);
   }
 }
 
 void FalseExpr::toIntermediateGoto(IntermediateGen *intGen)
 {
-  _falseList = intGen->genEmpty("goto");
+  // _falseList = intGen->genEmpty("goto");
 }
 
 void FalseExpr::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
 {
   if(!con)
   {
-    intGen->gen(_falseList, jumpDes);
+    // intGen->gen(_falseList, jumpDes);
   }
 }
 
@@ -174,8 +174,11 @@ void Sum::toIntermediate(IntermediateGen *intGen)
   izq->toIntermediate(intGen);
   der->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
-  intGen->gen("+",izq->getTemp(), der->getTemp(),temp, 
-              "   // Suma, linea " + std::to_string(get_first_line()));  
+
+  Quad* q = new SumQuad(izq->getTemp(), der->getTemp(), temp);
+  intGen->gen(q);
+
+  // intGen->gen("+",izq->getTemp(), der->getTemp(),temp, "   // Suma, linea " + std::to_string(get_first_line()));  
   setTemp(temp);
 }
 
@@ -212,8 +215,11 @@ void Substraction::toIntermediate(IntermediateGen *intGen)
   izq->toIntermediate(intGen);
   der->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
-  intGen->gen("-",izq->getTemp(), der->getTemp(),temp,
-                  "   // Resta, linea " + std::to_string(get_first_line()));  
+
+  Quad* q = new SubQuad(izq->getTemp(), der->getTemp(), temp);
+  intGen->gen(q);
+
+  // intGen->gen("-",izq->getTemp(), der->getTemp(),temp, "   // Resta, linea " + std::to_string(get_first_line()));  
   setTemp(temp);
 }
 
@@ -250,8 +256,11 @@ void Multiplication::toIntermediate(IntermediateGen *intGen)
   izq->toIntermediate(intGen);
   der->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
-  intGen->gen("*",izq->getTemp(), der->getTemp(),temp,
-                  "   // Multiplication, linea " + std::to_string(get_first_line()));  
+
+  Quad* q = new MulQuad(izq->getTemp(), der->getTemp(), temp);
+  intGen->gen(q);
+  
+  intGen->gen("*",izq->getTemp(), der->getTemp(),temp, "   // Multiplication, linea " + std::to_string(get_first_line()));  
   setTemp(temp);
 }
 
@@ -288,8 +297,11 @@ void Division::toIntermediate(IntermediateGen *intGen)
   izq->toIntermediate(intGen);
   der->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
-  intGen->gen("/",izq->getTemp(), der->getTemp(),temp,
-                "   // Division, linea " + std::to_string(get_first_line()));    
+
+  Quad* q = new DivQuad(izq->getTemp(), der->getTemp(), temp);
+  intGen->gen(q);
+  
+  // intGen->gen("/",izq->getTemp(), der->getTemp(),temp, "   // Division, linea " + std::to_string(get_first_line()));    
   setTemp(temp);
 }
 
@@ -326,8 +338,11 @@ void Remainder::toIntermediate(IntermediateGen *intGen)
   izq->toIntermediate(intGen);
   der->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
-  intGen->gen("%",izq->getTemp(), der->getTemp(),temp,
-                "   // Modulo, linea " + std::to_string(get_first_line()));    
+
+  Quad* q = new RemQuad(izq->getTemp(), der->getTemp(), temp);
+  intGen->gen(q);
+  
+  // intGen->gen("%",izq->getTemp(), der->getTemp(),temp, "   // Modulo, linea " + std::to_string(get_first_line()));    
   setTemp(temp);
 }
 
@@ -364,8 +379,11 @@ void Power::toIntermediate(IntermediateGen *intGen)
   izq->toIntermediate(intGen);
   der->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
-  intGen->gen("**",izq->getTemp(), der->getTemp(),temp,
-                "   // Potenciación, linea " + std::to_string(get_first_line()));    
+
+  Quad* q = new PowQuad(izq->getTemp(), der->getTemp(), temp);
+  intGen->gen(q);
+  
+//  intGen->gen("**",izq->getTemp(), der->getTemp(),temp, "   // Potenciación, linea " + std::to_string(get_first_line()));    
   setTemp(temp);
 }
 
@@ -396,8 +414,11 @@ void Minus::toIntermediate(IntermediateGen *intGen)
 {
   operando->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
-  intGen->gen("um",operando->getTemp(), " ", temp,  
-                  "   // Unario, linea " + std::to_string(get_first_line()));  
+
+  Quad* q = new UmQuad(operando->getTemp(), "", temp);
+  intGen->gen(q);
+  
+  // intGen->gen("um",operando->getTemp(), " ", temp, "   // Unario, linea " + std::to_string(get_first_line()));  
   setTemp(temp);
 }
 
@@ -434,14 +455,8 @@ void Less::toIntermediateGoto(IntermediateGen *intGen)
   izq->toIntermediate(intGen);
   der->toIntermediate(intGen);
 
-  _trueList   = intGen->genEmpty("if " + izq->getTemp() + " < " + der->getTemp() + " goto");
-  _falseList  = intGen->genEmpty("goto");
-}
-
-void Less::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
-{
-  if(con) intGen->gen(_trueList , jumpDes); 
-  else    intGen->gen(_falseList, jumpDes);
+  Quad* q = new LessThanQuad(izq->getTemp(), der->getTemp(), "");
+  _falseList   = intGen->gen(q);
 }
 
 void Less::toIntermediate(IntermediateGen *intGen)
@@ -489,14 +504,8 @@ void LessEqual::toIntermediateGoto(IntermediateGen *intGen)
   izq->toIntermediate(intGen);
   der->toIntermediate(intGen);
 
-  _trueList   = intGen->genEmpty("if " + izq->getTemp() + " =< " + der->getTemp() + " goto");
-  _falseList  = intGen->genEmpty("goto");
-}
-
-void LessEqual::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
-{
-  if(con) intGen->gen(_trueList , jumpDes); 
-  else    intGen->gen(_falseList, jumpDes);
+  Quad* q = new LessEqualQuad(izq->getTemp(), der->getTemp(), "");
+  _falseList   = intGen->gen(q);
 }
 
 void LessEqual::toIntermediate(IntermediateGen *intGen)
@@ -542,14 +551,8 @@ void Greater::toIntermediateGoto(IntermediateGen *intGen)
   izq->toIntermediate(intGen);
   der->toIntermediate(intGen);
 
-  _trueList   = intGen->genEmpty("if " + izq->getTemp() + " > " + der->getTemp() + " goto");
-  _falseList  = intGen->genEmpty("goto");
-}
-
-void Greater::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
-{
-  if(con) intGen->gen(_trueList , jumpDes); 
-  else    intGen->gen(_falseList, jumpDes);
+  Quad* q = new GreaterThanQuad(izq->getTemp(), der->getTemp(), "");
+  _falseList   = intGen->gen(q);
 }
 
 void Greater::toIntermediate(IntermediateGen *intGen)
@@ -595,14 +598,8 @@ void GreaterEqual::toIntermediateGoto(IntermediateGen *intGen)
   izq->toIntermediate(intGen);
   der->toIntermediate(intGen);
 
-  _trueList   = intGen->genEmpty("if " + izq->getTemp() + " >= " + der->getTemp() + " goto");
-  _falseList  = intGen->genEmpty("goto");
-}
-
-void GreaterEqual::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
-{
-  if(con) intGen->gen(_trueList , jumpDes); 
-  else    intGen->gen(_falseList, jumpDes);
+  Quad* q = new GreaterEqualQuad(izq->getTemp(), der->getTemp(), "");
+  _falseList   = intGen->gen(q);
 }
 
 void GreaterEqual::toIntermediate(IntermediateGen *intGen)
@@ -648,14 +645,8 @@ void Equal::toIntermediateGoto(IntermediateGen *intGen)
   izq->toIntermediate(intGen);
   der->toIntermediate(intGen);
 
-  _trueList   = intGen->genEmpty("if " + izq->getTemp() + " == " + der->getTemp() + " goto");
-  _falseList  = intGen->genEmpty("goto");
-}
-
-void Equal::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
-{
-  if(con) intGen->gen(_trueList , jumpDes); 
-  else    intGen->gen(_falseList, jumpDes);
+  Quad* q = new EqualQuad(izq->getTemp(), der->getTemp(), "");
+  _falseList   = intGen->gen(q);
 }
 
 void Equal::toIntermediate(IntermediateGen *intGen)
@@ -702,14 +693,8 @@ void NotEqual::toIntermediateGoto(IntermediateGen *intGen)
   izq->toIntermediate(intGen);
   der->toIntermediate(intGen);
 
-  _trueList   = intGen->genEmpty("if " + izq->getTemp() + " =/= " + der->getTemp() + " goto");
-  _falseList  = intGen->genEmpty("goto");
-}
-
-void NotEqual::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
-{
-  if(con) intGen->gen(_trueList , jumpDes); 
-  else    intGen->gen(_falseList, jumpDes);
+  Quad* q = new NotEqualQuad(izq->getTemp(), der->getTemp(), "");
+  _falseList   = intGen->gen(q);
 }
 
 void NotEqual::toIntermediate(IntermediateGen *intGen)
@@ -756,7 +741,6 @@ void And::toIntermediateGoto(IntermediateGen *intGen)
   izq->toIntermediateGoto(intGen);
   unsigned int pos = intGen->getQuad();
   der->toIntermediateGoto(intGen);
-
   izq->backpatch(true, pos, intGen);
 }
 
@@ -775,8 +759,7 @@ void And::toIntermediate(IntermediateGen *intGen)
   izq->toIntermediate(intGen);
   der->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
-  intGen->gen("&",izq->getTemp(), der->getTemp(),temp,
-                "   // Conjuncion, linea " + std::to_string(get_first_line()));    
+  intGen->gen("&",izq->getTemp(), der->getTemp(),temp,"   // Conjuncion, linea " + std::to_string(get_first_line()));    
   setTemp(temp);
 }
 
@@ -875,12 +858,12 @@ void Not::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
 {
   if(!con)
   {
-    intGen->gen(_trueList , jumpDes);
+    // intGen->gen(_trueList , jumpDes);
     operando->backpatch(true, _desTrue, intGen);
   }
   else
   {
-    intGen->gen(_falseList, jumpDes);
+    // intGen->gen(_falseList, jumpDes);
     operando->backpatch(false, _desFalse, intGen);
   }
 }
@@ -928,14 +911,8 @@ void IDExpr::check(){};
 
 void IDExpr::toIntermediateGoto(IntermediateGen *intGen)
 {
-  _trueList   = intGen->genEmpty("if " + _nombre + " goto");
-  _falseList  = intGen->genEmpty("goto");
-}
-
-void IDExpr::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
-{
-  if(con) intGen->gen(_trueList , jumpDes); 
-  else    intGen->gen(_falseList, jumpDes);
+  Quad* q = new IdBoolQuad(_nombre, "","");
+  _falseList   = intGen->gen(q);
 }
 
 FunctionExpr::FunctionExpr(std::string name, std::vector<Type*>* parameterTypes, std::vector<Expression*>* parameters, Type* returnType)
@@ -1032,8 +1009,8 @@ void FunctionExpr::toIntermediateAux(IntermediateGen *intGen)
 
 void FunctionExpr::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
 {
-  if(con) intGen->gen(_trueList , jumpDes); 
-  else    intGen->gen(_falseList, jumpDes);
+  // if(con) intGen->gen(_trueList , jumpDes); 
+  // else    intGen->gen(_falseList, jumpDes);
 }
 
 void FunctionExpr::toIntermediate(IntermediateGen *intGen)

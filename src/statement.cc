@@ -283,7 +283,7 @@ void IfElse::toIntermediate(IntermediateGen *intGen)
 
 void IfElse::nextInst(int nextInst, IntermediateGen *intGen)
 {
-  intGen->gen(_nextInst, nextInst);
+  // intGen->gen(_nextInst, nextInst);
   _brazoTrue->nextInst(nextInst, intGen);
   _brazoFalse->nextInst(nextInst, intGen);
 }
@@ -545,7 +545,7 @@ void ComplexFor::toIntermediate(IntermediateGen *intGen)
 
 void ComplexFor::nextInst(int nextInst, IntermediateGen *intGen)
 {
-  intGen->gen(_nextInst, nextInst);
+  // intGen->gen(_nextInst, nextInst);
   _body->nextInst(nextInst, intGen);
 }
 
@@ -620,7 +620,7 @@ void SimpleFor::toIntermediate(IntermediateGen *intGen)
 
 void SimpleFor::nextInst(int nextInst, IntermediateGen *intGen)
 {
-  intGen->gen(_nextInst, nextInst);
+  // intGen->gen(_nextInst, nextInst);
   _body->nextInst(nextInst, intGen);
 }
 
@@ -687,7 +687,7 @@ void IdFor::toIntermediate(IntermediateGen *intGen)
 
 void IdFor::nextInst(int nextInst, IntermediateGen *intGen)
 {
-  intGen->gen(_nextInst, nextInst);
+  // intGen->gen(_nextInst, nextInst);
   _body->nextInst(nextInst, intGen);
 }
 
@@ -839,7 +839,7 @@ void Continue::toIntermediate(IntermediateGen *intGen)
 
 void Continue::nextInstContinue(int nextInst, IntermediateGen *intGen)
 {
-  intGen->gen(_nextInst, nextInst);
+  // intGen->gen(_nextInst, nextInst);
 }
 
 ContinueID::ContinueID(std::string id)
@@ -875,7 +875,7 @@ void ContinueID::toIntermediateTag(IntermediateGen *intGen, std::string tag, int
 {
   if(tag.compare(_id) == 0)
   {
-    intGen->gen(_nextInst, pos);
+    // intGen->gen(_nextInst, pos);
   }
 }
 
@@ -908,7 +908,7 @@ void Break::toIntermediate(IntermediateGen *intGen)
 void Break::nextInstBreak(int nextInst, IntermediateGen *intGen)
 {
   std::cout << "Estoy generando codigo intermedio para el break " << nextInst << std::endl;
-  intGen->gen(_nextInst, nextInst);
+  // intGen->gen(_nextInst, nextInst);
 }
 
 BreakID::BreakID(std::string id)
@@ -944,7 +944,7 @@ void BreakID::toIntermediateTagBreak(IntermediateGen *intGen, std::string tag, i
 {
   if(tag.compare(_id) == 0)
   {
-    intGen->gen(_nextInst, pos);
+    // intGen->gen(_nextInst, pos);
   }
 }
 
