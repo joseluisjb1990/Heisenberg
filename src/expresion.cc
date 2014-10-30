@@ -117,28 +117,14 @@ void PandaExpr::check()
 
 void TrueExpr::toIntermediateGoto(IntermediateGen *intGen)
 {
-  // _trueList = intGen->genEmpty("goto");
-}
-
-void TrueExpr::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
-{
-  if(con)
-  {
-    // intGen->gen(_trueList, jumpDes);
-  }
+  Quad* q   = new GotoQuad();
+  _trueList = intGen->gen(q);
 }
 
 void FalseExpr::toIntermediateGoto(IntermediateGen *intGen)
 {
-  // _falseList = intGen->genEmpty("goto");
-}
-
-void FalseExpr::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
-{
-  if(!con)
-  {
-    // intGen->gen(_falseList, jumpDes);
-  }
+  Quad* q     = new GotoQuad();
+  _falseList  = intGen->gen(q);
 }
 
 Sum::Sum(Expression* izq, Expression* der)
@@ -260,7 +246,7 @@ void Multiplication::toIntermediate(IntermediateGen *intGen)
   Quad* q = new MulQuad(izq->getTemp(), der->getTemp(), temp);
   intGen->gen(q);
   
-  intGen->gen("*",izq->getTemp(), der->getTemp(),temp, "   // Multiplication, linea " + std::to_string(get_first_line()));  
+//  intGen->gen("*",izq->getTemp(), der->getTemp(),temp, "   // Multiplication, linea " + std::to_string(get_first_line()));  
   setTemp(temp);
 }
 
@@ -456,7 +442,10 @@ void Less::toIntermediateGoto(IntermediateGen *intGen)
   der->toIntermediate(intGen);
 
   Quad* q = new LessThanQuad(izq->getTemp(), der->getTemp(), "");
-  _falseList   = intGen->gen(q);
+  _trueList   = intGen->gen(q);
+
+  q = new GotoQuad();
+  _falseList = intGen->gen(q);
 }
 
 void Less::toIntermediate(IntermediateGen *intGen)
@@ -464,8 +453,9 @@ void Less::toIntermediate(IntermediateGen *intGen)
   izq->toIntermediate(intGen);
   der->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
-  intGen->gen("<",izq->getTemp(), der->getTemp(),temp,
-                "   // Menor, linea " + std::to_string(get_first_line()));    
+  Quad* q = new LessThanQuadExpr(izq->getTemp(), der->getTemp(), temp);
+  intGen->gen(q);
+  //intGen->gen("<",izq->getTemp(), der->getTemp(),temp,            "   // Menor, linea " + std::to_string(get_first_line()));    
   setTemp(temp);
 }
 
@@ -505,7 +495,10 @@ void LessEqual::toIntermediateGoto(IntermediateGen *intGen)
   der->toIntermediate(intGen);
 
   Quad* q = new LessEqualQuad(izq->getTemp(), der->getTemp(), "");
-  _falseList   = intGen->gen(q);
+  _trueList   = intGen->gen(q);
+
+  q = new GotoQuad();
+  _falseList = intGen->gen(q);
 }
 
 void LessEqual::toIntermediate(IntermediateGen *intGen)
@@ -513,8 +506,9 @@ void LessEqual::toIntermediate(IntermediateGen *intGen)
   izq->toIntermediate(intGen);
   der->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
-  intGen->gen("=<",izq->getTemp(), der->getTemp(),temp,
-                "   // MenorQue, linea " + std::to_string(get_first_line()));   
+  Quad* q = new LessEqualQuadExpr(izq->getTemp(), der->getTemp(), temp);
+  intGen->gen(q);
+  //intGen->gen("=<",izq->getTemp(), der->getTemp(),temp,            "   // MenorQue, linea " + std::to_string(get_first_line()));   
   setTemp(temp);
 }
 
@@ -552,7 +546,9 @@ void Greater::toIntermediateGoto(IntermediateGen *intGen)
   der->toIntermediate(intGen);
 
   Quad* q = new GreaterThanQuad(izq->getTemp(), der->getTemp(), "");
-  _falseList   = intGen->gen(q);
+  _trueList   = intGen->gen(q);
+  q = new GotoQuad();
+  _falseList = intGen->gen(q);
 }
 
 void Greater::toIntermediate(IntermediateGen *intGen)
@@ -560,8 +556,9 @@ void Greater::toIntermediate(IntermediateGen *intGen)
   izq->toIntermediate(intGen);
   der->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
-  intGen->gen(">",izq->getTemp(), der->getTemp(),temp,
-                "   // Mayor, linea " + std::to_string(get_first_line()));    
+  Quad* q = new GreaterThanQuadExpr(izq->getTemp(), der->getTemp(), temp);
+  intGen->gen(q);
+  // intGen->gen(">",izq->getTemp(), der->getTemp(),temp,            "   // Mayor, linea " + std::to_string(get_first_line()));    
   setTemp(temp);
 }
 
@@ -599,7 +596,9 @@ void GreaterEqual::toIntermediateGoto(IntermediateGen *intGen)
   der->toIntermediate(intGen);
 
   Quad* q = new GreaterEqualQuad(izq->getTemp(), der->getTemp(), "");
-  _falseList   = intGen->gen(q);
+  _trueList   = intGen->gen(q);
+  q = new GotoQuad();
+  _falseList = intGen->gen(q);
 }
 
 void GreaterEqual::toIntermediate(IntermediateGen *intGen)
@@ -607,8 +606,9 @@ void GreaterEqual::toIntermediate(IntermediateGen *intGen)
   izq->toIntermediate(intGen);
   der->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
-  intGen->gen(">=",izq->getTemp(), der->getTemp(),temp,
-                "   // MayorQue, linea " + std::to_string(get_first_line()));   
+  Quad* q = new GreaterEqualQuad(izq->getTemp(), der->getTemp(), temp);
+  intGen->gen(q);
+  //intGen->gen(">=",izq->getTemp(), der->getTemp(),temp,            "   // MayorQue, linea " + std::to_string(get_first_line()));   
   setTemp(temp);
 }
 
@@ -646,7 +646,9 @@ void Equal::toIntermediateGoto(IntermediateGen *intGen)
   der->toIntermediate(intGen);
 
   Quad* q = new EqualQuad(izq->getTemp(), der->getTemp(), "");
-  _falseList   = intGen->gen(q);
+  _trueList   = intGen->gen(q);
+  q = new GotoQuad();
+  _falseList = intGen->gen(q);
 }
 
 void Equal::toIntermediate(IntermediateGen *intGen)
@@ -654,8 +656,9 @@ void Equal::toIntermediate(IntermediateGen *intGen)
   izq->toIntermediate(intGen);
   der->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
-  intGen->gen("==",izq->getTemp(), der->getTemp(),temp,
-                "   // Igual, linea " + std::to_string(get_first_line()));   
+  Quad* q = new EqualQuadExpr(izq->getTemp(), der->getTemp(), temp);
+  intGen->gen(q);
+  // intGen->gen("==",izq->getTemp(), der->getTemp(),temp,           "   // Igual, linea " + std::to_string(get_first_line()));   
   setTemp(temp);
 }
 
@@ -694,7 +697,9 @@ void NotEqual::toIntermediateGoto(IntermediateGen *intGen)
   der->toIntermediate(intGen);
 
   Quad* q = new NotEqualQuad(izq->getTemp(), der->getTemp(), "");
-  _falseList   = intGen->gen(q);
+  _trueList   = intGen->gen(q);
+  q = new GotoQuad();
+  _falseList = intGen->gen(q);
 }
 
 void NotEqual::toIntermediate(IntermediateGen *intGen)
@@ -702,8 +707,9 @@ void NotEqual::toIntermediate(IntermediateGen *intGen)
   izq->toIntermediate(intGen);
   der->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
-  intGen->gen("=/=",izq->getTemp(), der->getTemp(),temp,
-                "   // Distinto, linea " + std::to_string(get_first_line()));    
+  Quad* q = new NotEqualQuadExpr(izq->getTemp(), der->getTemp(), temp);
+  intGen->gen(q);
+  // intGen->gen("=/=",izq->getTemp(), der->getTemp(),temp,"   // Distinto, linea " + std::to_string(get_first_line()));    
   setTemp(temp);
 }
 
@@ -759,7 +765,9 @@ void And::toIntermediate(IntermediateGen *intGen)
   izq->toIntermediate(intGen);
   der->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
-  intGen->gen("&",izq->getTemp(), der->getTemp(),temp,"   // Conjuncion, linea " + std::to_string(get_first_line()));    
+  Quad* q = new AndQuad(izq->getTemp(), der->getTemp(), temp);
+  intGen->gen(q);
+  // intGen->gen("&",izq->getTemp(), der->getTemp(),temp,"   // Conjuncion, linea " + std::to_string(get_first_line()));    
   setTemp(temp);
 }
 
@@ -815,8 +823,8 @@ void Or::toIntermediate(IntermediateGen *intGen)
   izq->toIntermediate(intGen);
   der->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
-  intGen->gen("|",izq->getTemp(), der->getTemp(),temp,
-                "   // Disyuncion, linea " + std::to_string(get_first_line()));   
+  Quad* q = new OrQuad(izq->getTemp(), der->getTemp(), temp);
+  intGen->gen(q);
   setTemp(temp);
 }
 
@@ -847,33 +855,20 @@ void Not::check()
 void Not::toIntermediateGoto(IntermediateGen *intGen)
 {
   operando->toIntermediateGoto(intGen);
-
-  _desTrue = intGen->getQuad();
-  _trueList   = intGen->genEmpty("goto");
-  _desFalse = intGen->getQuad();
-  _falseList  = intGen->genEmpty("goto");
 }
 
 void Not::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
 {
-  if(!con)
-  {
-    // intGen->gen(_trueList , jumpDes);
-    operando->backpatch(true, _desTrue, intGen);
-  }
-  else
-  {
-    // intGen->gen(_falseList, jumpDes);
-    operando->backpatch(false, _desFalse, intGen);
-  }
+  if  (!con)  operando->backpatch(true  , jumpDes, intGen);
+  else        operando->backpatch(false , jumpDes, intGen);
 }
 
 void Not::toIntermediate(IntermediateGen *intGen)
 {
   operando->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
-  intGen->gen("no",operando->getTemp(), "", temp,
-                "   // Negacion, linea " + std::to_string(get_first_line()));    
+  Quad* q = new NotQuad(operando->getTemp(), temp);
+  intGen->gen(q);
   setTemp(temp);
 }
 
@@ -912,7 +907,10 @@ void IDExpr::check(){};
 void IDExpr::toIntermediateGoto(IntermediateGen *intGen)
 {
   Quad* q = new IdBoolQuad(_nombre, "","");
-  _falseList   = intGen->gen(q);
+  _trueList   = intGen->gen(q);
+
+  q = new GotoQuad();
+  _falseList = intGen->gen(q);
 }
 
 FunctionExpr::FunctionExpr(std::string name, std::vector<Type*>* parameterTypes, std::vector<Expression*>* parameters, Type* returnType)
@@ -971,8 +969,11 @@ void FunctionExpr::check()
 void FunctionExpr::toIntermediateGoto(IntermediateGen *intGen)
 {
   toIntermediateAux(intGen);
-  _trueList   = intGen->genEmpty("if " + getTemp() + " goto");
-  _falseList  = intGen->genEmpty("goto");
+  Quad* q = new IdBoolQuad(getTemp(),"",""); 
+  _trueList   = intGen->gen(q);
+
+  q = new GotoQuad(); 
+  _falseList   = intGen->gen(q);
 }
 
 void FunctionExpr::toIntermediateAux(IntermediateGen *intGen)
@@ -982,35 +983,47 @@ void FunctionExpr::toIntermediateAux(IntermediateGen *intGen)
     for (unsigned int i=0; i < _parameters->size(); ++i)
       _parameters->at(i)->toIntermediate(intGen);
 
-
+  Quad* q;
+  std::string t;
+  Expression* p;
+  
   if(_parameters)
+  { 
     for (int i=(_parameters->size()-1); -1 < i; --i)
-    {
-      Expression* p = _parameters->at(i);
       if(_defParametros->at(i)->get_ref())
       {
-        std::string t = intGen->nextTemp();
-        intGen->gen("&", p->getTemp(), " ", t, "   // Acceso a Memoria");  
-        intGen->gen("param", t," "," ", "   // Parametro " + std::to_string(i+1)); 
-      } else
-      {
-        intGen->gen("param", p->getTemp()," "," ", "   // Parametro " + std::to_string(i+1));  
-      } 
-    }
+        p = _parameters->at(i);
+        t = intGen->nextTemp();
+        q = new RefQuad(p->getTemp(), t);
+        intGen->gen(q);
+        p->setTemp(t);
+      }
+    for (int i=(_parameters->size()-1); -1 < i; --i)
+    {
+      p = _parameters->at(i);
+      q = new ParamQuad(p->getTemp());
+      intGen->gen(q);
+    } 
+  }
 
-  std::string temp = intGen->nextTemp();
+  t = intGen->nextTemp();
   if(_parameters)
-    intGen->gen("call",_name,std::to_string(_parameters->size()),temp,"   // Llamada a Funcion, linea " + std::to_string(get_first_line()));
+  {
+    q = new CallQuad(_name, std::to_string(_parameters->size()), t);
+    intGen->gen(q);
+  }
   else
-    intGen->gen("call",_name,"0",temp,"   // Llamada a Funcion, linea " + std::to_string(get_first_line()));
-  
-  setTemp(temp);
+  {
+    q = new CallQuad(_name, "0", t);
+    intGen->gen(q);
+  } 
+  setTemp(t);
 }
 
 void FunctionExpr::backpatch(bool con, int jumpDes, IntermediateGen *intGen)
 {
-  // if(con) intGen->gen(_trueList , jumpDes); 
-  // else    intGen->gen(_falseList, jumpDes);
+  if      (!con and _falseList  != 0) intGen->patch(_falseList, jumpDes); 
+  else if (con  and _trueList   != 0) intGen->patch(_trueList , jumpDes);
 }
 
 void FunctionExpr::toIntermediate(IntermediateGen *intGen)
@@ -1047,10 +1060,15 @@ void AKodiakExpr::toIntermediate(IntermediateGen *intGen)
 {
   _parameter->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
-  intGen->gen("param",_parameter->getTemp(),""," ",
-                    "   // Parametro 1");      
-  intGen->gen("call","aKodiak ","1",temp,
-                      "   // Llamada a Funcion, linea " + std::to_string(get_first_line()));  
+
+  Quad* q = new ParamQuad(_parameter->getTemp());
+  intGen->gen(q);
+
+  q = new CallQuad("a_kodiak", "1", temp);
+  intGen->gen(q);
+  
+  // intGen->gen("param",_parameter->getTemp(),""," ",                  "   // Parametro 1");      
+  // intGen->gen("call","aKodiak ","1",temp,"   // Llamada a Funcion, linea " + std::to_string(get_first_line()));  
   setTemp(temp);
 }
 
@@ -1083,10 +1101,15 @@ void APolarExpr::toIntermediate(IntermediateGen *intGen)
 {
   _parameter->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
-  intGen->gen("param",_parameter->getTemp(),""," ",
-                    "   // Parametro 1");      
-  intGen->gen("call","aPolar ","1",temp,
-                      "   // Llamada a Funcion, linea " + std::to_string(get_first_line()));   
+
+  Quad* q = new ParamQuad(_parameter->getTemp());
+  intGen->gen(q);
+
+  q = new CallQuad("a_polar", "1", temp);
+  intGen->gen(q);
+  
+  // intGen->gen("param",_parameter->getTemp(),""," ", "   // Parametro 1");      
+  // intGen->gen("call","aPolar ","1",temp, "   // Llamada a Funcion, linea " + std::to_string(get_first_line()));   
   setTemp(temp);
 }
 
@@ -1119,10 +1142,15 @@ void AMalayoExpr::toIntermediate(IntermediateGen *intGen)
 {
   _parameter->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
-  intGen->gen("param",_parameter->getTemp(),""," ",
-                    "   // Parametro 1");      
-  intGen->gen("call","aMalayo ","1",temp,
-                      "   // Llamada a Funcion, linea " + std::to_string(get_first_line()));  
+ 
+  Quad* q = new ParamQuad(_parameter->getTemp());
+  intGen->gen(q);
+
+  q = new CallQuad("a_malayo", "1", temp);
+  intGen->gen(q);
+ 
+  //intGen->gen("param",_parameter->getTemp(),""," ",                  "   // Parametro 1");      
+  //intGen->gen("call","aMalayo ","1",temp,"   // Llamada a Funcion, linea " + std::to_string(get_first_line()));  
   setTemp(temp);
 }
 
@@ -1155,10 +1183,18 @@ void APandaExpr::toIntermediate(IntermediateGen *intGen)
 {
   _parameter->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
-  intGen->gen("param",_parameter->getTemp(),""," ",
-                    "   // Parametro 1");      
-  intGen->gen("call","aPanda ","1",temp,
-                      "   // Llamada a Funcion, linea " + std::to_string(get_first_line()));  
+  
+  Quad* q = new ParamQuad(_parameter->getTemp());
+  intGen->gen(q);
+
+  q = new CallQuad("a_panda", "1", temp);
+  intGen->gen(q);
+
+  //intGen->gen("param",_parameter->getTemp(),""," ",
+    //                "   // Parametro 1");      
+  //intGen->gen("call","aPanda ","1",temp,
+   //                   "   // Llamada a Funcion, linea " + std::to_string(get_first_line()));  
+  
   setTemp(temp);
 }
 
@@ -1190,11 +1226,16 @@ void LonExpr::check()
 void LonExpr::toIntermediate(IntermediateGen *intGen)
 {
   _parameter->toIntermediate(intGen);
-  std::string temp = intGen->nextTemp(); 
-  intGen->gen("param",_parameter->getTemp(),""," ",
-                    "   // Parametro 1");      
-  intGen->gen("call","lon ","1",temp,
-                      "   // Llamada a Funcion, linea " + std::to_string(get_first_line()));  
+  std::string temp = intGen->nextTemp();
+
+  Quad* q = new ParamQuad(_parameter->getTemp());
+  intGen->gen(q);
+
+  q = new CallQuad("lon", "1", temp);
+  intGen->gen(q);
+
+  // intGen->gen("param",_parameter->getTemp(),""," ", "   // Parametro 1");      
+  // intGen->gen("call","lon ","1",temp, "   // Llamada a Funcion, linea " + std::to_string(get_first_line()));  
   setTemp(temp);
 }
 
@@ -1248,7 +1289,10 @@ void PardoExpr::toIntermediate(IntermediateGen* intGen)
   if (_pardo  )  _pardo->toIntermediate(intGen);
 
   std::string temp = intGen->nextTemp();
-  intGen->gen("[]", std::to_string(_tableRow->getOffset()), _pardo->getTemp(), temp);
+
+  Quad* q = new DespQuad(std::to_string(_tableRow->getOffset()), _pardo->getTemp(), temp);
+  intGen->gen(q); 
+  // intGen->gen("[]", std::to_string(_tableRow->getOffset()), _pardo->getTemp(), temp);
   setTemp(temp);
 }
 
@@ -1357,8 +1401,9 @@ void CuevaExpr::toIntermediate(IntermediateGen *intGen)
   	_dimensions->at(i)->toIntermediate(intGen);
     std::string temp = intGen->nextTemp();
 
-  	intGen->gen("*",_dimensions->at(i)->getTemp(), std::to_string(t->getSize()), temp,
-                 "   // Desplazamiento Arreglo, linea " + std::to_string(get_first_line()));  
+    Quad* q = new MulQuad(_dimensions->at(i)->getTemp(), std::to_string(t->getSize()), temp);
+    intGen->gen(q);
+  	// intGen->gen("*",_dimensions->at(i)->getTemp(), std::to_string(t->getSize()), temp, "   // Desplazamiento Arreglo, linea " + std::to_string(get_first_line()));  
   	temps.push_back(temp);
     if(t->isArray()) { ct = dynamic_cast<CuevaType* > (t); t = ct->getTipo(); }
   }

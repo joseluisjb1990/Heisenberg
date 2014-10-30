@@ -65,5 +65,61 @@ NotEqualQuad::NotEqualQuad(std::string leftOperand, std::string rightOperand, st
 {}
 
 IdBoolQuad::IdBoolQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
-  : Quad("ifnot", leftOperand, rightOperand, destiny)
+  : Quad("if", leftOperand, rightOperand, destiny)
+{}
+
+GotoQuad::GotoQuad()
+  : Quad("goto", "", "", "")
+{}
+
+DespQuad::DespQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
+  : Quad("[]", leftOperand, rightOperand, destiny)
+{}
+
+ParamQuad::ParamQuad(std::string destiny)
+  : Quad("param", "", "", destiny)
+{}
+
+CallQuad::CallQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
+  : Quad("call", leftOperand, rightOperand, destiny)
+{}
+
+RefQuad::RefQuad(std::string leftOperand, std::string destiny)
+  : Quad("&", leftOperand, "", destiny)
+{}
+
+AndQuad::AndQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
+  : Quad("&", leftOperand, rightOperand, destiny)
+{}
+
+OrQuad::OrQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
+  : Quad("|", leftOperand, rightOperand, destiny)
+{}
+
+NotQuad::NotQuad(std::string leftOperand, std::string destiny)
+  : Quad("!", leftOperand, "", destiny)
+{}
+
+LessThanQuadExpr::LessThanQuadExpr(std::string leftOperand, std::string rightOperand, std::string destiny)
+  : Quad("<", leftOperand, rightOperand, destiny)
+{}
+
+LessEqualQuadExpr::LessEqualQuadExpr(std::string leftOperand, std::string rightOperand, std::string destiny)
+  : Quad("=<", leftOperand, rightOperand, destiny)
+{}
+
+GreaterThanQuadExpr::GreaterThanQuadExpr(std::string leftOperand, std::string rightOperand, std::string destiny)
+  : Quad(">", leftOperand, rightOperand, destiny)
+{}
+
+GreaterEqualQuadExpr::GreaterEqualQuadExpr(std::string leftOperand, std::string rightOperand, std::string destiny)
+  : Quad(">=", leftOperand, rightOperand, destiny)
+{}
+
+EqualQuadExpr::EqualQuadExpr(std::string leftOperand, std::string rightOperand, std::string destiny)
+  : Quad("==", leftOperand, rightOperand, destiny)
+{}
+
+NotEqualQuadExpr::NotEqualQuadExpr(std::string leftOperand, std::string rightOperand, std::string destiny)
+  : Quad("=/=", leftOperand, rightOperand, destiny)
 {}

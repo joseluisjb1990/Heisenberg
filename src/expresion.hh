@@ -35,7 +35,7 @@ class Expression : public Node
   private :
     bool         _mutID = true;
     unsigned int _tam   = 0;
-    std::string  _temp;
+    std::string  _temp  = "";
 };
 
 class Constant : public Expression
@@ -104,7 +104,10 @@ public:
   long _offset;
   unsigned int _trueList  = 0;
   unsigned int _falseList = 0;
-  virtual void backpatch(bool con, int jumpDes, IntermediateGen *intGen) { if(!con) intGen->patch(_falseList, jumpDes); }
+  virtual void backpatch(bool con, int jumpDes, IntermediateGen *intGen) { 
+                                                                            if      (!con and _falseList  != 0) intGen->patch(_falseList, jumpDes); 
+                                                                            else if (con  and _trueList   != 0) intGen->patch(_trueList , jumpDes);
+                                                                         }
 };
 
 class PandaExpr : public BoolExpr
@@ -125,7 +128,6 @@ class TrueExpr : public PandaExpr
 public:
   TrueExpr(std::string valor) : PandaExpr (valor) {}
   void toIntermediateGoto(IntermediateGen *intGen);
-  void backpatch(bool con, int jumpDes, IntermediateGen *intGen);
 };
 
 class FalseExpr : public PandaExpr
@@ -133,7 +135,6 @@ class FalseExpr : public PandaExpr
 public:
   FalseExpr(std::string valor) : PandaExpr (valor) {}
   void toIntermediateGoto(IntermediateGen *intGen);
-  void backpatch(bool con, int jumpDes, IntermediateGen *intGen);
 };
 
 class Sum : public Expression
@@ -392,8 +393,8 @@ class IDExpr : public LValueExpr
   private:
     std::string _nombre;
     Contenido * _tableRow;
-    long _trueList;
-    long _falseList;
+    unsigned int  _trueList = 0;
+    unsigned int  _falseList = 0;
 
   public:
     IDExpr(std::string nombre);
@@ -401,9 +402,13 @@ class IDExpr : public LValueExpr
     std::string to_string(int nesting);
     void check();
     std::string getTemp() { return _nombre; }
+    void setTemp(std::string temp) { _nombre = temp; }
     void toIntermediateGoto(IntermediateGen *intGen);
     bool isIdExpr()       { return true;    }
-    virtual void backpatch(bool con, int jumpDes, IntermediateGen *intGen) { if(!con) intGen->patch(_falseList, jumpDes); }
+    void backpatch(bool con, int jumpDes, IntermediateGen *intGen) { 
+                                                                      if      (!con and _falseList  != 0) intGen->patch(_falseList, jumpDes); 
+                                                                      else if (con  and _trueList   != 0) intGen->patch(_trueList , jumpDes);
+                                                                   }
 };
 
 class FunctionExpr : public Expression
@@ -426,8 +431,8 @@ class FunctionExpr : public Expression
     void toIntermediateAux(IntermediateGen *intGen);
     void toIntermediateGoto(IntermediateGen *intGen);
     void backpatch(bool con, int jumpDes, IntermediateGen *intGen);
-    long _trueList  = -1;
-    long _falseList = -1;
+    unsigned int _trueList  = 0;
+    unsigned int _falseList = 0;
     
   private:
     std::string               _name;

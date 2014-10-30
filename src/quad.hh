@@ -100,4 +100,89 @@ class IdBoolQuad : public Quad
   public:
     IdBoolQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
 };
+
+class GotoQuad : public Quad
+{
+  public:
+    GotoQuad();
+};
+
+class DespQuad : public Quad
+{
+  public:
+    DespQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
+};
+
+class ParamQuad : public Quad
+{
+  public:
+    ParamQuad(std::string destiny);
+};
+
+class CallQuad : public Quad
+{
+  public:
+    CallQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
+};
+
+class RefQuad : public Quad
+{
+  public:
+    RefQuad(std::string leftOperand, std::string destiny);
+};
+
+class AndQuad : public Quad
+{
+  public:
+    AndQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
+};
+
+class OrQuad : public Quad
+{
+  public:
+    OrQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
+};
+
+class NotQuad : public Quad
+{
+  public:
+    NotQuad(std::string leftOperand, std::string destiny);
+};
+
+class LessThanQuadExpr : public Quad
+{
+  public:
+    LessThanQuadExpr(std::string leftOperand, std::string rightOperand, std::string destiny);
+};
+
+class LessEqualQuadExpr : public Quad
+{
+  public:
+    LessEqualQuadExpr(std::string leftOperand, std::string rightOperand, std::string destiny);
+};
+
+class GreaterThanQuadExpr : public Quad
+{
+  public:
+    GreaterThanQuadExpr(std::string leftOperand, std::string rightOperand, std::string destiny);
+};
+
+class GreaterEqualQuadExpr : public Quad
+{
+  public:
+    GreaterEqualQuadExpr(std::string leftOperand, std::string rightOperand, std::string destiny);
+};
+
+class EqualQuadExpr : public Quad
+{
+  public:
+    EqualQuadExpr(std::string leftOperand, std::string rightOperand, std::string destiny);
+};
+
+class NotEqualQuadExpr : public Quad
+{
+  public:
+    NotEqualQuadExpr(std::string leftOperand, std::string rightOperand, std::string destiny);
+};
+
 #endif
