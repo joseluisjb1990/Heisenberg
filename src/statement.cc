@@ -44,17 +44,28 @@ void Assign::toIntermediate(IntermediateGen *intGen)
     id->toIntermediate(intGen);
     expr->toIntermediate(intGen);
 
+    Quad* q;
     if(id->isArray())
     {
       std::string temp = intGen->nextTemp();
-      intGen->gen("[]", id->getTemp(), id->getArrayName(), temp);
+      q = new DespQuad(id->getArrayName(), id->getTemp(), temp);
+      intGen->gen(q);
+      // intGen->gen("[]", id->getTemp(), id->getArrayName(), temp);
       id->setTemp(temp);
     }
 
     if(expr->isArray())
-      intGen->gen("[]=", expr->getArrayName(), expr->getTemp() , id->getTemp(),"   // Asignacion indirecta, linea " + std::to_string(get_first_line()));
+    {
+      // intGen->gen("[]=", expr->getArrayName(), expr->getTemp(), id->getTemp(),"   // Asignacion indirecta, linea " + std::to_string(get_first_line()));
+      q = new DespEqualQuad(expr->getArrayName(), expr->getTemp(), id->getTemp());
+      intGen->gen(q);
+    }
     else
-      intGen->gen(":=", expr->getTemp() , " " , id->getTemp(), "   // Asignacion directa, linea " + std::to_string(get_first_line()));
+    {
+      q = new AssignQuad(expr->getTemp(), id->getTemp());
+      intGen->gen(q);
+      // intGen->gen(":=", expr->getTemp() , " " , id->getTemp(), "   // Asignacion directa, linea " + std::to_string(get_first_line()));
+    }
   }
 }
 
@@ -143,35 +154,46 @@ void Function::check()
 
 void Function::toIntermediate(IntermediateGen *intGen)
 {
+
   if(_parameters)
     for (unsigned int i=0; i < _parameters->size(); ++i)
-    {
       _parameters->at(i)->toIntermediate(intGen);
 
-    }
-
+  Quad* q;
+  std::string t;
+  Expression* p;
+  
   if(_parameters)
+  { 
     for (int i=(_parameters->size()-1); -1 < i; --i)
-    {
-      Expression* p = _parameters->at(i);
       if(_defParametros->at(i))
       {
-        std::string t = intGen->nextTemp();
-        intGen->gen("&", p->getTemp(), " ", t, "   // Acceso a Memoria");  
-        intGen->gen("param", t," "," ", "   // Parametro " + std::to_string(i+1));
-      } else
-      {
-        intGen->gen("param", p->getTemp()," "," ", "   // Parametro " + std::to_string(i+1)); 
-      } 
-    }
+        p = _parameters->at(i);
+        t = intGen->nextTemp();
+        q = new RefQuad(p->getTemp(), t);
+        intGen->gen(q);
+        p->setTemp(t);
+      }
+    for (int i=(_parameters->size()-1); -1 < i; --i)
+    {
+      p = _parameters->at(i);
+      q = new ParamQuad(p->getTemp());
+      intGen->gen(q);
+    } 
+  }
 
-  std::string temp = intGen->nextTemp();
+  t = intGen->nextTemp();
   if(_parameters)
-    intGen->gen("call",_name,std::to_string(_parameters->size()),temp,"   // Llamada a Funcion, linea " + std::to_string(get_first_line()));
+  {
+    q = new CallQuad(_name, std::to_string(_parameters->size()), t);
+    intGen->gen(q);
+  }
   else
-    intGen->gen("call",_name,"0",temp,"   // Llamada a Funcion, linea " + std::to_string(get_first_line()));
-    
-  setTemp(temp);
+  {
+    q = new CallQuad(_name, "0", t);
+    intGen->gen(q);
+  } 
+  setTemp(t);
 }
 
 If::If(Expression* condicion, Statement* instrucciones)
@@ -272,18 +294,18 @@ bool IfElse::checkReturn(Type* type)
 
 void IfElse::toIntermediate(IntermediateGen *intGen)
 {
-  intGen->genComment("// Codigo generado por el selector if-then-else, linea " + std::to_string(get_first_line()));
   _condicion->toIntermediateGoto(intGen);
   _condicion->backpatch(true, intGen->getQuad(), intGen);
   _brazoTrue->toIntermediate(intGen);
-  _nextInst = intGen->genEmpty("goto");
+  Quad* q = new GotoQuad();
+  _nextInst = intGen->gen(q);
   _condicion->backpatch(false, intGen->getQuad(), intGen);
   _brazoFalse->toIntermediate(intGen);
 }
 
 void IfElse::nextInst(int nextInst, IntermediateGen *intGen)
 {
-  // intGen->gen(_nextInst, nextInst);
+  intGen->patch(_nextInst, nextInst);
   _brazoTrue->nextInst(nextInst, intGen);
   _brazoFalse->nextInst(nextInst, intGen);
 }
@@ -335,9 +357,13 @@ void Write::check()
 void Write::toIntermediate(IntermediateGen *intGen)
 {
   _expr->toIntermediate(intGen);
-  intGen->gen("param", _expr->getTemp(), "", "");
+  Quad* q = new ParamQuad(_expr->getTemp());
+  intGen->gen(q);
+  // intGen->gen("param", _expr->getTemp(), "", "");
   std::string temp = intGen->nextTemp();
-  intGen->gen("call", "escribir", "1", temp, "   // Escritura por salida estandar, linea " + std::to_string(get_first_line()));
+  q = new CallQuad("escribir", "1", temp);
+  intGen->gen(q);
+  // intGen->gen("call", "escribir", "1", temp, "   // Escritura por salida estandar, linea " + std::to_string(get_first_line()));
 }
 
 Read::Read(Expression* id)
@@ -373,9 +399,13 @@ void Read::check()
 void Read::toIntermediate(IntermediateGen *intGen)
 {
   _id->toIntermediate(intGen);
-  intGen->gen("param", _id->getTemp(), "", "");
+  Quad* q = new ParamQuad(_id->getTemp());
+  intGen->gen(q);
+  // intGen->gen("param", _id->getTemp(), "", "");
   std::string temp = intGen->nextTemp();
-  intGen->gen("call", "leer", "1", temp, "   // Lectura por entrada estandar, linea " + std::to_string(get_first_line()));
+  q = new CallQuad("leer", "1", temp);
+  intGen->gen(q);
+  // intGen->gen("call", "leer", "1", temp, "   // Lectura por entrada estandar, linea " + std::to_string(get_first_line()));
 }
 
 Body::Body( std::vector<Statement *>* listSta )

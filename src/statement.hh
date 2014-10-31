@@ -96,10 +96,10 @@ class IfElse : public Statement
     void toIntermediateTagBreak(IntermediateGen *intGen, std::string tag, int pos);
 
   private:
-    Expression* _condicion;
-    Statement* _brazoTrue;
-    Statement* _brazoFalse;
-    long       _nextInst;
+    Expression*   _condicion;
+    Statement*    _brazoTrue;
+    Statement*    _brazoFalse;
+    unsigned int  _nextInst;
 
 };
 

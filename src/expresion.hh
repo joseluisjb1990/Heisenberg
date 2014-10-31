@@ -79,7 +79,9 @@ class HormigueroExpr : public Constant
     std::string getValue();
     void check();
     void toIntermediate(IntermediateGen* intGen) { std::string temp = intGen->nextTemp(); 
-                                                   intGen->gen(":=", valor, "", temp);
+                                                   Quad* q = new AssignQuad(valor,temp);
+                                                   intGen->gen(q);
+                                                   // intGen->gen(":=", valor, "", temp);
                                                    setTemp(temp);
                                                  };
 };

@@ -1396,12 +1396,13 @@ void CuevaExpr::toIntermediate(IntermediateGen *intGen)
   std::vector<string> temps;
   Type *t = _cuevaType->getTipo();
   CuevaType* ct;
+  Quad* q;
   for (unsigned int i=0; i < _dimensions->size(); ++i)
   {
   	_dimensions->at(i)->toIntermediate(intGen);
     std::string temp = intGen->nextTemp();
 
-    Quad* q = new MulQuad(_dimensions->at(i)->getTemp(), std::to_string(t->getSize()), temp);
+    q = new MulQuad(_dimensions->at(i)->getTemp(), std::to_string(t->getSize()), temp);
     intGen->gen(q);
   	// intGen->gen("*",_dimensions->at(i)->getTemp(), std::to_string(t->getSize()), temp, "   // Desplazamiento Arreglo, linea " + std::to_string(get_first_line()));  
   	temps.push_back(temp);
@@ -1413,13 +1414,14 @@ void CuevaExpr::toIntermediate(IntermediateGen *intGen)
 
   for (unsigned int i=0; i < temps.size()-1; ++i)
   {
-  	intGen->gen("+",aux,  temps[i+1] ,temp, "   // Suma de Desplazamientos");  
+    q = new SumQuad(aux, temps[i+1], temp);
+    intGen->gen(q);
+  	// intGen->gen("+",aux,  temps[i+1] ,temp, "   // Suma de Desplazamientos");  
   	aux  = temp;  
 	  temp = intGen->nextTemp();
   }
 
   setTemp(aux); 
-
 }
 
 void EmptyExpr::check() { this->set_type(ErrorType::getInstance()); }

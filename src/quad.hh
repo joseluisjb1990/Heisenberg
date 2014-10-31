@@ -113,6 +113,18 @@ class DespQuad : public Quad
     DespQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
 };
 
+class DespEqualQuad : public Quad
+{
+  public:
+    DespEqualQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
+};
+
+class AssignQuad : public Quad
+{
+  public:
+    AssignQuad(std::string leftOperand, std::string destiny);
+};
+
 class ParamQuad : public Quad
 {
   public:

@@ -76,6 +76,14 @@ DespQuad::DespQuad(std::string leftOperand, std::string rightOperand, std::strin
   : Quad("[]", leftOperand, rightOperand, destiny)
 {}
 
+DespEqualQuad::DespEqualQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
+  : Quad("[]=", leftOperand, rightOperand, destiny)
+{}
+
+AssignQuad::AssignQuad(std::string leftOperand, std::string destiny)
+  : Quad(":=", leftOperand, "", destiny)
+{}
+
 ParamQuad::ParamQuad(std::string destiny)
   : Quad("param", "", "", destiny)
 {}
