@@ -48,13 +48,22 @@ void DefWithInit::toIntermediate(IntermediateGen *intGen)
     Expression* expr = _expr->at(i);
 
     expr->toIntermediate(intGen);
+    Quad* q;
 
-    if(expr->isStruct())
-      intGen->gen("*:=", expr->getTemp(), " ", id,
-                              "   // Asignacion Indirecta, linea " + std::to_string(get_first_line()));  
-    else
-      intGen->gen(":=", expr->getTemp(), " ", id,
-                              "   // Asignacion Directa, linea " + std::to_string(get_first_line()));  
+
+    if(expr->isStruct()) {
+
+      q = new AssignIndirectQuad(expr->getTemp(), id);
+      intGen->gen(q);
+      /*intGen->gen("*:=", expr->getTemp(), " ", id,
+                              "   // Asignacion Indirecta, linea " + std::to_string(get_first_line()));  */
+    }
+    else {
+      q = new AssignQuad(expr->getTemp(), id);
+      intGen->gen(q);
+     /* intGen->gen(":=", expr->getTemp(), " ", id,
+                              "   // Asignacion Directa, linea " + std::to_string(get_first_line()));  */
+    }
   }
 }
 
@@ -240,7 +249,12 @@ void DefFunction::check()
 
 void DefFunction::toIntermediate(IntermediateGen *intGen)
 {
-  intGen->gen(_id);  
+  Quad* q;
+
+  q = new FlagQuad(_id);
+  intGen->gen(q);
+  //intGen->gen(_id);  
+
   _statements->toIntermediate(intGen);
 }
 

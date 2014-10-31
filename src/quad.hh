@@ -116,6 +116,24 @@ class GotoQuad : public JumpQuad
     GotoQuad();
 };
 
+class GotoLineQuad : public Quad
+{
+	public:
+  		GotoLineQuad(std::string destiny);
+};
+
+class GotoEmptyQuad : public Quad
+{
+	public:
+  		GotoEmptyQuad(std::string leftOperand, std::string rightOperand);
+};
+
+class GotoEmptyIdForQuad : public Quad
+{
+	public:
+  		GotoEmptyIdForQuad(std::string leftOperand, std::string rightOperand);
+};
+
 class DespQuad : public Quad
 {
   public:
@@ -134,6 +152,12 @@ class AssignQuad : public Quad
     AssignQuad(std::string leftOperand, std::string destiny);
 };
 
+class AssignIndirectQuad : public Quad
+{
+  public:
+    AssignIndirectQuad(std::string leftOperand, std::string destiny);
+};
+
 class ParamQuad : public Quad
 {
   public:
@@ -144,6 +168,18 @@ class CallQuad : public Quad
 {
   public:
     CallQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
+};
+
+class ReturnQuad : public Quad
+{
+  public:
+    ReturnQuad(std::string destiny);
+};
+
+class FlagQuad : public Quad
+{
+  public:
+    FlagQuad(std::string destiny);
 };
 
 class RefQuad : public Quad
