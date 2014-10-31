@@ -8,9 +8,10 @@ class Quad
   public:
     Quad(std::string op, std::string leftOperand, std::string rightOperand, std::string destiny);
     virtual void print();
-    void setDestiny(std::string destiny) { _destiny = destiny; };
+    void setDestiny(std::string destiny) { _destiny = destiny;  }
+    virtual bool isJump()                { return false;        }
+    virtual int  getAddress()            { return 0;            }
 
-  private:
     std::string _operator;
     std::string _leftOperand;
     std::string _rightOperand;
@@ -59,49 +60,57 @@ class UmQuad : public Quad
     UmQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
 };
 
-class LessThanQuad : public Quad
+class JumpQuad : public Quad
+{
+  public:
+    JumpQuad(std::string op, std::string leftOperand, std::string rightOperand, std::string destiny);
+    bool isJump()     { return true;            }
+    int  getAddress() { return atoi(_destiny.c_str());  }
+};
+
+class LessThanQuad : public JumpQuad
 {
   public:
     LessThanQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
 };
 
-class LessEqualQuad : public Quad
+class LessEqualQuad : public JumpQuad
 {
   public:
     LessEqualQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
 };
 
-class GreaterThanQuad : public Quad
+class GreaterThanQuad : public JumpQuad
 {
   public:
     GreaterThanQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
 };
 
-class GreaterEqualQuad : public Quad
+class GreaterEqualQuad : public JumpQuad
 {
   public:
     GreaterEqualQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
 };
 
-class EqualQuad : public Quad
+class EqualQuad : public JumpQuad
 {
   public:
     EqualQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
 };
 
-class NotEqualQuad : public Quad
+class NotEqualQuad : public JumpQuad
 {
   public:
     NotEqualQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
 };
 
-class IdBoolQuad : public Quad
+class IdBoolQuad : public JumpQuad
 {
   public:
     IdBoolQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
 };
 
-class GotoQuad : public Quad
+class GotoQuad : public JumpQuad
 {
   public:
     GotoQuad();
@@ -195,6 +204,12 @@ class NotEqualQuadExpr : public Quad
 {
   public:
     NotEqualQuadExpr(std::string leftOperand, std::string rightOperand, std::string destiny);
+};
+
+class EndQuad : public Quad
+{
+  public:
+    EndQuad();
 };
 
 #endif

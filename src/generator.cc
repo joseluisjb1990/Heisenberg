@@ -13,13 +13,23 @@ QuadContainer::QuadContainer(Quad* quad, unsigned int numberQuad, bool isLeader)
 
 void QuadContainer::print()
 { 
-  std::cout << _numberQuad << " " << _isLeader << " "; _quad->print();
+  std::cout << _numberBlock << " " << _numberQuad << " " << _isLeader << " "; _quad->print();
+}
+
+void IntermediateGen::optimize()
+{
+  FlowGraph* fw = new FlowGraph(_totalQuadList);
+  fw->print();
 }
 
 void IntermediateGen::print()
 {
+  unsigned int i = 0;
   for(std::vector<QuadContainer*>::iterator it = _totalQuadList->begin(); it != _totalQuadList->end(); it++)
+  {
+    std::cout << i++ << " ";
     (*it)->print();
+  }
 }
 
 IntermediateGen::IntermediateGen(const std::string &file, TablaSimbolos * symbolTable)

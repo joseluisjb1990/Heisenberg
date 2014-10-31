@@ -7,6 +7,10 @@ Quad::Quad(std::string op, std::string leftOperand, std::string rightOperand, st
   , _destiny      ( destiny       )
 {}
   
+JumpQuad::JumpQuad(std::string op, std::string leftOperand, std::string rightOperand, std::string destiny)
+ : Quad(op, leftOperand, rightOperand, destiny)
+{}
+
 void Quad::print()
 {
   std::cout << _operator << " " << _leftOperand << " " << _rightOperand << " " << _destiny << '\n';
@@ -41,35 +45,35 @@ UmQuad::UmQuad(std::string leftOperand, std::string rightOperand, std::string de
 {}
 
 LessThanQuad::LessThanQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
-  : Quad("<", leftOperand, rightOperand, destiny)
+  : JumpQuad("<", leftOperand, rightOperand, destiny)
 {}
 
 LessEqualQuad::LessEqualQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
-  : Quad("=<", leftOperand, rightOperand, destiny)
+  : JumpQuad("=<", leftOperand, rightOperand, destiny)
 {}
 
 GreaterThanQuad::GreaterThanQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
-  : Quad(">", leftOperand, rightOperand, destiny)
+  : JumpQuad(">", leftOperand, rightOperand, destiny)
 {}
 
 GreaterEqualQuad::GreaterEqualQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
-  : Quad(">=", leftOperand, rightOperand, destiny)
+  : JumpQuad(">=", leftOperand, rightOperand, destiny)
 {}
 
 EqualQuad::EqualQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
-  : Quad("==", leftOperand, rightOperand, destiny)
+  : JumpQuad("==", leftOperand, rightOperand, destiny)
 {}
 
 NotEqualQuad::NotEqualQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
-  : Quad("=/=", leftOperand, rightOperand, destiny)
+  : JumpQuad("=/=", leftOperand, rightOperand, destiny)
 {}
 
 IdBoolQuad::IdBoolQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
-  : Quad("if", leftOperand, rightOperand, destiny)
+  : JumpQuad("if", leftOperand, rightOperand, destiny)
 {}
 
 GotoQuad::GotoQuad()
-  : Quad("goto", "", "", "")
+  : JumpQuad("goto", "", "", "")
 {}
 
 DespQuad::DespQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
@@ -130,4 +134,8 @@ EqualQuadExpr::EqualQuadExpr(std::string leftOperand, std::string rightOperand, 
 
 NotEqualQuadExpr::NotEqualQuadExpr(std::string leftOperand, std::string rightOperand, std::string destiny)
   : Quad("=/=", leftOperand, rightOperand, destiny)
+{}
+
+EndQuad::EndQuad()
+  : Quad("end", "", "", "")
 {}

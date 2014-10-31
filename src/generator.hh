@@ -7,19 +7,9 @@
 #include<stdio.h>
 #include"TablaSimbolos.hh"
 #include"quad.hh"
+#include"FlowGraph.hh"
+#include"quadcontainer.hh"
 #include <iostream>
-
-class QuadContainer
-{
-  public:
-    QuadContainer (Quad* quad, unsigned int numberQuad, bool isLeader);
-    void setLeader     () { _isLeader = true; }
-    void print         ();
-
-    Quad*         _quad;
-    unsigned int  _numberQuad;
-    bool          _isLeader;
-};
 
 class Generator {};
 
@@ -28,6 +18,7 @@ class IntermediateGen : public Generator
 public:
   IntermediateGen(const std::string &file, TablaSimbolos * symbolTable);
   void close();
+  void optimize();
   void gen(std::string op, std::string arg1, std::string arg2, std::string des, std::string com);
   void gen(std::string op, std::string arg1, std::string arg2, std::string des);
   void gen(std::string id);
@@ -41,7 +32,6 @@ public:
   unsigned int getQuad()        { return _quadNumber;   }
   long offset()                 { return _file.tellp(); } 
   std::string nextTemp()        { return  TEMPCHAR + std::to_string(getTempNumber());   }
-  void emptySlot()              { _file << std::string(30, ' ') << '\n'; _quadNumber++; }
   TablaSimbolos *_symbolTable;
   void print();
 

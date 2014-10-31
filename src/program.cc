@@ -47,6 +47,7 @@ void Program::toIntermediate(IntermediateGen *intGen)
 
   _statement->toIntermediate(intGen);
 
-  intGen->gen("end", "","","");
+  Quad* q = new EndQuad();
+  intGen->gen(q);
 }
 #endif
