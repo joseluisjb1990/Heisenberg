@@ -562,20 +562,32 @@ void ComplexFor::toIntermediate(IntermediateGen *intGen)
   _end->toIntermediate(intGen);
 
   _step->toIntermediate(intGen);
+  Quad* q;
 
-  intGen->gen(":=", _begin->getTemp(), " ",  _id, "   // Variable de Iteracion ");
+  q = new AssignQuad(_begin->getTemp(),_id);
+  intGen->gen(q);
+  //intGen->gen(":=", _begin->getTemp(), " ",  _id, "   // Variable de Iteracion ");
+
   unsigned int pos = intGen->getQuad();
-  _nextInst = intGen->genEmpty("if " + _id + " > " + _end->getTemp() + " goto");
+
+  q = new GotoEmptyQuad(_id, _end->getTemp());
+  _nextInst = intGen->gen(q);
+  //_nextInst = intGen->genEmpty("if " + _id + " > " + _end->getTemp() + " goto");
 
   _body->toIntermediate(intGen);
 
-  intGen->gen("+", _id, _step->getTemp(), _id, "   // Incremento del Iterador");
-  intGen->gen("goto", " ", " ", std::to_string(pos), "   // Fin de la Iteracion");
+  q = new SumQuad( _id, _step->getTemp(), _id); 
+  intGen->gen(q);     
+  //intGen->gen("+", _id, _step->getTemp(), _id, "   // Incremento del Iterador");
+
+  q = new GotoLineQuad(std::to_string(pos));
+  intGen->gen(q);
+  //intGen->gen("goto", " ", " ", std::to_string(pos), "   // Fin de la Iteracion");
 }
 
 void ComplexFor::nextInst(int nextInst, IntermediateGen *intGen)
 {
-  // intGen->gen(_nextInst, nextInst);
+   intGen->patch(_nextInst, nextInst);
   _body->nextInst(nextInst, intGen);
 }
 
@@ -637,20 +649,33 @@ void SimpleFor::toIntermediate(IntermediateGen *intGen)
   _begin->toIntermediate(intGen);
   _end->toIntermediate(intGen);
 
-  intGen->gen(":=", _begin->getTemp(), " ",  _id, "   // Variable de Iteracion ");
+  Quad* q;
+
+  q = new AssignQuad(_begin->getTemp(),_id);
+  intGen->gen(q);
+  //intGen->gen(":=", _begin->getTemp(), " ",  _id, "   // Variable de Iteracion ");
+
   unsigned int pos = intGen->getQuad();
-  _nextInst = intGen->genEmpty("if " + _id + " > " + _end->getTemp() + " goto");
+  
+  q = new GotoEmptyQuad(_id, _end->getTemp());
+  _nextInst = intGen->gen(q);
+  //_nextInst = intGen->genEmpty("if " + _id + " > " + _end->getTemp() + " goto");
 
   _body->toIntermediate(intGen);
+  
+  q = new SumQuad( _id, "1", _id); 
+  intGen->gen(q);
+  //intGen->gen("+", _id, "1", _id, "   // Incremento del Iterador");
 
-  intGen->gen("+", _id, "1", _id, "   // Incremento del Iterador");
-  intGen->gen("goto", " ", " ", std::to_string(pos), "   // Fin de la Iteracion");
+  q = new GotoLineQuad(std::to_string(pos));
+  intGen->gen(q);
+  //intGen->gen("goto", " ", " ", std::to_string(pos), "   // Fin de la Iteracion");
 
 }
 
 void SimpleFor::nextInst(int nextInst, IntermediateGen *intGen)
 {
-  // intGen->gen(_nextInst, nextInst);
+   intGen->patch(_nextInst, nextInst);
   _body->nextInst(nextInst, intGen);
 }
 
@@ -700,24 +725,42 @@ void IdFor::toIntermediate(IntermediateGen *intGen)
   std::string tc    = std::to_string(t->getTipo()->getSize());
   std::string temp  = intGen->nextTemp();
   std::string temp2  = intGen->nextTemp();
+ 
+  Quad* q;
 
-  intGen->gen(":=", "0", " ",  temp, "   // Variable de Iteracion ");
+  q = new AssignQuad("0",temp);
+  intGen->gen(q);
+  //intGen->gen(":=", "0", " ",  temp, "   // Variable de Iteracion ");
   
   unsigned int pos = intGen->getQuad();
-  _nextInst = intGen->genEmpty("if " + temp + " = " + std::to_string(t->getLongitud() -1) + " goto");
 
-  intGen->gen("*", tc, temp, temp2, "   // Desplazamiento Arreglo");  
-  intGen->gen("[]", _iterVar, temp2, _id, "   // Acceso al Arreglo, linea ");
+  q = new GotoEmptyIdForQuad(temp, std::to_string(t->getLongitud() -1));
+  _nextInst = intGen->gen(q);
+  //_nextInst = intGen->genEmpty("if " + temp + " = " + std::to_string(t->getLongitud() -1) + " goto");
+
+  q = new MulQuad( tc,temp, temp2); 
+  intGen->gen(q);
+  //intGen->gen("*", tc, temp, temp2, "   // Desplazamiento Arreglo");  
+
+  q = new DespQuad( _iterVar,temp2, _id); 
+  intGen->gen(q);
+  //intGen->gen("[]", _iterVar, temp2, _id, "   // Acceso al Arreglo, linea ");
 
   _body->toIntermediate(intGen);
 
-  intGen->gen("+",temp,"1",temp, "   // Incremento del Iterador");
-  intGen->gen("goto", " ", " ", std::to_string(pos), "   // Fin de la Iteracion");
+  q = new SumQuad( temp, "1", temp); 
+  intGen->gen(q);
+  //intGen->gen("+",temp,"1",temp, "   // Incremento del Iterador");
+
+  q = new GotoLineQuad(std::to_string(pos));
+  intGen->gen(q);
+  //intGen->gen("goto", " ", " ", std::to_string(pos), "   // Fin de la Iteracion");
+
 }
 
 void IdFor::nextInst(int nextInst, IntermediateGen *intGen)
 {
-  // intGen->gen(_nextInst, nextInst);
+   intGen->patch(_nextInst, nextInst);
   _body->nextInst(nextInst, intGen);
 }
 
@@ -780,8 +823,13 @@ bool ReturnExpr::checkReturn(Type* type)
 void ReturnExpr::toIntermediate(IntermediateGen *intGen)
 {
    _expr->toIntermediate(intGen);
-  intGen->gen("return",_expr->getTemp(), "","", 
-  	"   // Retorno de funcion, linea " + std::to_string(get_first_line()));  
+
+  Quad* q;
+
+  q = new ReturnQuad(_expr->getTemp());
+  intGen->gen(q);
+  /*intGen->gen("return",_expr->getTemp(), "","", 
+  	"   // Retorno de funcion, linea " + std::to_string(get_first_line()));  */
 }
 
 Increase::Increase(std::string id)
@@ -807,8 +855,12 @@ void Increase::check()
 }
 
 void Increase::toIntermediate(IntermediateGen *intGen)
-{
-  intGen->gen("+",_id,"1",_id, "   // Incremento, linea " + std::to_string(get_first_line()));  
+{ 
+  Quad* q;
+
+  q = new SumQuad( _id, "1", _id); 
+  intGen->gen(q);
+  //intGen->gen("+",_id,"1",_id, "   // Incremento, linea " + std::to_string(get_first_line()));  
 
 }
 
@@ -836,8 +888,12 @@ void Decrement::check()
 }
 
 void Decrement::toIntermediate(IntermediateGen *intGen)
-{
-  intGen->gen("-",_id,"1",_id, "// Decremento, linea " + std::to_string(get_first_line()));  
+{  
+  Quad* q;
+
+  q = new SubQuad( _id, "1", _id); 
+  intGen->gen(q);
+  //intGen->gen("-",_id,"1",_id, "// Decremento, linea " + std::to_string(get_first_line()));  
 
 }
 
@@ -864,12 +920,16 @@ void Continue::check()
 
 void Continue::toIntermediate(IntermediateGen *intGen)
 {
-  _nextInst = intGen->genEmpty("goto");
+  Quad* q;
+
+  q = new GotoQuad(); 
+  _nextInst = intGen->gen(q);
+
 }
 
 void Continue::nextInstContinue(int nextInst, IntermediateGen *intGen)
 {
-  // intGen->gen(_nextInst, nextInst);
+   intGen->patch(_nextInst, nextInst);
 }
 
 ContinueID::ContinueID(std::string id)
@@ -896,16 +956,20 @@ void ContinueID::check()
 
 void ContinueID::toIntermediate(IntermediateGen *intGen)
 {
-   intGen->genComment("// Codigo generado por el continue con tag. id = " + _id);
-   _nextInst = intGen->genEmpty("goto");
-   intGen->genSpace();
+   //intGen->genComment("// Codigo generado por el continue con tag. id = " + _id);
+
+    Quad* q;
+    q = new GotoQuad(); 
+    _nextInst = intGen->gen(q);
+    //_nextInst = intGen->genEmpty("goto");
+    //intGen->genSpace();
 }
 
 void ContinueID::toIntermediateTag(IntermediateGen *intGen, std::string tag, int pos)
 {
   if(tag.compare(_id) == 0)
   {
-    // intGen->gen(_nextInst, pos);
+  	intGen->patch(_nextInst, pos);
   }
 }
 
@@ -932,13 +996,17 @@ void Break::check()
 
 void Break::toIntermediate(IntermediateGen *intGen)
 {
-  _nextInst = intGen->genEmpty("goto");
+   Quad* q;
+
+   q = new GotoQuad(); 
+   _nextInst = intGen->gen(q);
+   //_nextInst = intGen->genEmpty("goto");
 }
 
 void Break::nextInstBreak(int nextInst, IntermediateGen *intGen)
 {
   std::cout << "Estoy generando codigo intermedio para el break " << nextInst << std::endl;
-  // intGen->gen(_nextInst, nextInst);
+   intGen->patch(_nextInst, nextInst);
 }
 
 BreakID::BreakID(std::string id)
@@ -965,16 +1033,20 @@ void BreakID::check()
 
 void BreakID::toIntermediate(IntermediateGen *intGen)
 {
-  intGen->genComment("// Codigo generado por el break con tag. id = " + _id);
-  _nextInst = intGen->genEmpty("goto");
-  intGen->genSpace();
+    //intGen->genComment("// Codigo generado por el break con tag. id = " + _id);
+
+    Quad* q;
+    q = new GotoQuad(); 
+    _nextInst = intGen->gen(q);
+   //_nextInst = intGen->genEmpty("goto");
+   //intGen->genSpace();
 }
 
 void BreakID::toIntermediateTagBreak(IntermediateGen *intGen, std::string tag, int pos)
 {
   if(tag.compare(_id) == 0)
-  {
-    // intGen->gen(_nextInst, pos);
+  {   
+  	intGen->patch(_nextInst, pos);
   }
 }
 
@@ -1024,7 +1096,11 @@ void While::toIntermediate(IntermediateGen *intGen)
   _expr->backpatch(true, intGen->getQuad(), intGen);
   _body->toIntermediate(intGen);
   _body->nextInstContinue(pos, intGen);
-  intGen->gen("goto",std::to_string(pos), "", "","   // Fin de la Iteracion");  
+
+  Quad* q;
+  q = new GotoLineQuad(std::to_string(pos));
+  intGen->gen(q);
+  //intGen->gen("goto",std::to_string(pos), "", "","   // Fin de la Iteracion");  
 
 }
 
@@ -1075,14 +1151,18 @@ bool TagWhile::checkReturn(Type* type) {  return _body->checkReturn(type); }
 
 void TagWhile::toIntermediate(IntermediateGen *intGen)
 {
-  intGen->genComment("Iteracion indeterminada con tag = " + _id);
+  //intGen->genComment("Iteracion indeterminada con tag = " + _id);
   int pos = intGen->getQuad();
   _expr->toIntermediateGoto(intGen);
   _expr->backpatch(true, intGen->getQuad(), intGen);
   _body->toIntermediate(intGen);
   _body->nextInstContinue(pos, intGen);
   _body->toIntermediateTag(intGen, _id, pos);
-  intGen->gen("goto",std::to_string(pos), "", "", "   // Fin de la Iteracion con tag = " + _id);
+
+  Quad* q;
+  q = new GotoLineQuad(std::to_string(pos));
+  intGen->gen(q);
+  //intGen->gen("goto",std::to_string(pos), "", "", "   // Fin de la Iteracion con tag = " + _id);
 }
 
 void TagWhile::nextInst(int nextInst, IntermediateGen *intGen)

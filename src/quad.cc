@@ -68,8 +68,20 @@ IdBoolQuad::IdBoolQuad(std::string leftOperand, std::string rightOperand, std::s
   : Quad("if", leftOperand, rightOperand, destiny)
 {}
 
+GotoLineQuad::GotoLineQuad(std::string destiny)
+  : Quad("goto", "", "", destiny)
+{}
+
 GotoQuad::GotoQuad()
   : Quad("goto", "", "", "")
+{}
+
+GotoEmptyQuad::GotoEmptyQuad(std::string leftOperand, std::string rightOperand)
+  : Quad("if", leftOperand + " > ", rightOperand, " goto")
+{}
+
+GotoEmptyIdForQuad::GotoEmptyIdForQuad(std::string leftOperand, std::string rightOperand)
+  : Quad("if", leftOperand + " = ", rightOperand, " goto")
 {}
 
 DespQuad::DespQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
@@ -84,12 +96,24 @@ AssignQuad::AssignQuad(std::string leftOperand, std::string destiny)
   : Quad(":=", leftOperand, "", destiny)
 {}
 
+AssignIndirectQuad::AssignIndirectQuad(std::string leftOperand, std::string destiny)
+  : Quad("*:=", leftOperand, "", destiny)
+{}
+
 ParamQuad::ParamQuad(std::string destiny)
   : Quad("param", "", "", destiny)
 {}
 
 CallQuad::CallQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
   : Quad("call", leftOperand, rightOperand, destiny)
+{}
+
+ReturnQuad::ReturnQuad(std::string destiny)
+  : Quad("return", "", "", destiny)
+{}
+
+FlagQuad::FlagQuad(std::string destiny)
+  : Quad(destiny, ":", "", "")
 {}
 
 RefQuad::RefQuad(std::string leftOperand, std::string destiny)
