@@ -1,7 +1,11 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <set>
+#include <string>
 #include "quad.hh"
+
+using namespace std;
 
 class Block
 {
@@ -10,11 +14,13 @@ class Block
     Block();
     void addQuad(Quad* q) { _quadList->push_back(q); }
     void print();
+    void setLiveVar();
 
   private:
-    std::vector<Quad*>*  _quadList;
-    std::vector<Block*>* _inBlocks;
-    std::vector<Block*>* _exitBlocks;
+    std::vector<Quad*>*   _quadList;
+    std::vector<Block*>*  _inBlocks;
+    std::vector<Block*>*  _exitBlocks;
+    vector<set<string>>   _liveVariables;
 };
 
 class EntryBlock : public Block

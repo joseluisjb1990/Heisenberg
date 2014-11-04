@@ -1,16 +1,23 @@
 #ifndef QUAD_HH
 #define QUAD_HH
 #include<string>
-#include <iostream>
+#include<set>
+#include<iostream>
+
+using namespace std;
 
 class Quad
 {
   public:
     Quad(std::string op, std::string leftOperand, std::string rightOperand, std::string destiny);
     virtual void print();
-    void setDestiny(std::string destiny) { _destiny = destiny;  }
-    virtual bool isJump()                { return false;        }
-    virtual int  getAddress()            { return 0;            }
+    void setDestiny(std::string destiny)    { _destiny = destiny;  }
+    virtual bool isJump()                   { return false;        }
+    virtual bool isTag()                    { return false;        }
+    virtual int  getAddress()               { return 0;            }
+    virtual set<string> getUsedVariables()  {  set<string> s = *(new set<string>);
+                                              return s;
+                                            }
 
     std::string _operator;
     std::string _leftOperand;
@@ -180,6 +187,8 @@ class FlagQuad : public Quad
 {
   public:
     FlagQuad(std::string destiny);
+    bool isTag()  { return true;  }
+
 };
 
 class RefQuad : public Quad

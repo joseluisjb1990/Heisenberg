@@ -10,6 +10,7 @@ class QuadContainer
     bool  isLeader    () { return _isLeader;            }
     bool  isJump      () { return _quad->isJump();      }
     int   getAddress  () { return _quad->getAddress();  }
+    bool  isTag       () { return _quad->isTag();       }
     void  addNumberBlock(unsigned int nb) { _numberBlock = nb;                      }
     void  replaceAddress(unsigned int ad) { _quad->setDestiny(std::to_string(ad));  }
     unsigned int  getNumberBlock()        { return _numberBlock;                    }

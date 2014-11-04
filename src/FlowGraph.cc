@@ -21,12 +21,15 @@ FlowGraph::FlowGraph(std::vector<QuadContainer*>* quadList)
       quadList->at(qc->getAddress())->setLeader();                                                  // El destino del salto es lider
       (*(it + 1))->setLeader();                                                                     // La siguiente instruccion es lider.
     } 
+
+    if(qc->isTag()) qc->setLeader();                                                                     // La siguiente instruccion es lider.
   }
 
   Block* b;
   _blockList = new std::vector<Block*>;
-  unsigned int bc = 0;
+  b = new Block(); _blockList->push_back(b);
 
+  unsigned int bc = 0;
   for(std::vector<QuadContainer*>::iterator it = quadList->begin(); it != quadList->end() - 1; it++)
   {
     qc = (*it);
@@ -36,11 +39,16 @@ FlowGraph::FlowGraph(std::vector<QuadContainer*>* quadList)
     bc++;
   }
 
-  for(std::vector<QuadContainer*>::iterator it = quadList->begin(); it != quadList->end() - 1; it++)
+  b = new Block(); qc = quadList->back(); qc->addNumberBlock(bc); b->addQuad(qc->getQuad()); _blockList->push_back(b);
+    
+  for(std::vector<QuadContainer*>::iterator it = quadList->begin(); it != quadList->end(); it++)
   {
     qc = (*it);
     if(qc->isJump()) { qc->replaceAddress(quadList->at(qc->getAddress())->getNumberBlock()); } 
   }
+  
+  for(std::vector<Block*>::iterator it = _blockList->begin(); it != _blockList->end(); it++)
+    (*it)->setLiveVar();
 }
 
 void FlowGraph::print()
