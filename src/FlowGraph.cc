@@ -34,7 +34,8 @@ FlowGraph::FlowGraph(std::vector<QuadContainer*>* quadList)
   {
     qc = (*it);
     b = new Block();
-    while(true) { b->addQuad(qc->getQuad()); qc->addNumberBlock(bc); if ((*(it + 1))->isLeader()) break; else qc = *(++it); }
+    if(qc->isLeader())
+      while(true) { b->addQuad(qc->getQuad()); qc->addNumberBlock(bc); if ((*(it + 1))->isLeader()) break; else qc = *(++it); }
     _blockList->push_back(b);
     bc++;
   }
@@ -59,6 +60,6 @@ void FlowGraph::print()
   for(std::vector<Block*>::iterator it = _blockList->begin(); it != _blockList->end(); it++)
   {
     b = (*it);
-    std::cout << "Bloque " << i++ << std::endl; b->print();  
+    std::cout << "------------------------------------------------ \n Bloque " << i++ << std::endl; b->print(); std::cout << std::endl;
   }
 }

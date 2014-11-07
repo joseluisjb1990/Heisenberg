@@ -136,12 +136,20 @@ GreaterThanQuad::GreaterThanQuad(std::string leftOperand, std::string rightOpera
   : JumpQuad(">", leftOperand, rightOperand, destiny)
 {}
 
+GreaterThanQuad::GreaterThanQuad(std::string leftOperand, std::string rightOperand)
+  : JumpQuad(">", leftOperand, rightOperand, "")
+{}
+
 GreaterEqualQuad::GreaterEqualQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
   : JumpQuad(">=", leftOperand, rightOperand, destiny)
 {}
 
 EqualQuad::EqualQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
   : JumpQuad("==", leftOperand, rightOperand, destiny)
+{}
+
+EqualQuad::EqualQuad(std::string leftOperand, std::string rightOperand)
+  : JumpQuad("==", leftOperand, rightOperand, "")
 {}
 
 NotEqualQuad::NotEqualQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
@@ -158,6 +166,10 @@ GotoLineQuad::GotoLineQuad(std::string destiny)
 
 GotoQuad::GotoQuad()
   : JumpQuad("goto", "", "", "")
+{}
+
+GotoQuad::GotoQuad(std::string destiny)
+  : JumpQuad("goto", "", "", destiny)
 {}
 
 GotoEmptyQuad::GotoEmptyQuad(std::string leftOperand, std::string rightOperand)
@@ -185,7 +197,7 @@ AssignIndirectQuad::AssignIndirectQuad(std::string leftOperand, std::string dest
 {}
 
 ParamQuad::ParamQuad(std::string destiny)
-  : Quad("param", "", "", destiny)
+  : Quad("param", destiny, "", "")
 {}
 
 CallQuad::CallQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
@@ -193,7 +205,7 @@ CallQuad::CallQuad(std::string leftOperand, std::string rightOperand, std::strin
 {}
 
 ReturnQuad::ReturnQuad(std::string destiny)
-  : Quad("return", "", "", destiny)
+  : Quad("return", destiny, "", "")
 {}
 
 FlagQuad::FlagQuad(std::string destiny)
@@ -242,6 +254,10 @@ NotEqualQuadExpr::NotEqualQuadExpr(std::string leftOperand, std::string rightOpe
 
 EndQuad::EndQuad()
   : Quad("end", "", "", "")
+{}
+
+BeginQuad::BeginQuad()
+  : Quad("begin", "", "", "")
 {}
 
 #endif

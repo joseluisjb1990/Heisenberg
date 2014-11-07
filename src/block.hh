@@ -1,6 +1,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <forward_list>
 #include <set>
 #include <string>
 #include "quad.hh"
@@ -17,10 +18,10 @@ class Block
     void setLiveVar();
 
   private:
-    std::vector<Quad*>*   _quadList;
-    std::vector<Block*>*  _inBlocks;
-    std::vector<Block*>*  _exitBlocks;
-    vector<set<string>>   _liveVariables;
+    std::vector<Quad*>*         _quadList;
+    std::vector<Block*>*        _inBlocks;
+    std::vector<Block*>*        _exitBlocks;
+    forward_list<set<string>>    _liveVariables;
 };
 
 class EntryBlock : public Block

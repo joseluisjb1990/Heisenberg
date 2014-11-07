@@ -41,13 +41,16 @@ void Program::check()
 void Program::toIntermediate(IntermediateGen *intGen)
 {
 
+  Quad* q = new BeginQuad();
+  intGen->gen(q);
+
   if (NULL != _definitions)
     for (unsigned int i=0; i < _definitions->size(); ++i)
       _definitions->at(i)->toIntermediate(intGen);
 
   _statement->toIntermediate(intGen);
 
-  Quad* q = new EndQuad();
+  q = new EndQuad();
   intGen->gen(q);
 }
 #endif
