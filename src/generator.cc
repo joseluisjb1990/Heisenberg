@@ -52,7 +52,11 @@ void IntermediateGen::printSpim()
 {
 
     for (unsigned int pos=0; pos < _totalQuadList->size(); pos++) {
-         _file << _totalQuadList->at(pos)->_quad->toSpim() << std::endl; 
+        
+        std::string line;
+        line = _totalQuadList->at(pos)->_quad->toSpim();
+        
+        if (line != "") _file << line << std::endl; 
     }
 
 }

@@ -9,11 +9,12 @@ Quad::Quad(std::string op, std::string leftOperand, std::string rightOperand, st
   , _destiny      ( destiny       )
 {}
 
-Quad::Quad( std::string op, std::string leftOperand, Type* type, std::string rightOperand, std::string destiny)
+Quad::Quad( std::string op, std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny)
   : _operator     ( op            )
   , _leftOperand  ( leftOperand   )
-  , _type         ( type          )
+  , _leftType     ( leftType      )
   , _rightOperand ( rightOperand  )
+  , _rightType    ( rightType     )
   , _destiny      ( destiny       )
 {}
 
@@ -30,17 +31,17 @@ SumQuad::SumQuad(std::string leftOperand, std::string rightOperand, std::string 
   : Quad("+", leftOperand, rightOperand, destiny)
 {}
 
-SumQuad::SumQuad(std::string leftOperand, Type* type, std::string rightOperand, std::string destiny)
-  : Quad("+", leftOperand, type, rightOperand, destiny)
+SumQuad::SumQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny)
+  : Quad("+", leftOperand, leftType, rightOperand, rightType, destiny)
   {}
 
  std::string SumQuad::toSpim() {
  
-    if (_type->isInt()) {
+    if (_leftType->isInt()) {
 
       return "add "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
        
-    } else if (_type->isFloat()) {
+    } else if (_leftType->isFloat()) {
       return "add.s "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
     };
 
@@ -51,17 +52,17 @@ SubQuad::SubQuad(std::string leftOperand, std::string rightOperand, std::string 
   : Quad("-", leftOperand, rightOperand, destiny)
 {}
 
-SubQuad::SubQuad(std::string leftOperand, Type* type, std::string rightOperand, std::string destiny)
-  : Quad("-", leftOperand, type, rightOperand, destiny)
+SubQuad::SubQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny)
+  : Quad("-", leftOperand, leftType, rightOperand, rightType, destiny)
 {}
 
  std::string SubQuad::toSpim() {
  
-    if (_type->isInt()) {
+    if (_leftType->isInt()) {
         
       return "sub "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
        
-    } else if (_type->isFloat()) {
+    } else if (_leftType->isFloat()) {
       return "sub.s "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
     };
 
@@ -72,17 +73,17 @@ DivQuad::DivQuad(std::string leftOperand, std::string rightOperand, std::string 
   : Quad("/", leftOperand, rightOperand, destiny)
 {}
 
-DivQuad::DivQuad(std::string leftOperand, Type* type, std::string rightOperand, std::string destiny)
-  : Quad("/", leftOperand, type, rightOperand, destiny)
+DivQuad::DivQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny)
+  : Quad("/", leftOperand, leftType, rightOperand, rightType, destiny)
 {}
 
 std::string DivQuad::toSpim() {
  
-    if (_type->isInt()) {
+    if (_leftType->isInt()) {
         
       return "div "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
        
-    } else if (_type->isFloat()) {
+    } else if (_leftType->isFloat()) {
       return "div.s "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
     };
 
@@ -94,17 +95,17 @@ MulQuad::MulQuad(std::string leftOperand, std::string rightOperand, std::string 
   : Quad("*", leftOperand, rightOperand, destiny)
 {}
 
-MulQuad::MulQuad(std::string leftOperand, Type* type, std::string rightOperand, std::string destiny)
-  : Quad("*", leftOperand, type, rightOperand, destiny)
+MulQuad::MulQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny)
+  : Quad("*", leftOperand, leftType, rightOperand, rightType, destiny)
 {}
 
 std::string MulQuad::toSpim() {
  
-    if (_type->isInt()) {
+    if (_leftType->isInt()) {
         
       return "mul "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
        
-    } else if (_type->isFloat()) {
+    } else if (_leftType->isFloat()) {
       return "mul.s "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
     };
 
