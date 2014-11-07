@@ -35,14 +35,13 @@ SumQuad::SumQuad(std::string leftOperand, Type* leftType, std::string rightOpera
   : Quad("+", leftOperand, leftType, rightOperand, rightType, destiny)
   {}
 
- std::string SumQuad::toSpim() {
+std::string SumQuad::toSpim() {
  
-    if (_leftType->isInt()) {
-
-      return "add "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+    if (_leftType->isInt()) {  
+        return "sum "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
        
     } else if (_leftType->isFloat()) {
-      return "add.s "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+        return "sum.s "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
     };
 
     return "";
@@ -58,12 +57,11 @@ SubQuad::SubQuad(std::string leftOperand, Type* leftType, std::string rightOpera
 
  std::string SubQuad::toSpim() {
  
-    if (_leftType->isInt()) {
-        
-      return "sub "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+    if (_leftType->isInt()) {  
+        return "sub "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
        
     } else if (_leftType->isFloat()) {
-      return "sub.s "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+        return "sub.s "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
     };
 
     return "";
@@ -79,12 +77,11 @@ DivQuad::DivQuad(std::string leftOperand, Type* leftType, std::string rightOpera
 
 std::string DivQuad::toSpim() {
  
-    if (_leftType->isInt()) {
-        
-      return "div "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+    if (_leftType->isInt()) {  
+        return "div "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
        
     } else if (_leftType->isFloat()) {
-      return "div.s "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+        return "div.s "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
     };
 
     return "";
@@ -101,12 +98,11 @@ MulQuad::MulQuad(std::string leftOperand, Type* leftType, std::string rightOpera
 
 std::string MulQuad::toSpim() {
  
-    if (_leftType->isInt()) {
-        
-      return "mul "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+    if (_leftType->isInt()) {  
+        return "mul "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
        
     } else if (_leftType->isFloat()) {
-      return "mul.s "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+        return "mul.s "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
     };
 
     return "";

@@ -40,7 +40,6 @@ class Quad
     std::string _rightOperand = *(new std::string());
     Type*       _rightType;  
     std::string _destiny      = *(new std::string());
-
 };
 
 class SumQuad : public Quad
