@@ -32,7 +32,8 @@ class Quad
     virtual string getDefinedVariable()     { if(useVariables()) return _destiny; else return *( new std::string()); }
     virtual bool useVariables()             { return false; }
     virtual std::string toSpim()            { return "";};
-
+    
+    Type* _type;
     std::string _operator     = *(new std::string());
     std::string _leftOperand  = *(new std::string());
     std::string _rightOperand = *(new std::string());
