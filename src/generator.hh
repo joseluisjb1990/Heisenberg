@@ -34,6 +34,7 @@ public:
   std::string nextTemp()        { return  TEMPCHAR + std::to_string(getTempNumber());   }
   TablaSimbolos *_symbolTable;
   void print();
+  void printSpim();
 
 private:
   std::vector<QuadContainer*>*  _totalQuadList;
@@ -42,6 +43,7 @@ private:
   unsigned int        _tempNumber;
   unsigned int        _quadNumber;
   std::string write(std::string op, std::string arg1, std::string arg2, std::string des);
+  void writeOp(std::string op, std::string des, std::string arg1, std::string arg2);
 };
 
 #endif

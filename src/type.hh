@@ -34,6 +34,11 @@ class Type
     virtual bool compareStructure(Type* type) { return compareTypes(type); };
     virtual bool isHormiguero() { return false; };
     virtual std::string to_string(int nesting) = 0;
+    virtual bool isEmpty() { return false; }
+    virtual bool isFloat() { return false; };
+    virtual bool isBool() { return false; };
+    virtual bool isInt() { return false; };
+
     /**
      * Constructor para la clase.
      *
@@ -87,6 +92,7 @@ class PandaType : public Type
     std::string to_string();
     std::string to_string(int nesting);
     bool isSimple();
+    bool isBool() { return true; };
     static PandaType* getInstance()
     {
       if(!_instance)
@@ -107,6 +113,7 @@ class PolarType : public Type
     std::string to_string();
     std::string to_string(int nesting);
     bool isSimple();
+    bool isInt() { return true; };
     static PolarType* getInstance()
     {
       if(!_instance)
@@ -128,6 +135,7 @@ class KodiakType : public Type
     std::string to_string();
     std::string to_string(int nesting);
     bool isSimple();
+    bool isFloat() { return true; };
     static KodiakType*getInstance()
     {
       if(!_instance)
@@ -365,4 +373,14 @@ class TagType : public Type
     bool isSimple();
     bool compareTypes(Type* t2);
 };
+
+class EmptyType : public Type
+{
+  public:
+    EmptyType() : Type(0,0) {};
+    std::string to_string(int nesting) { return "Empty Type"; }
+    bool isSimple() { return true; }
+    bool isEmpty()  { return true; }
+};
 #endif
+ 

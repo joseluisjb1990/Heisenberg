@@ -48,6 +48,15 @@ void IntermediateGen::close()
   if(_file != NULL) _file.close();
 }
 
+void IntermediateGen::printSpim()
+{
+
+    for (unsigned int pos=0; pos < _totalQuadList->size(); pos++) {
+         _file << _totalQuadList->at(pos)->_quad->toSpim() << std::endl; 
+    }
+
+}
+
 unsigned int IntermediateGen::gen(Quad* q)
 {
   _totalQuadList->push_back(new QuadContainer(q, getQuadNumber(), false));
@@ -89,10 +98,19 @@ std::string IntermediateGen::write(std::string op, std::string arg1, std::string
         + des;
 }
 
+void IntermediateGen::writeOp(std::string op, std::string des, std::string arg1, std::string arg2)
+{
+  std::cout << "Fff";
+  _file << op <<" " << des << " " << arg1 + " " << arg2 << " "; 
+ 
+}
+
+
 void IntermediateGen::gen(std::string id)
 {
   _file << id << ":  " << std::endl;
 }
+
 
 long IntermediateGen::genEmpty(std::string op)
 {

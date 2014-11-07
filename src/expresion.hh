@@ -31,6 +31,7 @@ class Expression : public Node
     virtual bool isIdExpr()                 { return false;         }
     virtual bool isArray()                  { return false;         }
     virtual std::string getArrayName()      { return "";            }
+    virtual Type* getType()                 { return new EmptyType(); }
 
   private :
     bool         _mutID = true;
@@ -411,6 +412,7 @@ class IDExpr : public LValueExpr
                                                                       if      (!con and _falseList  != 0) intGen->patch(_falseList, jumpDes); 
                                                                       else if (con  and _trueList   != 0) intGen->patch(_trueList , jumpDes);
                                                                    }
+    Type* getType();
 };
 
 class FunctionExpr : public Expression
@@ -560,5 +562,3 @@ class GrizzliExpr : public LValueExpr
 };
 
 #endif
-
-

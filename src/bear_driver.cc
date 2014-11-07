@@ -26,6 +26,7 @@ int bear_driver::parse (const std::string &f)
       AST->toIntermediate(intgen);
       intgen->optimize();
       intgen->print();
+      intgen->printSpim();
       intgen->close();
     }
   }

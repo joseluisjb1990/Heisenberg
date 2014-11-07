@@ -161,9 +161,8 @@ void Sum::toIntermediate(IntermediateGen *intGen)
   der->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
 
-  Quad* q = new SumQuad(izq->getTemp(), der->getTemp(), temp);
+  Quad* q = new SumQuad(izq->getTemp(), izq->getType(), der->getTemp(), temp);
   intGen->gen(q);
-
   // intGen->gen("+",izq->getTemp(), der->getTemp(),temp, "   // Suma, linea " + std::to_string(get_first_line()));  
   setTemp(temp);
 }
@@ -202,7 +201,7 @@ void Substraction::toIntermediate(IntermediateGen *intGen)
   der->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
 
-  Quad* q = new SubQuad(izq->getTemp(), der->getTemp(), temp);
+  Quad* q = new SubQuad(izq->getTemp(), izq->getType(), der->getTemp(), temp);
   intGen->gen(q);
 
   // intGen->gen("-",izq->getTemp(), der->getTemp(),temp, "   // Resta, linea " + std::to_string(get_first_line()));  
@@ -243,7 +242,7 @@ void Multiplication::toIntermediate(IntermediateGen *intGen)
   der->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
 
-  Quad* q = new MulQuad(izq->getTemp(), der->getTemp(), temp);
+  Quad* q = new MulQuad(izq->getTemp(), izq->getType(), der->getTemp(), temp);
   intGen->gen(q);
   
 //  intGen->gen("*",izq->getTemp(), der->getTemp(),temp, "   // Multiplication, linea " + std::to_string(get_first_line()));  
@@ -284,7 +283,7 @@ void Division::toIntermediate(IntermediateGen *intGen)
   der->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
 
-  Quad* q = new DivQuad(izq->getTemp(), der->getTemp(), temp);
+  Quad* q = new DivQuad(izq->getTemp(), izq->getType(), der->getTemp(), temp);
   intGen->gen(q);
   
   // intGen->gen("/",izq->getTemp(), der->getTemp(),temp, "   // Division, linea " + std::to_string(get_first_line()));    
@@ -913,6 +912,11 @@ void IDExpr::toIntermediateGoto(IntermediateGen *intGen)
   _falseList = intGen->gen(q);
 }
 
+Type* IDExpr::getType()
+{
+  return _tableRow->getTipo();
+}
+
 FunctionExpr::FunctionExpr(std::string name, std::vector<Type*>* parameterTypes, std::vector<Expression*>* parameters, Type* returnType)
   : Expression()
   , _name           ( name           )
@@ -1414,6 +1418,7 @@ void CuevaExpr::toIntermediate(IntermediateGen *intGen)
 
   for (unsigned int i=0; i < temps.size()-1; ++i)
   {
+    
     q = new SumQuad(aux, temps[i+1], temp);
     intGen->gen(q);
   	// intGen->gen("+",aux,  temps[i+1] ,temp, "   // Suma de Desplazamientos");  

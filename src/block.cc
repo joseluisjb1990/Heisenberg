@@ -21,7 +21,7 @@ void Block::setLiveVar()
   for(std::vector<Quad*>::iterator it = _quadList->end(); it != _quadList->begin(); it--)
   {
     q = (*it);
-    s = q->getUsedVariables();
+    //s = q->getUsedVariables();
   }
 }
 

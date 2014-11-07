@@ -1,3 +1,5 @@
+#ifndef QUAD_CC
+#define QUAD_CC
 #include  "quad.hh"
 
 Quad::Quad(std::string op, std::string leftOperand, std::string rightOperand, std::string destiny)
@@ -6,7 +8,15 @@ Quad::Quad(std::string op, std::string leftOperand, std::string rightOperand, st
   , _rightOperand ( rightOperand  )
   , _destiny      ( destiny       )
 {}
-  
+
+Quad::Quad( std::string op, std::string leftOperand, Type* type, std::string rightOperand, std::string destiny)
+  : _operator     ( op            )
+  , _leftOperand  ( leftOperand   )
+  , _type         ( type          )
+  , _rightOperand ( rightOperand  )
+  , _destiny      ( destiny       )
+{}
+
 JumpQuad::JumpQuad(std::string op, std::string leftOperand, std::string rightOperand, std::string destiny)
  : Quad(op, leftOperand, rightOperand, destiny)
 {}
@@ -20,17 +30,87 @@ SumQuad::SumQuad(std::string leftOperand, std::string rightOperand, std::string 
   : Quad("+", leftOperand, rightOperand, destiny)
 {}
 
+SumQuad::SumQuad(std::string leftOperand, Type* type, std::string rightOperand, std::string destiny)
+  : Quad("+", leftOperand, type, rightOperand, destiny)
+  {}
+
+ std::string SumQuad::toSpim() {
+ 
+    if (_type->isInt()) {
+
+      return "add "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+       
+    } else if (_type->isFloat()) {
+      return "add.s "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+    };
+
+    return "";
+};
+
 SubQuad::SubQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
   : Quad("-", leftOperand, rightOperand, destiny)
 {}
+
+SubQuad::SubQuad(std::string leftOperand, Type* type, std::string rightOperand, std::string destiny)
+  : Quad("-", leftOperand, type, rightOperand, destiny)
+{}
+
+ std::string SubQuad::toSpim() {
+ 
+    if (_type->isInt()) {
+        
+      return "sub "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+       
+    } else if (_type->isFloat()) {
+      return "sub.s "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+    };
+
+    return "";
+};
 
 DivQuad::DivQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
   : Quad("/", leftOperand, rightOperand, destiny)
 {}
 
+DivQuad::DivQuad(std::string leftOperand, Type* type, std::string rightOperand, std::string destiny)
+  : Quad("/", leftOperand, type, rightOperand, destiny)
+{}
+
+std::string DivQuad::toSpim() {
+ 
+    if (_type->isInt()) {
+        
+      return "div "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+       
+    } else if (_type->isFloat()) {
+      return "div.s "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+    };
+
+    return "";
+};
+
+
 MulQuad::MulQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
   : Quad("*", leftOperand, rightOperand, destiny)
 {}
+
+MulQuad::MulQuad(std::string leftOperand, Type* type, std::string rightOperand, std::string destiny)
+  : Quad("*", leftOperand, type, rightOperand, destiny)
+{}
+
+std::string MulQuad::toSpim() {
+ 
+    if (_type->isInt()) {
+        
+      return "mul "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+       
+    } else if (_type->isFloat()) {
+      return "mul.s "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+    };
+
+    return "";
+};
+
 
 RemQuad::RemQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
   : Quad("%", leftOperand, rightOperand, destiny)
@@ -163,3 +243,5 @@ NotEqualQuadExpr::NotEqualQuadExpr(std::string leftOperand, std::string rightOpe
 EndQuad::EndQuad()
   : Quad("end", "", "", "")
 {}
+
+#endif

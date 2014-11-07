@@ -1,8 +1,11 @@
 #ifndef QUAD_HH
 #define QUAD_HH
 #include<string>
+#include<stdio.h>
 #include<set>
 #include<iostream>
+#include<fstream>
+#include"type.hh"
 
 using namespace std;
 
@@ -10,17 +13,19 @@ class Quad
 {
   public:
     Quad(std::string op, std::string leftOperand, std::string rightOperand, std::string destiny);
+    Quad(std::string op, std::string leftOperand, Type* type, std::string rightOperand, std::string destiny);
     virtual void print();
     void setDestiny(std::string destiny)    { _destiny = destiny;  }
     virtual bool isJump()                   { return false;        }
     virtual bool isTag()                    { return false;        }
     virtual int  getAddress()               { return 0;            }
     virtual set<string> getUsedVariables()  {  set<string> s = *(new set<string>);
-                                              return s;
-                                            }
+                                              return s; }
+    virtual std::string toSpim()            { return "";};
 
     std::string _operator;
     std::string _leftOperand;
+    Type* _type;
     std::string _rightOperand;
     std::string _destiny;
 };
@@ -28,31 +33,39 @@ class Quad
 class SumQuad : public Quad
 {
   public:
+    SumQuad(std::string leftOperand, Type* type, std::string rightOperand, std::string destiny);
     SumQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
+    std::string toSpim();
 };
 
 class SubQuad : public Quad
 {
   public:
+    SubQuad(std::string leftOperand, Type* type, std::string rightOperand, std::string destiny);
     SubQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
+    std::string toSpim();
 };
 
 class DivQuad : public Quad
 {
   public:
+    DivQuad(std::string leftOperand, Type* type, std::string rightOperand, std::string destiny);
     DivQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
+    std::string toSpim();
+};
+
+class MulQuad : public Quad
+{
+  public:
+    MulQuad(std::string leftOperand, Type* type, std::string rightOperand, std::string destiny);
+    MulQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
+    std::string toSpim();
 };
 
 class RemQuad : public Quad
 {
   public:
     RemQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
-};
-
-class MulQuad : public Quad
-{
-  public:
-    MulQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
 };
 
 class PowQuad : public Quad

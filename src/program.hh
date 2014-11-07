@@ -1,6 +1,9 @@
 #ifndef PROGRAM_HH
 #define PROGRAM_HH
-
+#include<string>
+#include<stdio.h>
+#include<iostream>
+#include<fstream>
 #include "statement.hh"
 #include "definition.hh"
 
