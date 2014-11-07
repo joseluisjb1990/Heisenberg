@@ -1,7 +1,7 @@
 #ifndef GENERATOR_HH
 #define GENERATOR_HH
 
-#define TEMPCHAR "#"
+#define TEMPCHAR "_"
 #include<string>
 #include<fstream>
 #include<stdio.h>
