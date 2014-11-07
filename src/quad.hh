@@ -89,7 +89,7 @@ class RemQuad : public Quad
   public:
     RemQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
     bool useVariables()             { return true; }
-
+    std::string toSpim();
 };
 
 class PowQuad : public Quad
@@ -238,6 +238,7 @@ class FlagQuad : public Quad
 {
   public:
     FlagQuad(std::string destiny);
+    std::string toSpim();
     bool isTag()  { return true;  }
 
 };

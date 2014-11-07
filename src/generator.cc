@@ -35,7 +35,7 @@ void IntermediateGen::print()
 IntermediateGen::IntermediateGen(const std::string &file, TablaSimbolos * symbolTable)
   : Generator()
   { 
-    _nameTempFile = file + ".temp";
+    _nameTempFile = file + ".s";
     _file.open( _nameTempFile.c_str(), std::ofstream::out); 
     _quadNumber = 0;
     _tempNumber = 0;
@@ -51,6 +51,7 @@ void IntermediateGen::close()
 void IntermediateGen::printSpim()
 {
 
+    _file << " .text"  << std::endl; 
     for (unsigned int pos=0; pos < _totalQuadList->size(); pos++) {
         
         std::string line;

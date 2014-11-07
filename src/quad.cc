@@ -113,6 +113,19 @@ RemQuad::RemQuad(std::string leftOperand, std::string rightOperand, std::string 
   : Quad("%", leftOperand, rightOperand, destiny)
 {}
 
+std::string RemQuad::toSpim() {
+ 
+    if (_leftType->isInt()) {  
+        return "rem "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+       
+    } else if (_leftType->isFloat()) {
+        return "rem.s "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+    };
+
+    return "";
+};
+
+
 PowQuad::PowQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
   : Quad("**", leftOperand, rightOperand, destiny)
 {}
@@ -208,6 +221,11 @@ ReturnQuad::ReturnQuad(std::string destiny)
 FlagQuad::FlagQuad(std::string destiny)
   : Quad(destiny, ":", "", "")
 {}
+
+std::string FlagQuad::toSpim() {
+ 
+    return _operator + ":";
+};
 
 RefQuad::RefQuad(std::string leftOperand, std::string destiny)
   : Quad("&", leftOperand, "", destiny)
