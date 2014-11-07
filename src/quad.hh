@@ -5,6 +5,7 @@
 #include<set>
 #include<iostream>
 #include<fstream>
+#include<map>
 #include"type.hh"
 
 using namespace std;
@@ -38,6 +39,7 @@ class Quad
     Type* _type;
     std::string _rightOperand = *(new std::string());
     std::string _destiny      = *(new std::string());
+    static map<string, Type*>* tablaTemporales;
 };
 
 class SumQuad : public Quad
