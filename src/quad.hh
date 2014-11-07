@@ -33,12 +33,11 @@ class Quad
     virtual bool useVariables()             { return false; }
     virtual std::string toSpim()            { return "";};
     
-    Type* _type;
     std::string _operator     = *(new std::string());
     std::string _leftOperand  = *(new std::string());
+    Type* _type;
     std::string _rightOperand = *(new std::string());
     std::string _destiny      = *(new std::string());
-
 };
 
 class SumQuad : public Quad

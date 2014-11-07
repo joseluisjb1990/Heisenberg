@@ -30,14 +30,15 @@ class Type
     unsigned int _align;
 
   public:
-    virtual bool isArray() { return false; };
-    virtual bool compareStructure(Type* type) { return compareTypes(type); };
-    virtual bool isHormiguero() { return false; };
+    virtual bool isArray()                          { return false;               };
+    virtual bool compareStructure(Type* type)       { return compareTypes(type);  };
+    virtual bool isHormiguero()                     { return false;               };
     virtual std::string to_string(int nesting) = 0;
-    virtual bool isEmpty() { return false; }
-    virtual bool isFloat() { return false; };
-    virtual bool isBool() { return false; };
-    virtual bool isInt() { return false; };
+    virtual bool isEmpty()                          { return false;               };
+    virtual bool isFloat()                          { return false;               };
+    virtual bool isBool()                           { return false;               };
+    virtual bool isInt()                            { return false;               };
+    virtual bool isNum()                            { return false;               };
 
     /**
      * Constructor para la clase.
@@ -113,7 +114,8 @@ class PolarType : public Type
     std::string to_string();
     std::string to_string(int nesting);
     bool isSimple();
-    bool isInt() { return true; };
+    bool isInt() { return true;  };
+    virtual bool isNum() { return false; };
     static PolarType* getInstance()
     {
       if(!_instance)
@@ -127,6 +129,23 @@ class PolarType : public Type
     PolarType();
     static PolarType* _instance;
 
+};
+
+class NumType : public PolarType
+{
+  public:
+    static NumType* getInstance()
+    {
+      if(!_instance)
+        _instance = new NumType();
+
+      return _instance;
+    }
+    bool isNum() { return true; }
+
+  private:
+    NumType();
+    static NumType* _instance;
 };
 
 class KodiakType : public Type

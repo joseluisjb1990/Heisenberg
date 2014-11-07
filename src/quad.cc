@@ -34,16 +34,13 @@ SumQuad::SumQuad(std::string leftOperand, Type* type, std::string rightOperand, 
   : Quad("+", leftOperand, type, rightOperand, destiny)
   {}
 
- std::string SumQuad::toSpim() {
+std::string SumQuad::toSpim() {
  
     if (_type->isInt()) {
-
       return "add "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
-       
     } else if (_type->isFloat()) {
       return "add.s "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
     };
-
     return "";
 };
 

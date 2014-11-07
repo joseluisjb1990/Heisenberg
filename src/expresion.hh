@@ -53,6 +53,7 @@ class PolarExpr : public Constant
     std::string getValue();
     void check();
     virtual std::string getTemp() { return valor; }
+    Type* getType()       { return PolarType::getInstance(); }
 };
 
 class KodiakExpr : public Constant
@@ -66,7 +67,7 @@ class KodiakExpr : public Constant
     std::string getValue();
     void check();
     virtual std::string getTemp() { return valor; }
-
+    Type* getType()       { return KodiakType::getInstance(); }
 };
 
 class HormigueroExpr : public Constant
@@ -79,12 +80,13 @@ class HormigueroExpr : public Constant
     std::string to_string(int nesting);
     std::string getValue();
     void check();
-    void toIntermediate(IntermediateGen* intGen) { std::string temp = intGen->nextTemp(); 
+    void toIntermediate(IntermediateGen* intGen) { 
+                                                   std::string temp = intGen->nextTemp();
                                                    Quad* q = new AssignQuad(valor,temp);
                                                    intGen->gen(q);
-                                                   // intGen->gen(":=", valor, "", temp);
                                                    setTemp(temp);
                                                  };
+    Type* getType()       { return new HormigueroType(); }
 };
 
 class MalayoExpr : public Constant
@@ -98,7 +100,7 @@ class MalayoExpr : public Constant
     std::string getValue();
     void check();
     virtual std::string getTemp() { return valor; }
-
+    Type* getType()       { return MalayoType::getInstance(); }
 };
 
 class BoolExpr : public Expression
