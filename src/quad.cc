@@ -2,8 +2,6 @@
 #define QUAD_CC
 #include  "quad.hh"
 
-static map<string, Type*>* Quad::tablaTemporales = new map<string, Type*>();
-
 Quad::Quad(std::string op, std::string leftOperand, std::string rightOperand, std::string destiny)
   : _operator     ( op            )
   , _leftOperand  ( leftOperand   )
