@@ -27,7 +27,7 @@ all: bear
 bear: $(FILES)
 	$(MAKE) $(SOBJ)
 	$(MAKE) $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $(EXE) $(OBJS) parser.o lexer.o expresion.cc statement.cc definition.cc type.cc TablaSimbolos.cc Contenido.cc program.cc generator.cc quad.cc block.cc FlowGraph.cc $(LIBS)
+	$(CXX) $(CXXFLAGS) -o $(EXE) $(OBJS) parser.o lexer.o expresion.cc statement.cc definition.cc type.cc TablaSimbolos.cc Contenido.cc program.cc generator.cc quad.cc block.cc FlowGraph.cc registerAsigner.cc $(LIBS)
 
 
 parser: bear_parser.yy

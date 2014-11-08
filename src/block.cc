@@ -13,6 +13,20 @@ Block::Block()
   _exitBlocks = new std::vector<Block*>();
 }
 
+void Block::setRegisters(RegisterAsigner* ra)
+{
+  if(_quadList->empty()) return;
+  vector<Quad*>::iterator itq = _quadList->begin();
+
+  forward_list<set<string>>::iterator it = _liveVariables.begin();
+  it++;
+  for(; it != _liveVariables.end(); it++, itq++)
+  {
+    set<string> s = *it;
+    ra->getReg(*itq,*it);
+  }
+}
+
 void Block::setLiveVar()
 {
   if(_liveVariables.empty()) _liveVariables.push_front(*(new set<string>()));
@@ -40,7 +54,6 @@ void Block::setLiveVar()
 
     //Insertamos las nuevas variables usadas en el quad
     _liveVariables.front().insert(s.begin(), s.end());
-
   }
 }
 

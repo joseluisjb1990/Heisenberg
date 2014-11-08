@@ -47,9 +47,18 @@ FlowGraph::FlowGraph(std::vector<QuadContainer*>* quadList)
     qc = (*it);
     if(qc->isJump()) { qc->replaceAddress(quadList->at(qc->getAddress())->getNumberBlock()); } 
   }
-  
+
   for(std::vector<Block*>::iterator it = _blockList->begin(); it != _blockList->end(); it++)
-    (*it)->setLiveVar();
+    (*it)->setLiveVar(); 
+
+  // RegisterAsigner* ra = new RegisterAsigner(100);
+  //for(std::vector<Block*>::iterator it = _blockList->begin(); it != _blockList->end(); it++)
+  //{
+    //b = *it;
+    //b = _blockList->at(2);
+    //b->setLiveVar();
+    //b->setRegisters(ra);
+  //}
 }
 
 void FlowGraph::print()

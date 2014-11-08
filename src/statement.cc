@@ -575,7 +575,7 @@ void ComplexFor::toIntermediate(IntermediateGen *intGen)
 
   _body->toIntermediate(intGen);
 
-  q = new SumQuad( _id, _step->getTemp(), _id); 
+  q = new SumQuad( _id, PolarType::getInstance(), _step->getTemp(), PolarType::getInstance(), _id, PolarType::getInstance()); 
   intGen->gen(q);     
   //intGen->gen("+", _id, _step->getTemp(), _id, "   // Incremento del Iterador");
 
@@ -661,7 +661,7 @@ void SimpleFor::toIntermediate(IntermediateGen *intGen)
 
   _body->toIntermediate(intGen);
   
-  q = new SumQuad( _id, "1", _id); 
+  q = new SumQuad( _id, PolarType::getInstance(), "1", PolarType::getInstance(), _id, PolarType::getInstance()); 
   intGen->gen(q);
   //intGen->gen("+", _id, "1", _id, "   // Incremento del Iterador");
 
@@ -721,7 +721,7 @@ void IdFor::toIntermediate(IntermediateGen *intGen)
   CuevaType*  t     = dynamic_cast<CuevaType *> (_tableRow->getTipo());
   std::string tc    = std::to_string(t->getTipo()->getSize());
   std::string temp  = intGen->nextTemp();
-  std::string temp2  = intGen->nextTemp();
+  std::string temp2 = intGen->nextTemp();
  
   Quad* q;
 
@@ -735,7 +735,7 @@ void IdFor::toIntermediate(IntermediateGen *intGen)
   _nextInst = intGen->gen(q);
   //_nextInst = intGen->genEmpty("if " + temp + " = " + std::to_string(t->getLongitud() -1) + " goto");
 
-  q = new MulQuad( tc,temp, temp2); 
+  q = new MulQuad(tc,PolarType::getInstance(), temp, PolarType::getInstance(), temp2, PolarType::getInstance()); 
   intGen->gen(q);
   //intGen->gen("*", tc, temp, temp2, "   // Desplazamiento Arreglo");  
 
@@ -745,7 +745,7 @@ void IdFor::toIntermediate(IntermediateGen *intGen)
 
   _body->toIntermediate(intGen);
 
-  q = new SumQuad( temp, "1", temp); 
+  q = new SumQuad(temp, PolarType::getInstance(), "1", PolarType::getInstance(), temp, PolarType::getInstance()); 
   intGen->gen(q);
   //intGen->gen("+",temp,"1",temp, "   // Incremento del Iterador");
 
@@ -855,7 +855,7 @@ void Increase::toIntermediate(IntermediateGen *intGen)
 { 
   Quad* q;
 
-  q = new SumQuad( _id, "1", _id); 
+  q = new SumQuad( _id, PolarType::getInstance(), "1", PolarType::getInstance(), _id, PolarType::getInstance()); 
   intGen->gen(q);
   //intGen->gen("+",_id,"1",_id, "   // Incremento, linea " + std::to_string(get_first_line()));  
 

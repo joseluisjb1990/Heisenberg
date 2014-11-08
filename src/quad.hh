@@ -14,8 +14,20 @@ class Quad
 {
   public:
     Quad(std::string op, std::string leftOperand, std::string rightOperand, std::string destiny);
-    Quad(std::string op, std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, 
-                                                                            std::string destiny);
+    Quad(std::string op , std::string leftOperand
+                        , Type* leftType
+                        , std::string rightOperand
+                        , Type* rightType
+                        , std::string destiny
+                        );
+
+    Quad(std::string op , std::string leftOperand
+                        , Type* leftType
+                        , std::string rightOperand
+                        , Type* rightType
+                        , std::string destiny
+                        , Type* destinyType
+                        );
     virtual void print();
     void setDestiny(std::string destiny)    { _destiny = destiny;  }
     virtual bool isJump()                   { return false;        }
@@ -34,20 +46,22 @@ class Quad
     virtual string getDefinedVariable()     { if(useVariables()) return _destiny; else return *( new std::string()); }
     virtual bool useVariables()             { return false; }
     virtual std::string toSpim()            { return "";};
-    
+
+    static map<string, Type*> tablaTemporales;
     std::string _operator     = *(new std::string());
     std::string _leftOperand  = *(new std::string());
-    Type*       _leftType;
+    Type*       _leftType     = new EmptyType();
     std::string _rightOperand = *(new std::string());
-    Type*       _rightType;  
+    Type*       _rightType    = new EmptyType();
     std::string _destiny      = *(new std::string());
-    static map<string, Type*>* tablaTemporales;
+    Type*       _destinyType  = new EmptyType();
 };
 
 class SumQuad : public Quad
 {
   public:
     SumQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny);
+    SumQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny, Type* destinyType);
     SumQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
     bool useVariables()             { return true; }
     std::string toSpim();
@@ -59,6 +73,7 @@ class SubQuad : public Quad
   public:
     SubQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny);
     SubQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
+    SubQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny, Type* destinyType);
     bool useVariables()             { return true; }
     std::string toSpim();
 
@@ -69,6 +84,7 @@ class DivQuad : public Quad
   public:
     DivQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny);
     DivQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
+    DivQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny, Type* destinyType);
     bool useVariables()             { return true; }
     std::string toSpim();
 
@@ -81,6 +97,7 @@ class MulQuad : public Quad
 
     MulQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny);
     MulQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
+    MulQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny, Type* destinyType);
     bool useVariables()             { return true; }
     std::string toSpim();
 
