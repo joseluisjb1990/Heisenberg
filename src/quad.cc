@@ -2,6 +2,8 @@
 #define QUAD_CC
 #include  "quad.hh"
 
+static map<string, Type*>* Quad::tablaTemporales = new map<string, Type*>();
+
 Quad::Quad(std::string op, std::string leftOperand, std::string rightOperand, std::string destiny)
   : _operator     ( op            )
   , _leftOperand  ( leftOperand   )
@@ -36,7 +38,7 @@ SumQuad::SumQuad(std::string leftOperand, Type* leftType, std::string rightOpera
   {}
 
 std::string SumQuad::toSpim() {
- 
+    //Quad::tablaTemporales->(destiny) = 
     if (_leftType->isInt()) {  
         return "sum "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
        
