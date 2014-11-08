@@ -32,6 +32,7 @@ class Quad
     void setDestiny(std::string destiny)    { _destiny = destiny;  }
     virtual bool isJump()                   { return false;        }
     virtual bool isTag()                    { return false;        }
+    virtual bool isMain()                   { return false;        }
     virtual int  getAddress()               { return 0;            }
     virtual set<string> getUsedVariables()  {  
                                                if(useVariables())
@@ -123,6 +124,7 @@ class UmQuad : public Quad
   public:
     UmQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
     bool useVariables()             { return true; }
+    std::string toSpim();
 };
 
 class JumpQuad : public Quad
@@ -138,12 +140,14 @@ class LessThanQuad : public JumpQuad
 {
   public:
     LessThanQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
+    std::string toSpim();
 };
 
 class LessEqualQuad : public JumpQuad
 {
   public:
     LessEqualQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
+    std::string toSpim();
 };
 
 class GreaterThanQuad : public JumpQuad
@@ -151,12 +155,14 @@ class GreaterThanQuad : public JumpQuad
   public:
     GreaterThanQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
     GreaterThanQuad(std::string leftOperand, std::string rightOperand);
+    std::string toSpim();
 };
 
 class GreaterEqualQuad : public JumpQuad
 {
   public:
     GreaterEqualQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
+    std::string toSpim();
 };
 
 class EqualQuad : public JumpQuad
@@ -164,18 +170,21 @@ class EqualQuad : public JumpQuad
   public:
     EqualQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
     EqualQuad(std::string leftOperand, std::string rightOperand);
+    std::string toSpim();
 };
 
 class NotEqualQuad : public JumpQuad
 {
   public:
     NotEqualQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
+    std::string toSpim();
 };
 
 class IdBoolQuad : public JumpQuad
 {
   public:
     IdBoolQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
+    std::string toSpim();
 };
 
 class GotoQuad : public JumpQuad
@@ -257,8 +266,9 @@ class FlagQuad : public Quad
 {
   public:
     FlagQuad(std::string destiny);
-    std::string toSpim();
     bool isTag()  { return true;  }
+    bool isMain() { if (_operator == "oso") return true; else return false; }
+    std::string toSpim();
 
 };
 
