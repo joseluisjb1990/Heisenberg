@@ -51,13 +51,29 @@ void IntermediateGen::close()
 void IntermediateGen::printSpim()
 {
 
-    _file << " .text"  << std::endl; 
-    for (unsigned int pos=0; pos < _totalQuadList->size(); pos++) {
+    _file << "        .text"  << std::endl; 
+    for (unsigned int pos=1; pos < _totalQuadList->size() - 1; pos++) {
         
         std::string line;
-        line = _totalQuadList->at(pos)->_quad->toSpim();
         
-        if (line != "") _file << line << std::endl; 
+        if (_totalQuadList->at(pos)->_quad->isTag()) {
+
+            if (_totalQuadList->at(pos)->_quad->isMain()) 
+                _file << std::endl << _totalQuadList->at(pos)->_quad->toSpim() << std::endl << std::endl;
+
+            _file << std::endl << "bloque" << _totalQuadList-> at(pos)->getNumberBlock()
+                                                                        << ":" << std::endl << std::endl; 
+
+        } else {
+
+            if (_totalQuadList->at(pos)->isLeader()) 
+                _file << std::endl << "bloque" << _totalQuadList-> at(pos)->getNumberBlock()
+                                                                        << ":" << std::endl << std::endl; 
+
+            line = _totalQuadList->at(pos)->_quad->toSpim();
+        
+            if (line != "") _file << "    " << line << std::endl; 
+        }
     }
 
 }
