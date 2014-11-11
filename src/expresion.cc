@@ -22,7 +22,7 @@ PolarExpr::PolarExpr(std::string valor)
 std::string PolarExpr::to_string(int nesting)
 {
   std::string padding(nesting*2, ' ');
-  return padding + getValue();
+  return padding + getValue() + " Expresion polar";
 }
 
 std::string PolarExpr::getValue()

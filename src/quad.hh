@@ -342,6 +342,18 @@ class NotEqualQuadExpr : public Quad
     bool useVariables()             { return true; }
 };
 
+class LoadQuad : public Quad
+{
+  public:
+    LoadQuad(std::string leftOperand, std::string destiny);
+};
+
+class StoreQuad : public Quad
+{
+  public:
+    StoreQuad(std::string leftOperand, std::string destiny);
+};
+
 class EndQuad : public Quad
 {
   public:

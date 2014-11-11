@@ -32,7 +32,7 @@ class Expression : public Node
     virtual bool isArray()                  { return false;         }
     virtual std::string getArrayName()      { return "";            }
     virtual Type* getType()                 { return _type;           }
-    virtual void setType(Type* type)                { _type = type;           }
+    virtual void setType(Type* type)        { _type = type;           }
   private :
     bool         _mutID = true;
     unsigned int _tam   = 0;
@@ -54,7 +54,7 @@ class PolarExpr : public Constant
     std::string getValue();
     void check();
     virtual std::string getTemp() { return valor; }
-    Type* getType()       { return PolarType::getInstance(); }
+    Type* getType()               { return NumType::getInstance(); }
 };
 
 class KodiakExpr : public Constant

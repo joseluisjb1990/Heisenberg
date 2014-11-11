@@ -1,6 +1,8 @@
+#ifndef BLOCK_CC
+#define BLOCK_CC
 #include "block.hh"
 
-Block::Block(std::vector<Quad*>* quadList, std::vector<Block*>* inBlocks, std::vector<Block*>* exitBlocks)
+Block::Block(std::vector<QuadContainer*>* quadList, std::vector<Block*>* inBlocks, std::vector<Block*>* exitBlocks)
   : _quadList   ( quadList   )
   , _inBlocks   ( inBlocks   )
   , _exitBlocks ( exitBlocks )
@@ -8,34 +10,23 @@ Block::Block(std::vector<Quad*>* quadList, std::vector<Block*>* inBlocks, std::v
 
 Block::Block()
 {
-  _quadList   = new std::vector<Quad*>();
+  _quadList   = new std::vector<QuadContainer*>();
   _inBlocks   = new std::vector<Block*>();
   _exitBlocks = new std::vector<Block*>();
 }
 
-void Block::setRegisters(RegisterAsigner* ra)
-{
-  if(_quadList->empty()) return;
-  vector<Quad*>::iterator itq = _quadList->begin();
-
-  forward_list<set<string>>::iterator it = _liveVariables.begin();
-  it++;
-  for(; it != _liveVariables.end(); it++, itq++)
-  {
-    set<string> s = *it;
-    ra->getReg(*itq,*it);
-  }
-}
 
 void Block::setLiveVar()
 {
   if(_liveVariables.empty()) _liveVariables.push_front(*(new set<string>()));
   Quad* q;
+  QuadContainer* qc;
   set<string> s, s1, s2;
   string d;
-  for(std::vector<Quad*>::iterator it = _quadList->end() -1; it != _quadList->begin() -1; it--)
+  for(std::vector<QuadContainer*>::iterator it = _quadList->end() -1; it != _quadList->begin() -1; it--)
   {
-    q = *it;
+    qc  = *it;
+    q   = qc->_quad;
 
     // Obtenemos las variables usadas por el quad
     s   = q->getUsedVariables();
@@ -60,7 +51,7 @@ void Block::setLiveVar()
 void Block::print()
 {
   if(_quadList->empty()) return;
-  std::vector<Quad*>::iterator itq = _quadList->begin();
+  std::vector<QuadContainer*>::iterator itq = _quadList->begin();
   
   for(std::forward_list<set<string>>::iterator it = _liveVariables.begin(); it != _liveVariables.end(); it++)
   {
@@ -74,7 +65,7 @@ void Block::print()
       std::cout << "Vacio";
 
     std::cout << std::endl;
-    if(itq != _quadList->end()) { std::cout << "Quad :  "; (*itq)->print(); itq++; }
+    if(itq != _quadList->end()) { std::cout << "Quad :  "; (*itq)->_quad->print(); itq++; }
   }
 }
 
@@ -85,3 +76,4 @@ EntryBlock::EntryBlock(std::vector<Block*>* exitBlocks)
 EndingBlock::EndingBlock(std::vector<Block*>* entryBlocks)
   : Block(nullptr, entryBlocks, nullptr)
 {}
+#endif

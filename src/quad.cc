@@ -35,9 +35,9 @@ JumpQuad::JumpQuad(std::string op, std::string leftOperand, std::string rightOpe
 void Quad::print()
 {
   std::cout <<  _operator       << " " 
-            <<  _leftOperand    << " "  << _leftType->to_string(0)   << " "     
-            <<  _rightOperand   << " "  << _rightType->to_string(0)  << " "
-            <<  _destiny        << " "  << _destinyType->to_string(0)<< " " << '\n';
+            <<  _leftOperand    << " "       
+            <<  _rightOperand   << " "  
+            <<  _destiny        << " "  << '\n';
 }
 
 map<string, Type*> Quad::tablaTemporales;
@@ -399,4 +399,11 @@ BeginQuad::BeginQuad()
   : Quad("begin", "", "", "")
 {}
 
+LoadQuad::LoadQuad(std::string leftOperand, std::string destiny)
+  : Quad("ld", leftOperand, "", destiny)
+{}
+
+StoreQuad::StoreQuad(std::string leftOperand, std::string destiny)
+  : Quad("st", leftOperand, "", destiny)
+{}
 #endif

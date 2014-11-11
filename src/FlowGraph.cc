@@ -1,5 +1,7 @@
-#include "FlowGraph.hh"
+#ifndef FLOWGRAPH_CC
+#define FLOWGRAPH_CC
 
+#include "FlowGraph.hh"
 FlowGraph::FlowGraph(std::vector<Block*>* blockList, EntryBlock* entry, EndingBlock* ending)
   : _blockList( blockList )
   , _entry    ( entry     )
@@ -35,12 +37,12 @@ FlowGraph::FlowGraph(std::vector<QuadContainer*>* quadList)
     qc = (*it);
     b = new Block();
     if(qc->isLeader())
-      while(true) { b->addQuad(qc->getQuad()); qc->addNumberBlock(bc); if ((*(it + 1))->isLeader()) break; else qc = *(++it); }
+      while(true) { b->addQuad(qc); qc->addNumberBlock(bc); if ((*(it + 1))->isLeader()) break; else qc = *(++it); }
     _blockList->push_back(b);
     bc++;
   }
 
-  b = new Block(); qc = quadList->back(); qc->addNumberBlock(bc); b->addQuad(qc->getQuad()); _blockList->push_back(b);
+  b = new Block(); qc = quadList->back(); qc->addNumberBlock(bc); b->addQuad(qc); _blockList->push_back(b);
     
   for(std::vector<QuadContainer*>::iterator it = quadList->begin(); it != quadList->end(); it++)
   {
@@ -51,14 +53,55 @@ FlowGraph::FlowGraph(std::vector<QuadContainer*>* quadList)
   for(std::vector<Block*>::iterator it = _blockList->begin(); it != _blockList->end(); it++)
     (*it)->setLiveVar(); 
 
-  // RegisterAsigner* ra = new RegisterAsigner(100);
-  //for(std::vector<Block*>::iterator it = _blockList->begin(); it != _blockList->end(); it++)
-  //{
-    //b = *it;
-    //b = _blockList->at(2);
-    //b->setLiveVar();
-    //b->setRegisters(ra);
-  //}
+  _quadList = quadList;
+
+}
+
+void FlowGraph::setRegisters(int cantRegisters)
+{
+  if(_quadList->empty()) return;
+  
+  RegisterAsigner* ra = new RegisterAsigner(cantRegisters);
+
+  vector<pair<bool, int>> arrPairs;
+  
+  QuadContainer* qc;
+  Quad* q;
+  int   regLeft, regRight, regRes;
+  bool  loadLeft, loadRight, loadRes;
+
+  for(vector<QuadContainer*>::iterator itq = _quadList->begin(); itq != _quadList->end(); itq++)
+  {
+    qc  = (*itq);
+    q   = qc->_quad; 
+    if(q->useVariables())
+    {
+      // Obtenemos los registros necesarios para la instruccion
+      //set<string> s = *it;
+      arrPairs = ra->getReg(q);
+
+      // Guardamos los resultados en las variables necesarias
+
+      loadLeft    = arrPairs.at(0).first;
+      regLeft     = arrPairs.at(0).second;
+      loadRight   = arrPairs.at(1).first;
+      regRight    = arrPairs.at(1).second;
+      loadRes     = arrPairs.at(2).first;
+      regRes      = arrPairs.at(2).second;
+
+      if(loadLeft)
+      {
+        // q1 = new LoadQuad(q->_leftOperand, "R" + to_string(regLeft));
+        // _quadList->insert(itq, q1);
+        // itq++;
+        // AQUI DEBERIAMOS GUARDAR LOS REGISTROS EN LAS VARIABLES QUE HAGAN FALTA.
+      }
+
+      cout << "La variable " << q->_leftOperand  << " Tiene el registro " << arrPairs.at(0).second << " " << arrPairs.at(0).first << endl;
+      cout << "La variable " << q->_rightOperand << " Tiene el registro " << arrPairs.at(1).second << " " << arrPairs.at(1).first << endl;
+      cout << "La variable " << q->_destiny      << " Tiene el registro " << arrPairs.at(2).second << " " << arrPairs.at(2).first << endl;
+    }
+  }
 }
 
 void FlowGraph::print()
@@ -72,3 +115,4 @@ void FlowGraph::print()
     std::cout << "------------------------------------------------ \n Bloque " << i++ << std::endl; b->print(); std::cout << std::endl;
   }
 }
+#endif

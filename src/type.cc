@@ -91,6 +91,12 @@ bool PolarType::compareTypes (Type* t2)
   return t2 == getInstance();
 }
 
+NumType::NumType()
+  : PolarType()
+{}
+
+NumType* NumType::_instance = 0;
+
 KodiakType::KodiakType()
   : Type(8,8)
   {}
@@ -117,6 +123,12 @@ bool KodiakType::compareTypes (Type* t2)
 {
   return t2 == getInstance();
 }
+
+ConstFloat::ConstFloat()
+  : KodiakType()
+{}
+
+ConstFloat* ConstFloat::_instance = 0;
 
 MalayoType::MalayoType()
   : Type(1, 2)

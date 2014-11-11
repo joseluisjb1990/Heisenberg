@@ -38,7 +38,7 @@ class Type
     virtual bool isFloat()                          { return false;               };
     virtual bool isBool()                           { return false;               };
     virtual bool isInt()                            { return false;               };
-    virtual bool isNum()                            { return false;               };
+    virtual bool isConstant()                            { return false;               };
 
     /**
      * Constructor para la clase.
@@ -111,11 +111,11 @@ class PandaType : public Type
 class PolarType : public Type
 {
   public:
-    std::string to_string();
+    virtual std::string to_string();
     std::string to_string(int nesting);
     bool isSimple();
-    bool isInt() { return true;  };
-    virtual bool isNum() { return false; };
+    bool isInt()                { return true;  };
+    virtual bool isConstant()   { return false; };
     static PolarType* getInstance()
     {
       if(!_instance)
@@ -125,8 +125,8 @@ class PolarType : public Type
     }
     bool compareTypes(Type* t2);
 
-  private:
     PolarType();
+  private:
     static PolarType* _instance;
 
 };
@@ -141,9 +141,10 @@ class NumType : public PolarType
 
       return _instance;
     }
-    bool isNum() { return true; }
+    bool isConstant()          { return true; }
+    
+    std::string to_string() { return "Num"; }
 
-  private:
     NumType();
     static NumType* _instance;
 };
@@ -164,9 +165,25 @@ class KodiakType : public Type
     }
     bool compareTypes(Type* t2);
 
-  private:
     KodiakType();
     static KodiakType* _instance;
+};
+
+class ConstFloat : public KodiakType
+{
+  public:
+    static ConstFloat* getInstance()
+    {
+      if(!_instance)
+        _instance = new ConstFloat();
+
+      return _instance;
+    }
+    bool isConstant()          { return true; }
+
+  private:
+    ConstFloat();
+    static ConstFloat* _instance;
 };
 
 class MalayoType : public Type

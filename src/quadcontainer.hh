@@ -1,5 +1,8 @@
 #ifndef QUADCONTAINER_HH
 #define QUADCONTAINER_HH
+
+#include "quad.hh"
+
 class QuadContainer
 {
   public:
@@ -19,5 +22,6 @@ class QuadContainer
     unsigned int  _numberQuad;
     unsigned int  _numberBlock;
     bool          _isLeader;
+    bool          _isDead = false;
 };
 #endif

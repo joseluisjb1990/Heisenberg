@@ -1,3 +1,5 @@
+#ifndef BLOCK_HH
+#define BLOCK_HH
 #include <string>
 #include <iostream>
 #include <vector>
@@ -5,7 +7,7 @@
 #include <set>
 #include <string>
 #include <utility>
-#include "quad.hh"
+#include "quadcontainer.hh"
 #include "registerAsigner.hh"
 
 using namespace std;
@@ -13,18 +15,17 @@ using namespace std;
 class Block
 {
   public:
-    Block(std::vector<Quad*>* quadList, std::vector<Block*>* entryBlocks, std::vector<Block*>* exitBlocks);
+    Block(std::vector<QuadContainer*>* quadList, std::vector<Block*>* entryBlocks, std::vector<Block*>* exitBlocks);
     Block();
-    void addQuad(Quad* q) { _quadList->push_back(q); }
+    void addQuad(QuadContainer* q) { _quadList->push_back(q); }
     void print();
     void setLiveVar();
-    void setRegisters(RegisterAsigner* ra);
 
   private:
-    std::vector<Quad*>*         _quadList;
-    std::vector<Block*>*        _inBlocks;
-    std::vector<Block*>*        _exitBlocks;
-    forward_list<set<string>>   _liveVariables;
+    std::vector<QuadContainer*>* _quadList;
+    std::vector<Block*>*         _inBlocks;
+    std::vector<Block*>*         _exitBlocks;
+    forward_list<set<string>>    _liveVariables;
 };
 
 class EntryBlock : public Block
@@ -38,3 +39,4 @@ class EndingBlock : public Block
   public:
     EndingBlock(std::vector<Block*>* entryBlocks);
 };
+#endif

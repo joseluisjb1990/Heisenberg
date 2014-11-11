@@ -16,10 +16,10 @@ void QuadContainer::print()
   std::cout << _numberBlock << " " << _numberQuad << " " << _isLeader << " "; _quad->print();
 }
 
-void IntermediateGen::optimize()
+FlowGraph* IntermediateGen::optimize()
 {
   FlowGraph* fw = new FlowGraph(_totalQuadList);
-  fw->print();
+  return fw;
 }
 
 void IntermediateGen::print()
