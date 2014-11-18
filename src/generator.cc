@@ -48,10 +48,17 @@ void IntermediateGen::close()
   if(_file != NULL) _file.close();
 }
 
-void IntermediateGen::printSpim()
+void IntermediateGen::printSpim(TablaSimbolos* tSimbolos)
 {
 
+    RegisterAsigner* ra = new RegisterAsigner(15);
+    
+    QuadContainer* qc, *qc1;
+    Quad* q, *q1;
+    vector<pair<bool, string>> arrPairs;
+    
     _file << "        .text"  << std::endl; 
+
     for (unsigned int pos=1; pos < _totalQuadList->size() - 1; pos++) {
         
         std::string line;
@@ -67,15 +74,59 @@ void IntermediateGen::printSpim()
         } else {
 
             if (_totalQuadList->at(pos)->isLeader()) 
-                _file << std::endl << "bloque" << _totalQuadList-> at(pos)->getNumberBlock()
+                _file << std::endl << "bloque" << _totalQuadList->at(pos)->getNumberBlock()
                                                                         << ":" << std::endl << std::endl; 
+            qc  = _totalQuadList->at(pos);
+            q   = qc->_quad; 
 
-            line = _totalQuadList->at(pos)->_quad->toSpim();
+            // Obtenemos los registros necesarios para la instruccion
+            //set<string> s = *it;
+
+            if(q->useVariables())
+            {
+              arrPairs = ra->getReg(q);
+
+              // Guardamos los resultados en las variables necesarias
+
+              susVariables(arrPairs, q, _file);
+            }
+            
+            line = q->toSpim();
         
-            if (line != "") _file << "    " << line << std::endl; 
+            if (line != "") _file << "   " << line << std::endl; 
         }
     }
+}
 
+void IntermediateGen::susVariables(vector<pair<bool, string>> arrPairs, Quad* q, std::ofstream& file)
+{
+  string    regLeft, regRight, regRes;
+  bool      loadLeft, loadRight, loadRes;
+
+  loadLeft    = arrPairs.at(0).first;
+  regLeft     = arrPairs.at(0).second;
+  loadRight   = arrPairs.at(1).first;
+  regRight    = arrPairs.at(1).second;
+  loadRes     = arrPairs.at(2).first;
+  regRes      = arrPairs.at(2).second;
+
+  if(loadLeft)
+  {
+    if(q->_leftType->isConstant())
+    {
+      file << "   li " << regLeft << " " << q->_leftOperand << endl;
+    }
+  }
+
+  if(loadRight)
+  {
+    if(q->_rightType->isConstant())
+    {
+      file << "   li " << regRight << " " << q->_rightOperand << endl;
+    }
+  }
+
+  q->susVarReg(regLeft, regRight, regRes);
 }
 
 unsigned int IntermediateGen::gen(Quad* q)

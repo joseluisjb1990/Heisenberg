@@ -56,7 +56,7 @@ SumQuad::SumQuad(std::string leftOperand, Type* leftType, std::string rightOpera
 
 std::string SumQuad::toSpim() {
     if (_leftType->isInt()) {
-        return "sum "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+        return "addu "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
        
     } else if (_leftType->isFloat()) {
         return "sum.s "+  _destiny + " " + _leftOperand + " " +  _rightOperand;

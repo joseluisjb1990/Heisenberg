@@ -55,6 +55,7 @@ FlowGraph::FlowGraph(std::vector<QuadContainer*>* quadList)
 
   _quadList = quadList;
 
+  setRegisters(15);
 }
 
 void FlowGraph::setRegisters(int cantRegisters)
@@ -63,12 +64,12 @@ void FlowGraph::setRegisters(int cantRegisters)
   
   RegisterAsigner* ra = new RegisterAsigner(cantRegisters);
 
-  vector<pair<bool, int>> arrPairs;
+  vector<pair<bool, string>> arrPairs;
   
-  QuadContainer* qc;
-  Quad* q;
-  int   regLeft, regRight, regRes;
-  bool  loadLeft, loadRight, loadRes;
+  QuadContainer* qc, *qc1;
+  Quad* q, *q1;
+  string    regLeft, regRight, regRes;
+  bool      loadLeft, loadRight, loadRes;
 
   for(vector<QuadContainer*>::iterator itq = _quadList->begin(); itq != _quadList->end(); itq++)
   {
@@ -89,30 +90,22 @@ void FlowGraph::setRegisters(int cantRegisters)
       loadRes     = arrPairs.at(2).first;
       regRes      = arrPairs.at(2).second;
 
-      if(loadLeft)
-      {
-        // q1 = new LoadQuad(q->_leftOperand, "R" + to_string(regLeft));
-        // _quadList->insert(itq, q1);
-        // itq++;
-        // AQUI DEBERIAMOS GUARDAR LOS REGISTROS EN LAS VARIABLES QUE HAGAN FALTA.
-      }
-
-      cout << "La variable " << q->_leftOperand  << " Tiene el registro " << arrPairs.at(0).second << " " << arrPairs.at(0).first << endl;
-      cout << "La variable " << q->_rightOperand << " Tiene el registro " << arrPairs.at(1).second << " " << arrPairs.at(1).first << endl;
-      cout << "La variable " << q->_destiny      << " Tiene el registro " << arrPairs.at(2).second << " " << arrPairs.at(2).first << endl;
+      cout << "La variable izquierda "  << q->_leftOperand  << " Tiene el registro " << arrPairs.at(0).second << " " << arrPairs.at(0).first << endl;
+      cout << "La variable derecha "    << q->_rightOperand << " Tiene el registro " << arrPairs.at(1).second << " " << arrPairs.at(1).first << endl;
+      cout << "La variable destino "    << q->_destiny      << " Tiene el registro " << arrPairs.at(2).second << " " << arrPairs.at(2).first << endl;
     }
   }
 }
 
 void FlowGraph::print()
 {
-  Block* b;
+  QuadContainer* b;
   int i = 0;
 
-  for(std::vector<Block*>::iterator it = _blockList->begin(); it != _blockList->end(); it++)
+  for(std::vector<QuadContainer*>::iterator it = _quadList->begin(); it != _quadList->end(); it++)
   {
     b = (*it);
-    std::cout << "------------------------------------------------ \n Bloque " << i++ << std::endl; b->print(); std::cout << std::endl;
+    std::cout << i++; b->print();
   }
 }
 #endif

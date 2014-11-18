@@ -38,7 +38,7 @@ class Type
     virtual bool isFloat()                          { return false;               };
     virtual bool isBool()                           { return false;               };
     virtual bool isInt()                            { return false;               };
-    virtual bool isConstant()                            { return false;               };
+    virtual bool isConstant()                       { return false;               };
 
     /**
      * Constructor para la clase.

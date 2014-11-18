@@ -44,10 +44,12 @@ class Quad
                                                }
                                                return *(new set<string>());
                                             }
-    virtual string getDefinedVariable()     { if(useVariables()) return _destiny; else return *( new std::string()); }
+    virtual string getDefinedVariable()     { if(useVariables()) return _destiny; else return *(new std::string()); }
     virtual bool useVariables()             { return false; }
-    virtual std::string toSpim()            { return "";};
-
+    virtual std::string toSpim()            { return "";    }
+    void susVarReg(string regLeft, string regRight, string regDes) {  _leftOperand = regLeft; _rightOperand = regRight; _destiny = regDes; }
+    virtual bool isExpQuad() { return  false; }
+    virtual bool isAssign()  { return false; }
     static map<string, Type*> tablaTemporales;
     std::string _operator     = *(new std::string());
     std::string _leftOperand  = *(new std::string());
@@ -66,7 +68,7 @@ class SumQuad : public Quad
     SumQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
     bool useVariables()             { return true; }
     std::string toSpim();
-
+    bool isExpQuad() { return true; }
 };
 
 class SubQuad : public Quad
@@ -76,6 +78,7 @@ class SubQuad : public Quad
     SubQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
     SubQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny, Type* destinyType);
     bool useVariables()             { return true; }
+    bool isExpQuad() { return true; }
     std::string toSpim();
 
 };
@@ -87,9 +90,8 @@ class DivQuad : public Quad
     DivQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
     DivQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny, Type* destinyType);
     bool useVariables()             { return true; }
+    bool isExpQuad() { return true; }
     std::string toSpim();
-
-
 };
 
 class MulQuad : public Quad
@@ -100,6 +102,7 @@ class MulQuad : public Quad
     MulQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
     MulQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny, Type* destinyType);
     bool useVariables()             { return true; }
+    bool isExpQuad() { return true; }
     std::string toSpim();
 
 };
@@ -109,6 +112,7 @@ class RemQuad : public Quad
   public:
     RemQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
     bool useVariables()             { return true; }
+    bool isExpQuad() { return true; }
     std::string toSpim();
 };
 
@@ -116,6 +120,7 @@ class PowQuad : public Quad
 {
   public:
     PowQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
+    bool isExpQuad() { return true; }
     bool useVariables()             { return true; }
 };
 
@@ -124,6 +129,7 @@ class UmQuad : public Quad
   public:
     UmQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
     bool useVariables()             { return true; }
+    bool isExpQuad() { return true; }
     std::string toSpim();
 };
 
@@ -233,6 +239,7 @@ class AssignQuad : public Quad
   public:
     AssignQuad(std::string leftOperand, std::string destiny);
     bool useVariables()             { return true; }
+    bool isAssign()                 { return true; }
 };
 
 class AssignIndirectQuad : public Quad

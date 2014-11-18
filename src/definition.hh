@@ -149,6 +149,14 @@ class DefFunction : public Definition
                , Statement*                statements
                );
 
+    DefFunction( std::string               id
+               , std::vector<Parameter*>*  parameters
+               , Type*                     type
+               , Statement*                statements
+               , unsigned int              scope
+               );
+
+    unsigned int geScope() { return _scope; }
     std::string to_string(int nesting);
     void check();
     void toIntermediate(IntermediateGen *intGen);
@@ -158,5 +166,6 @@ class DefFunction : public Definition
     std::vector<Parameter*>*  _parameters;
     Type*                     _type;
     Statement*                _statements;
+    unsigned int              _scope = 0;
 };
 #endif

@@ -204,10 +204,23 @@ DefFunction::DefFunction ( std::string               id
                          , Type*                     type
                          , Statement*                statements
                          )
-  : _id         ( id )
-  , _parameters ( parameters )
-  , _type       ( type )
-  , _statements ( statements )
+  : _id         ( id          )
+  , _parameters ( parameters  )
+  , _type       ( type        )
+  , _statements ( statements  )
+  {}
+
+DefFunction::DefFunction ( std::string               id
+                         , std::vector<Parameter*>*  parameters
+                         , Type*                     type
+                         , Statement*                statements
+                         , unsigned int              scope
+                         )
+  : _id         ( id          )
+  , _parameters ( parameters  )
+  , _type       ( type        )
+  , _statements ( statements  )
+  , _scope      ( scope       )
   {}
 
 std::string DefFunction::to_string(int nesting)
@@ -220,6 +233,7 @@ std::string DefFunction::to_string(int nesting)
 
   str += padding + "Retorna:\n" + _type->to_string(nesting + 1)  + '\n';
   str += padding + "Instrucción:\n" + _statements->to_string(nesting+1) + '\n';
+  str += padding + "Alcance de sus variables: " + std::to_string(_scope) + '\n';
   return str;
 }
 

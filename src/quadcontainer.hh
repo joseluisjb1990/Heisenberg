@@ -23,5 +23,8 @@ class QuadContainer
     unsigned int  _numberBlock;
     bool          _isLeader;
     bool          _isDead = false;
+    string        _rLeft;
+    string        _rRight;
+    string        _rDestiny;
 };
 #endif

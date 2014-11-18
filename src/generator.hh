@@ -34,7 +34,8 @@ public:
   std::string nextTemp()        { return  TEMPCHAR + std::to_string(getTempNumber());   }
   TablaSimbolos *_symbolTable;
   void print();
-  void printSpim();
+  void printSpim(TablaSimbolos* tSimbolos);
+  void susVariables(vector<pair<bool, string>> arrPairs, Quad* q, std::ofstream& file);
 
 private:
   std::vector<QuadContainer*>*  _totalQuadList;

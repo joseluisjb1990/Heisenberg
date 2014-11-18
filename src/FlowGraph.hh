@@ -18,7 +18,7 @@ class FlowGraph
     void print();
  
   private:
-    std::vector<Block*>*      _blockList;
+    vector<Block*>*           _blockList;
     vector<QuadContainer*>*   _quadList;   
     EntryBlock*               _entry;
     EndingBlock*              _ending;

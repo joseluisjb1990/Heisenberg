@@ -114,11 +114,23 @@ bool TablaSimbolos::check_scope( std::string nombre )
 unsigned int TablaSimbolos::exit_scope()
 {
   _pila.pop_back();
+  return _pila.back();
+}
+
+unsigned int TablaSimbolos::exit_function_scope()
+{
+  _pila.pop_back();
   _offsets.pop_back();
   return _pila.back();
 }
 
 unsigned int TablaSimbolos::enter_scope()
+{
+  _pila.push_back(++_alcance);
+  return _alcance;
+}
+
+unsigned int TablaSimbolos::enter_function_scope()
 {
   _pila.push_back(++_alcance);
   _offsets.push_back(0);
