@@ -38,10 +38,10 @@ SumQuad::SumQuad(std::string leftOperand, Type* leftType, std::string rightOpera
 std::string SumQuad::toSpim() {
     //Quad::tablaTemporales->(destiny) = 
     if (_leftType->isInt()) {  
-        return "sum "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+        return "add "+  _destiny + ", " + _leftOperand + ", " +  _rightOperand;
        
     } else if (_leftType->isFloat()) {
-        return "sum.s "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+        return "add.s "+  _destiny + ", " + _leftOperand + ", " +  _rightOperand;
     };
 
     return "";
@@ -58,10 +58,10 @@ SubQuad::SubQuad(std::string leftOperand, Type* leftType, std::string rightOpera
  std::string SubQuad::toSpim() {
  
     if (_leftType->isInt()) {  
-        return "sub "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+        return "sub "+  _destiny + ", " + _leftOperand + ", " +  _rightOperand;
        
     } else if (_leftType->isFloat()) {
-        return "sub.s "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+        return "sub.s "+  _destiny + ", " + _leftOperand + ", " +  _rightOperand;
     };
 
     return "";
@@ -78,10 +78,10 @@ DivQuad::DivQuad(std::string leftOperand, Type* leftType, std::string rightOpera
 std::string DivQuad::toSpim() {
  
     if (_leftType->isInt()) {  
-        return "div "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+        return "div "+  _destiny + ", " + _leftOperand + ", " +  _rightOperand;
        
     } else if (_leftType->isFloat()) {
-        return "div.s "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+        return "div.s "+  _destiny + ", " + _leftOperand + ", " +  _rightOperand;
     };
 
     return "";
@@ -99,10 +99,10 @@ MulQuad::MulQuad(std::string leftOperand, Type* leftType, std::string rightOpera
 std::string MulQuad::toSpim() {
  
     if (_leftType->isInt()) {  
-        return "mul "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+        return "mul "+  _destiny + ", " + _leftOperand + ", " +  _rightOperand;
        
     } else if (_leftType->isFloat()) {
-        return "mul.s "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+        return "mul.s "+  _destiny + ", " + _leftOperand + ", " +  _rightOperand;
     };
 
     return "";
@@ -116,7 +116,7 @@ RemQuad::RemQuad(std::string leftOperand, std::string rightOperand, std::string 
 std::string RemQuad::toSpim() {
  
     if (_leftType->isInt()) 
-        return "rem "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+        return "rem "+  _destiny + ", " + _leftOperand + ", " +  _rightOperand;
        
     return "";
 };
@@ -132,10 +132,10 @@ UmQuad::UmQuad(std::string leftOperand, std::string rightOperand, std::string de
 std::string UmQuad::toSpim() {
  
     if (_leftType->isInt()) {  
-        return "neg "+  _destiny + " " + _leftOperand;
+        return "neg "+  _destiny + ", " + _leftOperand;
        
     } else if (_leftType->isFloat()) {
-        return "neg.s "+  _destiny + " " + _leftOperand;
+        return "neg.s "+  _destiny + ", " + _leftOperand;
     };
 
     return "";
@@ -148,13 +148,13 @@ LessThanQuad::LessThanQuad(std::string leftOperand, std::string rightOperand, st
 std::string LessThanQuad::toSpim() {
 
     if (_rightOperand == "0") {  
-        return "bltz "+ _leftOperand + " bloque" + _destiny;
+        return "bltz "+ _leftOperand + ", bloque" + _destiny;
 
     } else if (_leftOperand == "0") { 
-        return "bgtz "+ _rightOperand + " bloque" + _destiny;
+        return "bgtz "+ _rightOperand + ", bloque" + _destiny;
 
     } else {
-        return "blt " + _leftOperand + " " + _rightOperand  + " bloque" + _destiny;
+        return "blt " + _leftOperand + ", " + _rightOperand  + ", bloque" + _destiny;
     }
 
 };
@@ -166,13 +166,13 @@ LessEqualQuad::LessEqualQuad(std::string leftOperand, std::string rightOperand, 
 std::string LessEqualQuad::toSpim() {
 
     if (_rightOperand == "0") {  
-        return "blez "+ _leftOperand + " bloque" + _destiny;
+        return "blez "+ _leftOperand + ", bloque" + _destiny;
 
     } else if (_leftOperand == "0") { 
-        return "bgez "+ _rightOperand + " bloque" + _destiny;
+        return "bgez "+ _rightOperand + ", bloque" + _destiny;
 
     } else {
-        return "ble " + _leftOperand + " " + _rightOperand  + " bloque" + _destiny;
+        return "ble " + _leftOperand + ", " + _rightOperand  + ", bloque" + _destiny;
     }
 
 };
@@ -188,13 +188,13 @@ GreaterThanQuad::GreaterThanQuad(std::string leftOperand, std::string rightOpera
 std::string GreaterThanQuad::toSpim() {
 
     if (_rightOperand == "0") {  
-        return "bgtz "+ _leftOperand + " bloque" + _destiny; 
+        return "bgtz "+ _leftOperand + ", bloque" + _destiny; 
 
     } else if (_leftOperand == "0") { 
-        return "bltz "+ _rightOperand + " bloque" + _destiny;
+        return "bltz "+ _rightOperand + ", bloque" + _destiny;
 
     } else {
-        return "bgt " + _leftOperand + " " + _rightOperand  + " bloque" + _destiny;
+        return "bgt " + _leftOperand + ", " + _rightOperand  + ", bloque" + _destiny;
     }
 
 };
@@ -206,13 +206,13 @@ GreaterEqualQuad::GreaterEqualQuad(std::string leftOperand, std::string rightOpe
 std::string GreaterEqualQuad::toSpim() {
 
     if (_rightOperand == "0") {  
-        return "bgez "+ _leftOperand + " bloque" + _destiny;
+        return "bgez "+ _leftOperand + ", bloque" + _destiny;
 
     } else if (_leftOperand == "0") { 
-        return "blez "+ _rightOperand + " bloque" + _destiny;
+        return "blez "+ _rightOperand + ", bloque" + _destiny;
 
     } else {
-        return "bge " + _leftOperand + " " + _rightOperand  + " bloque" + _destiny;
+        return "bge " + _leftOperand + ", " + _rightOperand  + ", bloque" + _destiny;
     }
 
 };
@@ -228,13 +228,13 @@ EqualQuad::EqualQuad(std::string leftOperand, std::string rightOperand)
 std::string EqualQuad::toSpim() {
 
     if (_rightOperand == "0") {  
-        return "beqz "+ _leftOperand + " bloque" + _destiny;
+        return "beqz "+ _leftOperand + ", bloque" + _destiny;
 
     } else if (_leftOperand == "0") { 
-        return "beqz "+ _rightOperand + " bloque" + _destiny;
+        return "beqz "+ _rightOperand + ", bloque" + _destiny;
 
     } else {
-        return "beq " + _leftOperand + " " + _rightOperand  + " bloque" + _destiny;
+        return "beq " + _leftOperand + ", " + _rightOperand  + ", bloque" + _destiny;
     }
 
 };
@@ -246,13 +246,13 @@ NotEqualQuad::NotEqualQuad(std::string leftOperand, std::string rightOperand, st
 std::string NotEqualQuad::toSpim() {
 
     if (_rightOperand == "0") {  
-        return "bnez "+ _leftOperand + " bloque" + _destiny;
+        return "bnez "+ _leftOperand + ", bloque" + _destiny;
 
     } else if (_leftOperand == "0") { 
-        return "bnez "+ _rightOperand + " bloque" + _destiny;
+        return "bnez "+ _rightOperand + ", bloque" + _destiny;
 
     } else {
-        return "bne " + _leftOperand + " " + _rightOperand  + " bloque" + _destiny;
+        return "bne " + _leftOperand + ", " + _rightOperand  + ", bloque" + _destiny;
     }
 
 };
@@ -265,10 +265,6 @@ std::string IdBoolQuad::toSpim() {
     return "j bloque" + _destiny;
 };
 
-GotoLineQuad::GotoLineQuad(std::string destiny)
-  : Quad("goto", "", "", destiny)
-{}
-
 GotoQuad::GotoQuad()
   : JumpQuad("goto", "", "", "")
 {}
@@ -277,13 +273,9 @@ GotoQuad::GotoQuad(std::string destiny)
   : JumpQuad("goto", "", "", destiny)
 {}
 
-GotoEmptyQuad::GotoEmptyQuad(std::string leftOperand, std::string rightOperand)
-  : Quad("if", leftOperand + " > ", rightOperand, " goto")
-{}
-
-GotoEmptyIdForQuad::GotoEmptyIdForQuad(std::string leftOperand, std::string rightOperand)
-  : Quad("if", leftOperand + " = ", rightOperand, " goto")
-{}
+std::string GotoQuad::toSpim() {
+    return "j bloque" + _destiny;
+};
 
 DespQuad::DespQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
   : Quad("[]", leftOperand, rightOperand, destiny)
@@ -305,9 +297,22 @@ ParamQuad::ParamQuad(std::string destiny)
   : Quad("param", destiny, "", "")
 {}
 
+std::string ParamQuad::toSpim() {
+    return "sw 0($sp), " + _leftOperand + "\n" 
+         + "    sub $sp, $sp, " + "#NUMERO TAMANO";
+
+};
+
 CallQuad::CallQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
   : Quad("call", leftOperand, rightOperand, destiny)
 {}
+
+std::string CallQuad::toSpim() {
+    return "sub $sp, $sp, " + "#NUMERO TAMANO RESULTADO \n" 
+         + "    j " + leftOperand;
+
+};
+
 
 ReturnQuad::ReturnQuad(std::string destiny)
   : Quad("return", destiny, "", "")

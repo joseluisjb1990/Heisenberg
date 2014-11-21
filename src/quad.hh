@@ -176,25 +176,7 @@ class GotoQuad : public JumpQuad
     GotoQuad();
     GotoQuad(std::string destiny);
     bool useVariables()             { return false; }
-};
-
-class GotoLineQuad : public Quad
-{
-	public:
-  		GotoLineQuad(std::string destiny);
-};
-
-class GotoEmptyQuad : public Quad
-{
-	public:
-  		GotoEmptyQuad(std::string leftOperand, std::string rightOperand);
-};
-
-class GotoEmptyIdForQuad : public Quad
-{
-	public:
-  		GotoEmptyIdForQuad(std::string leftOperand, std::string rightOperand);
-      bool useVariables()             { return true; }
+    std::string toSpim();
 };
 
 class DespQuad : public Quad
@@ -230,12 +212,14 @@ class ParamQuad : public Quad
   public:
     ParamQuad(std::string destiny);
     bool useVariables()             { return true; }
+    std::string toSpim();
 };
 
 class CallQuad : public Quad
 {
   public:
     CallQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
+    std::string toSpim();
 };
 
 class ReturnQuad : public Quad
