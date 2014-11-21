@@ -14,10 +14,12 @@ class QuadContainer
     bool  isJump      () { return _quad->isJump();      }
     int   getAddress  () { return _quad->getAddress();  }
     bool  isTag       () { return _quad->isTag();       }
-    void  addNumberBlock(unsigned int nb) { _numberBlock = nb;                      }
-    void  replaceAddress(unsigned int ad) { _quad->setDestiny(std::to_string(ad));  }
-    unsigned int  getNumberBlock()        { return _numberBlock;                    }
- 
+    void  addNumberBlock(unsigned int nb) { _numberBlock = nb;                          }
+    void  replaceAddress(unsigned int ad) { _quad->setDestiny(std::to_string(ad));      }
+    unsigned int  getNumberBlock()        { return _numberBlock;                        }
+    void setLiveVar(set<string> s)        { _quad->_liveVar = s;                                        }
+    bool isLiveVar(string s)              { return  _quad->_liveVar.find(s) != _quad->_liveVar.end();   }
+
     Quad*         _quad;
     unsigned int  _numberQuad;
     unsigned int  _numberBlock;

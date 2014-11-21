@@ -37,7 +37,7 @@ void Quad::print()
   std::cout <<  _operator       << " " 
             <<  _leftOperand    << " "       
             <<  _rightOperand   << " "  
-            <<  _destiny        << " "  << '\n';
+            <<  _destiny        << " ";
 }
 
 map<string, Type*> Quad::tablaTemporales;

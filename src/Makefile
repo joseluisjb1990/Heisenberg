@@ -15,6 +15,8 @@ FILES = $(addsuffix .cc, $(CXXOBJ))
 
 OBJS  = $(addsuffix .o, $(CXXOBJ))
 
+LIBS = -lboost_regex
+
 CLEANLIST =  $(addsuffix .o, $(OBJ)) $(OBJS) \
 			 bear_parser.tab.cc bear_parser.tab.hh \
 			 location.hh position.hh \

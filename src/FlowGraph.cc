@@ -55,7 +55,7 @@ FlowGraph::FlowGraph(std::vector<QuadContainer*>* quadList)
 
   _quadList = quadList;
 
-  setRegisters(15);
+  setRegisters(3);
 }
 
 void FlowGraph::setRegisters(int cantRegisters)
@@ -64,10 +64,9 @@ void FlowGraph::setRegisters(int cantRegisters)
   
   RegisterAsigner* ra = new RegisterAsigner(cantRegisters);
 
+  QuadContainer* qc;
+  Quad* q;
   vector<pair<bool, string>> arrPairs;
-  
-  QuadContainer* qc, *qc1;
-  Quad* q, *q1;
   string    regLeft, regRight, regRes;
   bool      loadLeft, loadRight, loadRes;
 
@@ -77,12 +76,17 @@ void FlowGraph::setRegisters(int cantRegisters)
     q   = qc->_quad; 
     if(q->useVariables())
     {
-      // Obtenemos los registros necesarios para la instruccion
-      //set<string> s = *it;
       arrPairs = ra->getReg(q);
 
-      // Guardamos los resultados en las variables necesarias
+      if(ra->getSpillMode())
+      {
+        ra->print();
+        vector<pair<int, string>> v = ra->getVarToSpill();
+        for(auto& pis: v)
+          cout << pis.first << ", " << pis.second << endl ;
 
+         arrPairs = ra->getReg(q);
+      }
       loadLeft    = arrPairs.at(0).first;
       regLeft     = arrPairs.at(0).second;
       loadRight   = arrPairs.at(1).first;
@@ -93,6 +97,9 @@ void FlowGraph::setRegisters(int cantRegisters)
       cout << "La variable izquierda "  << q->_leftOperand  << " Tiene el registro " << arrPairs.at(0).second << " " << arrPairs.at(0).first << endl;
       cout << "La variable derecha "    << q->_rightOperand << " Tiene el registro " << arrPairs.at(1).second << " " << arrPairs.at(1).first << endl;
       cout << "La variable destino "    << q->_destiny      << " Tiene el registro " << arrPairs.at(2).second << " " << arrPairs.at(2).first << endl;
+      q->print();
+      ra->print();
+      cout << endl;
     }
   }
 }
@@ -100,12 +107,12 @@ void FlowGraph::setRegisters(int cantRegisters)
 void FlowGraph::print()
 {
   QuadContainer* b;
-  int i = 0;
 
   for(std::vector<QuadContainer*>::iterator it = _quadList->begin(); it != _quadList->end(); it++)
   {
     b = (*it);
-    std::cout << i++; b->print();
+    b->print();
+    cout << endl;
   }
 }
 #endif

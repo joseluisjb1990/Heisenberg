@@ -13,7 +13,9 @@ QuadContainer::QuadContainer(Quad* quad, unsigned int numberQuad, bool isLeader)
 
 void QuadContainer::print()
 { 
-  std::cout << _numberBlock << " " << _numberQuad << " " << _isLeader << " "; _quad->print();
+  std::cout << _numberBlock << " " << _numberQuad << " " << _isLeader << " "; _quad->print(); cout << " / ";
+  for(set<string>::iterator it = _quad->_liveVar.begin(); it != _quad->_liveVar.end(); it++)
+    cout << (*it) << " ";
 }
 
 FlowGraph* IntermediateGen::optimize()

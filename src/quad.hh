@@ -50,6 +50,7 @@ class Quad
     void susVarReg(string regLeft, string regRight, string regDes) {  _leftOperand = regLeft; _rightOperand = regRight; _destiny = regDes; }
     virtual bool isExpQuad() { return  false; }
     virtual bool isAssign()  { return false; }
+    bool isLiveVar(string s) { return  _liveVar.find(s) != _liveVar.end();  }
     static map<string, Type*> tablaTemporales;
     std::string _operator     = *(new std::string());
     std::string _leftOperand  = *(new std::string());
@@ -58,6 +59,7 @@ class Quad
     Type*       _rightType    = new EmptyType();
     std::string _destiny      = *(new std::string());
     Type*       _destinyType  = new EmptyType();
+    set<string>   _liveVar;
 };
 
 class SumQuad : public Quad

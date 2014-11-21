@@ -40,6 +40,9 @@ void Block::setLiveVar()
     //Hacemos copia del ultimo conjunto insertado en la lista de variables vivas
     _liveVariables.push_front(*(new set<string>(s1)));
 
+    // Insertamos la informacion de variables vivas al quad.
+    qc->setLiveVar(s1);
+
     //Eliminamos las variables definidas en el quad
     if(!_liveVariables.front().empty()) _liveVariables.front().erase(d);
 
