@@ -22,7 +22,7 @@ PolarExpr::PolarExpr(std::string valor)
 std::string PolarExpr::to_string(int nesting)
 {
   std::string padding(nesting*2, ' ');
-  return padding + getValue();
+  return padding + getValue() + " Expresion polar";
 }
 
 std::string PolarExpr::getValue()
@@ -161,10 +161,11 @@ void Sum::toIntermediate(IntermediateGen *intGen)
   der->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
 
-  Quad* q = new SumQuad(izq->getTemp(), izq->getType(), der->getTemp(), der->getType(), temp);
+  Quad* q = new SumQuad(izq->getTemp(), izq->getType(), der->getTemp(), der->getType(), temp, izq->getType());
   intGen->gen(q);
   // intGen->gen("+",izq->getTemp(), der->getTemp(),temp, "   // Suma, linea " + std::to_string(get_first_line()));  
   setTemp(temp);
+  setType(izq->getType());
 }
 
 Substraction::Substraction(Expression* izq, Expression* der)
@@ -201,11 +202,12 @@ void Substraction::toIntermediate(IntermediateGen *intGen)
   der->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
 
-  Quad* q = new SubQuad(izq->getTemp(), izq->getType(), der->getTemp(), der->getType(), temp);
+  Quad* q = new SubQuad(izq->getTemp(), izq->getType(), der->getTemp(), der->getType(), temp, izq->getType());
   intGen->gen(q);
 
   // intGen->gen("-",izq->getTemp(), der->getTemp(),temp, "   // Resta, linea " + std::to_string(get_first_line()));  
   setTemp(temp);
+  setType(izq->getType());
 }
 
 Multiplication::Multiplication(Expression* izq, Expression* der)
@@ -242,11 +244,12 @@ void Multiplication::toIntermediate(IntermediateGen *intGen)
   der->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
 
-  Quad* q = new MulQuad(izq->getTemp(), izq->getType(), der->getTemp(), der->getType(), temp);
+  Quad* q = new MulQuad(izq->getTemp(), izq->getType(), der->getTemp(), der->getType(), temp, izq->getType());
   intGen->gen(q);
   
 //  intGen->gen("*",izq->getTemp(), der->getTemp(),temp, "   // Multiplication, linea " + std::to_string(get_first_line()));  
-  setTemp(temp);
+  setTemp(temp); 
+  setType(izq->getType());
 }
 
 Division::Division(Expression* izq, Expression* der)
@@ -283,11 +286,12 @@ void Division::toIntermediate(IntermediateGen *intGen)
   der->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
 
-  Quad* q = new DivQuad(izq->getTemp(), izq->getType(), der->getTemp(), der->getType(), temp);
+  Quad* q = new DivQuad(izq->getTemp(), izq->getType(), der->getTemp(), der->getType(), temp, izq->getType());
   intGen->gen(q);
   
   // intGen->gen("/",izq->getTemp(), der->getTemp(),temp, "   // Division, linea " + std::to_string(get_first_line()));    
   setTemp(temp);
+  setType(izq->getType());
 }
 
 Remainder::Remainder(Expression* izq, Expression* der)
@@ -1406,7 +1410,7 @@ void CuevaExpr::toIntermediate(IntermediateGen *intGen)
   	_dimensions->at(i)->toIntermediate(intGen);
     std::string temp = intGen->nextTemp();
 
-    q = new MulQuad(_dimensions->at(i)->getTemp(), std::to_string(t->getSize()), temp);
+    q = new MulQuad(_dimensions->at(i)->getTemp(), PolarType::getInstance(), std::to_string(t->getSize()), PolarType::getInstance(), temp, PolarType::getInstance());
     intGen->gen(q);
   	// intGen->gen("*",_dimensions->at(i)->getTemp(), std::to_string(t->getSize()), temp, "   // Desplazamiento Arreglo, linea " + std::to_string(get_first_line()));  
   	temps.push_back(temp);
@@ -1419,7 +1423,7 @@ void CuevaExpr::toIntermediate(IntermediateGen *intGen)
   for (unsigned int i=0; i < temps.size()-1; ++i)
   {
     
-    q = new SumQuad(aux, temps[i+1], temp);
+    q = new SumQuad(aux, PolarType::getInstance(), temps[i+1], PolarType::getInstance(), temp, PolarType::getInstance());
     intGen->gen(q);
   	// intGen->gen("+",aux,  temps[i+1] ,temp, "   // Suma de Desplazamientos");  
   	aux  = temp;  

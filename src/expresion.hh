@@ -31,12 +31,13 @@ class Expression : public Node
     virtual bool isIdExpr()                 { return false;         }
     virtual bool isArray()                  { return false;         }
     virtual std::string getArrayName()      { return "";            }
-    virtual Type* getType()                 { return new EmptyType(); }
-
+    virtual Type* getType()                 { return _type;           }
+    virtual void setType(Type* type)        { _type = type;           }
   private :
     bool         _mutID = true;
     unsigned int _tam   = 0;
     std::string  _temp  = "";
+    Type* _type = new EmptyType();
 };
 
 class Constant : public Expression
@@ -53,7 +54,7 @@ class PolarExpr : public Constant
     std::string getValue();
     void check();
     virtual std::string getTemp() { return valor; }
-    Type* getType()       { return PolarType::getInstance(); }
+    Type* getType()               { return NumType::getInstance(); }
 };
 
 class KodiakExpr : public Constant
@@ -113,6 +114,7 @@ public:
                                                                             if      (!con and _falseList  != 0) intGen->patch(_falseList, jumpDes); 
                                                                             else if (con  and _trueList   != 0) intGen->patch(_trueList , jumpDes);
                                                                          }
+  Type* getType()       { return PandaType::getInstance(); }
 };
 
 class PandaExpr : public BoolExpr
@@ -520,6 +522,7 @@ class CuevaExpr : public LValueExpr
     Contenido* getTableRow()        { return _tableRow; }
     std::string getArrayName()      { return _cueva;    }
     bool isArray()                  { return true;      }
+    Type* getType()                 { return _tableRow->getTipo(); }
     
   private:
     std::string               _cueva;

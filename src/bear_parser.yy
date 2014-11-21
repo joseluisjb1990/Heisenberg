@@ -167,61 +167,63 @@ std::vector<std::string>* extraerIds(std::vector<elementoLista>* ids);
 %%
 %start programa;
 
-programa : definiciones "oso" "(" ")" "=>" EXTINTO           { driver.tabla.enter_scope();
+programa : definiciones "oso" "(" ")" "=>" EXTINTO           { driver.tabla.enter_function_scope();
                                                                std::vector<Parameter*>* paramVacio = new std::vector<Parameter*>();
                                                                driver.tabla.add_function("oso",ExtintoType::getInstance(),@2.begin.line,@2.begin.column, @2.begin.line, @2.begin.column, paramVacio);
                                                              }
-           bloqueespecial                                    { driver.tabla.exit_scope();
-                                                               $$ = new Program($1, new DefFunction("oso", new vector<Parameter*>, ExtintoType::getInstance(), $8));
-                                                               driver.AST = $$;
+           bloqueespecial                                    { 
+                                                                unsigned int scope = driver.tabla.get_actual_scope();
+                                                                driver.tabla.exit_function_scope();
+                                                                $$ = new Program($1, new DefFunction("oso", new vector<Parameter*>, ExtintoType::getInstance(), $8, scope));
+                                                                driver.AST = $$;
                                                              }
          | definiciones "oso" "(" error ")" "=>" EXTINTO     { driver.error(@4, "Main function oso must not recieve parameters.");
                                                                yyerrok;
-                                                               driver.tabla.enter_scope();
+                                                               driver.tabla.enter_function_scope();
                                                              }
-           bloqueespecial                                    { driver.tabla.exit_scope();
+           bloqueespecial                                    { driver.tabla.exit_function_scope();
                                                                $$ = new Program($1, new DefFunction("oso", new vector<Parameter*>, ExtintoType::getInstance(), $9));
                                                                driver.AST = $$;
                                                              }
          | definiciones "oso" error "=>" EXTINTO             { driver.error(@3, "Missing \"()\" in main function oso.");
                                                                yyerrok;
-                                                               driver.tabla.enter_scope();
+                                                               driver.tabla.enter_function_scope();
                                                              }
-           bloqueespecial                                    { driver.tabla.exit_scope();
+           bloqueespecial                                    { driver.tabla.exit_function_scope();
                                                                $$ = new Program($1, new DefFunction("oso", new vector<Parameter*>, ExtintoType::getInstance(), $7));
                                                                driver.AST = $$;
                                                              }
          | definiciones "oso" "(" ")" "=>" error             { driver.error(@6, "Return type for main function oso must be extinto.");
                                                                yyerrok;
-                                                               driver.tabla.enter_scope();
+                                                               driver.tabla.enter_function_scope();
                                                              }
-           bloqueespecial                                    { driver.tabla.exit_scope();
+           bloqueespecial                                    { driver.tabla.exit_function_scope();
                                                                $$ = new Program($1, new DefFunction("oso", new vector<Parameter*>, ExtintoType::getInstance(), $8));
                                                                driver.AST = $$;
                                                              }
          | definiciones "oso" error "=>" error               { driver.error(@3, "Missing \"()\" in main function oso.");
                                                                driver.error(@5, "Return type for main function oso must be extinto.");
                                                                yyerrok;
-                                                               driver.tabla.enter_scope();
+                                                               driver.tabla.enter_function_scope();
                                                              }
-           bloqueespecial                                    { driver.tabla.exit_scope();
+           bloqueespecial                                    { driver.tabla.exit_function_scope();
                                                                $$ = new Program($1, new DefFunction("oso", new vector<Parameter*>, ExtintoType::getInstance(), $7));
                                                                driver.AST = $$;
                                                              }
          | definiciones "oso" error "=>" error error         { driver.error(@3, "Missing \"()\" in main function oso.");
                                                                driver.error(@5, "Return type for main function oso must be extinto.");
                                                                yyerrok;
-                                                               driver.tabla.enter_scope();
+                                                               driver.tabla.enter_function_scope();
                                                              }
-           bloqueespecial                                    { driver.tabla.exit_scope();
+           bloqueespecial                                    { driver.tabla.exit_function_scope();
                                                                $$ = new Program($1, new DefFunction("oso", new vector<Parameter*>, ExtintoType::getInstance(), $8));
                                                                driver.AST = $$;
                                                              }
          | definiciones "oso" "(" ")" "=>" error error       { driver.error(@6, "Return type for main function oso must be extinto.");
                                                                yyerrok;
-                                                               driver.tabla.enter_scope();
+                                                               driver.tabla.enter_function_scope();
                                                              }
-           bloqueespecial                                    { driver.tabla.exit_scope();
+           bloqueespecial                                    { driver.tabla.exit_function_scope();
                                                                $$ = new Program($1, new DefFunction("oso", new vector<Parameter*>, ExtintoType::getInstance(), $9));
                                                                driver.AST = $$;
                                                              }
@@ -229,7 +231,7 @@ programa : definiciones "oso" "(" ")" "=>" EXTINTO           { driver.tabla.ente
                                                                driver.error(@7, "The return type for main function oso must be extinto.");
                                                                yyerrok;
                                                              }
-           bloqueespecial                                    { driver.tabla.exit_scope();
+           bloqueespecial                                    { driver.tabla.exit_function_scope();
                                                                $$ = new Program($1, new DefFunction("oso", new vector<Parameter*>, ExtintoType::getInstance(), $9));
                                                                driver.AST = $$;
                                                              }
@@ -237,7 +239,7 @@ programa : definiciones "oso" "(" ")" "=>" EXTINTO           { driver.tabla.ente
                                                                driver.error(@7, "The return type for main function oso must be extinto.");
                                                                yyerrok;
                                                              }
-           bloqueespecial                                    { driver.tabla.exit_scope();
+           bloqueespecial                                    { driver.tabla.exit_function_scope();
                                                                $$ = new Program($1, new DefFunction("oso", new vector<Parameter*>, ExtintoType::getInstance(), $10));
                                                                driver.AST = $$;
                                                              }
@@ -276,7 +278,7 @@ deffuncion: ID "(" defparametros ")" "=>" tipo ";"        { Funcion* f = driver.
                                                               if (!(f->getDef())) {
                                                                 if (driver.compare_parameters($3, f->get_parameters())) {
                                                                   f->define(@1.begin.line, @1.begin.column);
-                                                                  driver.tabla.enter_scope();
+                                                                  driver.tabla.enter_function_scope();
                                                                   for(std::vector<Parameter*>::iterator it = $3->begin(); it != $3->end(); ++it) {
                                                                      if(dynamic_cast<CuevaType*> ((*it)->get_tipo())) {
                                                                        driver.tabla.add_symbol((*it)->get_id(), (*it)->get_tipo(),Cueva,@3.begin.line, @3.begin.column, true);
@@ -293,7 +295,7 @@ deffuncion: ID "(" defparametros ")" "=>" tipo ";"        { Funcion* f = driver.
                                                               }
                                                             } else {
                                                               driver.tabla.add_function($1,$6,@1.begin.line,@1.begin.column, @1.begin.line, @1.begin.column, $3);
-                                                              driver.tabla.enter_scope();
+                                                              driver.tabla.enter_function_scope();
                                                               for(std::vector<Parameter*>::iterator it = $3->begin(); it != $3->end(); ++it) {
                                                                 if(dynamic_cast<CuevaType*> ((*it)->get_tipo())) {
                                                                  driver.tabla.add_symbol((*it)->get_id(), (*it)->get_tipo(),Cueva,@3.begin.line, @3.begin.column, true);
@@ -305,7 +307,8 @@ deffuncion: ID "(" defparametros ")" "=>" tipo ";"        { Funcion* f = driver.
                                                             }
                                                           }
             bloqueespecial                                {
-                                                            driver.tabla.exit_scope(); $$ = new DefFunction($1, $3, $6, $8);
+                                                            unsigned int scope = driver.tabla.get_actual_scope();
+                                                            driver.tabla.exit_function_scope(); $$ = new DefFunction($1, $3, $6, $8, scope);
                                                             $$->set_location(@1.begin.line, @1.begin.column, @6.end.line, @6.end.column);
                                                           }
           | ID "(" defparametros ")" "=>" tipo error      { yyerrok; $$ = new EmptyDef(); }

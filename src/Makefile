@@ -15,6 +15,8 @@ FILES = $(addsuffix .cc, $(CXXOBJ))
 
 OBJS  = $(addsuffix .o, $(CXXOBJ))
 
+LIBS = -lboost_regex
+
 CLEANLIST =  $(addsuffix .o, $(OBJ)) $(OBJS) \
 			 bear_parser.tab.cc bear_parser.tab.hh \
 			 location.hh position.hh \
@@ -27,7 +29,7 @@ all: bear
 bear: $(FILES)
 	$(MAKE) $(SOBJ)
 	$(MAKE) $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $(EXE) $(OBJS) parser.o lexer.o expresion.cc statement.cc definition.cc type.cc TablaSimbolos.cc Contenido.cc program.cc generator.cc quad.cc block.cc FlowGraph.cc $(LIBS)
+	$(CXX) $(CXXFLAGS) -o $(EXE) $(OBJS) parser.o lexer.o expresion.cc statement.cc definition.cc type.cc TablaSimbolos.cc Contenido.cc program.cc generator.cc quad.cc block.cc FlowGraph.cc registerAsigner.cc $(LIBS)
 
 
 parser: bear_parser.yy

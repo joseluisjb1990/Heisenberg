@@ -220,12 +220,14 @@ public:
      *
      */
     unsigned int enter_scope();
+    unsigned int enter_function_scope();
 
     /**
      * Función para sacar el alcance actual del tope de la pila.
      *
      */
     unsigned int exit_scope();
+    unsigned int exit_function_scope();
 
     /**
      *  Hace una búsqueda solo en el alcance que está en el tope de la pila.

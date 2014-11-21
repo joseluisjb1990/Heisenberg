@@ -18,7 +18,7 @@ class IntermediateGen : public Generator
 public:
   IntermediateGen(const std::string &file, TablaSimbolos * symbolTable);
   void close();
-  void optimize();
+  FlowGraph* optimize();
   void gen(std::string op, std::string arg1, std::string arg2, std::string des, std::string com);
   void gen(std::string op, std::string arg1, std::string arg2, std::string des);
   void gen(std::string id);
@@ -34,7 +34,8 @@ public:
   std::string nextTemp()        { return  TEMPCHAR + std::to_string(getTempNumber());   }
   TablaSimbolos *_symbolTable;
   void print();
-  void printSpim();
+  void printSpim(TablaSimbolos* tSimbolos);
+  void susVariables(vector<pair<bool, string>> arrPairs, Quad* q, std::ofstream& file);
 
 private:
   std::vector<QuadContainer*>*  _totalQuadList;
