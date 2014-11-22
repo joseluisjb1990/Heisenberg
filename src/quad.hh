@@ -245,6 +245,7 @@ class CallQuad : public Quad
 {
   public:
     CallQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
+    CallQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny);
     std::string toSpim();
 };
 
@@ -351,11 +352,26 @@ class EndQuad : public Quad
 {
   public:
     EndQuad();
+    std::string toSpim();
 };
 
 class BeginQuad : public Quad
 {
   public:
     BeginQuad();
+};
+
+class WriteQuad : public Quad
+{
+  public:
+    WriteQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny);
+    std::string toSpim();
+};
+
+class ReadQuad : public Quad
+{
+  public:
+    ReadQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny);
+    std::string toSpim();
 };
 #endif
