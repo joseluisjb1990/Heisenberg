@@ -163,9 +163,9 @@ void IntermediateGen::printSpim(TablaSimbolos* tSimbolos)
             if(q->useVariables())
             {
               arrPairs = ra->getReg(q);
-              //qc->print();
-              //ra->print();
-              //cout << endl;
+              qc->print();
+              ra->print();
+              cout << endl;
               if(ra->getSpillMode())
               {
                 vector<pair<string, string>> v = ra->getVarToSpill();

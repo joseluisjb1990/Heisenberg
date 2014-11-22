@@ -157,6 +157,39 @@ vector<pair<bool,string>> RegisterAsigner::getReg(Quad* quad)
       vecPairs = insertAll(vs);
     }
   }
+  else if (quad->isDespEqual())
+  {
+    vector<string> vs;
+    vs.push_back(leftOp); vs.push_back(rightOp); vs.push_back(destiny);
+    int r = cantInRegister(vs);
+
+    if(inRegister(rightOp))
+    {
+      _register[_variables[rightOp]] = eraseVec(_register[_variables[rightOp]], rightOp);
+      if(_register[_variables[rightOp]].empty()) _occupiedReg--;
+      _variables.erase(rightOp);
+      _variableMod = eraseVec(_variableMod,rightOp);
+    }
+
+    if(_occupiedReg + r > _totalRegisters)
+    {  
+      cleanRegisters();
+      if(_occupiedReg + r <= _totalRegisters)
+      {
+        vecPairs = insertAll(vs);
+        _variableMod.push_back(rightOp);
+      }
+      else
+      {
+        spill(quad, vs);
+      }
+    }
+    else
+    {
+      vecPairs = insertAll(vs);
+      _variableMod.push_back(rightOp);
+    }
+  }
   else
   {
     vecPairs.push_back(pair<bool, string>(false, ""));

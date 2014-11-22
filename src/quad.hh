@@ -53,9 +53,10 @@ class Quad
                                                                       if(!regRight.empty()) _rightOperand = regRight; 
                                                                       if(!regDes  .empty()) _destiny      = regDes; 
                                                                     }
-    virtual bool isExpQuad() { return  false; }
-    virtual bool isAssign()  { return false; }
-    virtual bool isDesp()    { return false;  }
+    virtual bool isExpQuad()    { return false;   }
+    virtual bool isAssign()     { return false;   }
+    virtual bool isDesp()       { return false;   }
+    virtual bool isDespEqual()  { return false;   }
     bool isLiveVar(string s) { return  _liveVar.find(s) != _liveVar.end();  }
     static map<string, Type*> tablaTemporales;
     std::string _operator     = *(new std::string());
@@ -223,8 +224,8 @@ class DespEqualQuad : public Quad
 {
   public:
     DespEqualQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
-    bool useVariables()             { return true; }
-    bool isDesp()                    { return true;  }
+    bool useVariables()  { return true; }
+    bool isDespEqual()   { return true; }
     std::string toSpim();
 };
 
