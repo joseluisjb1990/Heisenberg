@@ -305,7 +305,7 @@ ReturnQuad::ReturnQuad(std::string destiny)
 {}
 
 std::string ReturnQuad::toSpim() {
-    return "sw 4($fp), " + _leftOperand;
+    return "sw " + _leftOperand + ", 4($fp) ";
 };
 
 FlagQuad::FlagQuad(std::string destiny)
