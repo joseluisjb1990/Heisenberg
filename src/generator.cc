@@ -67,12 +67,15 @@ void IntermediateGen::printSpim(TablaSimbolos* tSimbolos)
         
         if (_totalQuadList->at(pos)->_quad->isTag()) {
 
-            if (_totalQuadList->at(pos)->_quad->isMain()) 
-                _file << std::endl << _totalQuadList->at(pos)->_quad->toSpim() << std::endl << std::endl;
+            //if (_totalQuadList->at(pos)->_quad->isMain()) 
+            _file << std::endl << _totalQuadList->at(pos)->_quad->toSpim() << std::endl << std::endl;
+
 
             _file << std::endl << "bloque" << _totalQuadList-> at(pos)->getNumberBlock()
-                                                                        << ":" << std::endl << std::endl; 
-
+                                                                        << ":" << std::endl << std::endl;
+             // Imprime el Principio de la Funcion                                                            
+            _file << std::endl << _totalQuadList->at(pos)->_quad->toSpim2() << std::endl << std::endl;                                                                          
+     
         } else {
 
             if (_totalQuadList->at(pos)->isLeader()) 

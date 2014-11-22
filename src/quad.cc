@@ -344,7 +344,6 @@ std::string CallQuad::toSpim() {
     return "sw 0($sp), " + _destiny + "\n    sub $sp, $sp, 4 \n    jal " + _leftOperand;
 };
 
-
 ReturnQuad::ReturnQuad(std::string destiny)
   : Quad("return", destiny, "", "")
 {}
@@ -356,6 +355,18 @@ FlagQuad::FlagQuad(std::string destiny)
 std::string FlagQuad::toSpim() {
  
     if (_operator == "oso") return "main:"; else return _operator + ":";
+};
+
+
+std::string FlagQuad::toSpim2() {
+     
+	std::string res = "";
+
+	res+= "    sw 0($sp), $ra"  "\n    sub $sp, $sp, 4 \n";
+	res+= "    sw 0($sp), $fp"  "\n    sub $sp, $sp, 4 \n";
+	res+= "    add $fp, $sp, 8 \n    sub $sp, $sp, NumerodeVariablesLocales*Tipo";
+	return res;
+
 };
 
 RefQuad::RefQuad(std::string leftOperand, std::string destiny)
@@ -435,7 +446,7 @@ EndQuad::EndQuad()
 {}
 
 std::string EndQuad::toSpim() {
-	return "li $v0, 10 \n syscall";
+	return "li $v0, 10 \n    syscall";
 }
 
 BeginQuad::BeginQuad()

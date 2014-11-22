@@ -47,6 +47,7 @@ class Quad
     virtual string getDefinedVariable()     { if(useVariables()) return _destiny; else return *(new std::string()); }
     virtual bool useVariables()             { return false; }
     virtual std::string toSpim()            { return "";    }
+    virtual std::string toSpim2()           { return "";    }
     void susVarReg(string regLeft, string regRight, string regDes) {  _leftOperand = regLeft; _rightOperand = regRight; _destiny = regDes; }
     virtual bool isExpQuad() { return  false; }
     virtual bool isAssign()  { return false; }
@@ -263,6 +264,7 @@ class FlagQuad : public Quad
     bool isTag()  { return true;  }
     bool isMain() { if (_operator == "oso") return true; else return false; }
     std::string toSpim();
+    std::string toSpim2();
 
 };
 
