@@ -1,0 +1,24 @@
+Hanoi(polar dimension, polar origen, polar destino, polar auxiliar) => extinto
+{
+	si (dimension == 1) {
+
+		escribir("Pasar disco de "); escribir(origen); escribir(" a "); escribir(destino);
+
+	} sino {
+
+		Hanoi(dimension-1, origen, auxiliar, destino);
+		escribir("Pasar disco de "); escribir(origen); escribir(" a "); escribir(destino);
+		Hanoi(dimension-1, auxiliar, destino, origen);				
+	}
+
+}
+
+oso() => extinto
+{
+	polar n;
+	escribir("Numero de discos que desea: ");
+	leer(n);
+
+	escribir("Los movimientos que tienes que hacer son: ")
+	Hanoi(n,1,2,3);
+}

@@ -1,0 +1,72 @@
+
+particion(cueva [] de polar arreglo, polar izq, polar der) => polar
+{
+	polar pivote, temp, i, j;
+
+	i = izq;
+	j = der;
+	pivote = arreglo[(izq + der)/2];
+	
+	mientras (i =< j) {
+
+		mientras (arreglo[i] < pivote) {i++;}
+			mientras (arreglo[j] > pivote) { j++;}
+
+			si (i =< j) {
+
+				temp = arreglo[i];
+				arreglo[i] = arreglo[j];
+				arreglo[j] = temp;
+				i++;
+				j--;
+			}
+	}
+
+	vomita i;
+}
+
+quickSort(cueva [] de polar arreglo, polar izq, polar der) => extinto
+{
+	polar indice;
+
+	indice = particion(arreglo, izq, der);
+
+	si (izq < indice -1) {
+		quickSort(arreglo,izq,indice -1);
+	}
+
+	si (indice < der) {
+		quickSort(arreglo,indice,der);
+	}
+
+}
+
+oso() => extinto
+{
+
+	cueva [128] de polar desordenados;
+
+	para i en (0;127) {
+		
+		si (i % 2 == 0) {
+			desordenados[i] = 128-i;
+		} sino {
+			desordenados[i] = 256-i;
+		}
+	}
+
+	
+	quickSort(desordenados,0,127);
+
+    <3 Imprimir arreglo ordenado
+
+	para i en (0;127) {
+		escribir(desordenados[i]);
+	}	
+}
+
+
+
+
+
+

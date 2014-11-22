@@ -1,0 +1,37 @@
+Ackermann(polar m, polar n) => polar
+{
+	si (m == 0) {
+		vomita n +1;
+	}
+
+	si (n == 0) {
+		vomita Ackermann(m - 1,1);
+	} sino {
+		vomita Ackermann(m - 1, Ackermann(m, n - 1));
+	}
+
+}
+
+oso() => extinto
+{
+	polar m, n, res;
+
+	escribir("Funcion de Ackermann(m,n), escriba el valor de m =");
+	leer (m);
+
+  	escribir("Escriba el valor de n =");
+	leer (n);
+
+	res = Ackermann(m,n);
+
+	escribir("El valor de la funcion de Ackermann es = ");
+	escribir(res);
+
+}
+
+
+
+
+
+
+
