@@ -48,16 +48,13 @@ class Quad
     virtual bool useVariables()             { return false; }
     virtual std::string toSpim()            { return "";    }
     virtual std::string toSpim2()           { return "";    }
-    void susVarReg(string regLeft, string regRight, string regDes) {  _leftOperand = regLeft; _rightOperand = regRight; _destiny = regDes; }
-    virtual bool isExpQuad() { return  false; }
-    virtual bool isAssign()  { return false; }
     void susVarReg(string regLeft, string regRight, string regDes)  {  
                                                                       if(!regLeft .empty()) _leftOperand  = regLeft; 
                                                                       if(!regRight.empty()) _rightOperand = regRight; 
                                                                       if(!regDes  .empty()) _destiny      = regDes; 
                                                                     }
-    virtual bool isExpQuad() { return false;  }
-    virtual bool isAssign()  { return false;  }
+    virtual bool isExpQuad() { return  false; }
+    virtual bool isAssign()  { return false; }
     virtual bool isDesp()    { return false;  }
     bool isLiveVar(string s) { return  _liveVar.find(s) != _liveVar.end();  }
     static map<string, Type*> tablaTemporales;
