@@ -25,6 +25,7 @@
 #include <string>
 #include <stack>
 #include <vector>
+#include <queue>
 #include "Contenido.hh"
 
 class Type;
@@ -44,9 +45,13 @@ private:
     Stack         _offsets;   /* Pila de enteros para manejar los alcances activos.                             */
     unsigned int  _alcance;   /* Variable para llevar los identificadores de los alcances.                      */
     void insert_symbol(std::string nombre, Contenido* cont);
+    queue<unsigned int>  _alcanceFunciones;
+    queue<unsigned int>  _tamFunciones;
 
 public:
 
+    queue<unsigned int> getAlcFunciones() { return _alcanceFunciones;  }
+    queue<unsigned int> getTamFunciones() { return _tamFunciones;      }
     /**
      * Constructor para la clase.
      *
@@ -271,9 +276,13 @@ public:
      *    cat:      categoría del símbolo.
      *    alcance:  alcance en el que se desea buscar el símbolo.
      */
-    Contenido* find_scope( std::string nombre
-                         , Categorias cat
-                         , unsigned int alcance
-                         );
+     Contenido* find_scope( std::string nombre
+                          , Categorias cat
+                          , unsigned int alcance
+                          );
+
+     Contenido* find_scope( std::string nombre
+                          , unsigned int alcance
+                          );
 };
 #endif

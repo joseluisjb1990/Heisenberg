@@ -47,9 +47,14 @@ class Quad
     virtual string getDefinedVariable()     { if(useVariables()) return _destiny; else return *(new std::string()); }
     virtual bool useVariables()             { return false; }
     virtual std::string toSpim()            { return "";    }
-    void susVarReg(string regLeft, string regRight, string regDes) {  _leftOperand = regLeft; _rightOperand = regRight; _destiny = regDes; }
-    virtual bool isExpQuad() { return  false; }
-    virtual bool isAssign()  { return false; }
+    void susVarReg(string regLeft, string regRight, string regDes)  {  
+                                                                      if(!regLeft .empty()) _leftOperand  = regLeft; 
+                                                                      if(!regRight.empty()) _rightOperand = regRight; 
+                                                                      if(!regDes  .empty()) _destiny      = regDes; 
+                                                                    }
+    virtual bool isExpQuad() { return false;  }
+    virtual bool isAssign()  { return false;  }
+    virtual bool isDesp()    { return false;  }
     bool isLiveVar(string s) { return  _liveVar.find(s) != _liveVar.end();  }
     static map<string, Type*> tablaTemporales;
     std::string _operator     = *(new std::string());
@@ -59,7 +64,7 @@ class Quad
     Type*       _rightType    = new EmptyType();
     std::string _destiny      = *(new std::string());
     Type*       _destinyType  = new EmptyType();
-    set<string>   _liveVar;
+    set<string> _liveVar;
 };
 
 class SumQuad : public Quad
@@ -200,33 +205,18 @@ class GotoQuad : public JumpQuad
   public:
     GotoQuad();
     GotoQuad(std::string destiny);
+    std::string toSpim();
     bool useVariables()             { return false; }
 };
 
-class GotoLineQuad : public Quad
-{
-	public:
-  		GotoLineQuad(std::string destiny);
-};
-
-class GotoEmptyQuad : public Quad
-{
-	public:
-  		GotoEmptyQuad(std::string leftOperand, std::string rightOperand);
-};
-
-class GotoEmptyIdForQuad : public Quad
-{
-	public:
-  		GotoEmptyIdForQuad(std::string leftOperand, std::string rightOperand);
-      bool useVariables()             { return true; }
-};
 
 class DespQuad : public Quad
 {
   public:
     DespQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
-    bool useVariables()             { return true; }
+    bool useVariables()              { return true; }
+    bool isDesp()                    { return true;  }
+    std::string toSpim();
 };
 
 class DespEqualQuad : public Quad
@@ -234,6 +224,8 @@ class DespEqualQuad : public Quad
   public:
     DespEqualQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
     bool useVariables()             { return true; }
+    bool isDesp()                    { return true;  }
+    std::string toSpim();
 };
 
 class AssignQuad : public Quad

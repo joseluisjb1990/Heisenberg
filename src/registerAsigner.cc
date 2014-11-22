@@ -5,6 +5,12 @@
 RegisterAsigner::RegisterAsigner(int numRegisters)
   : _totalRegisters( numRegisters )
 {
+
+  _mipsRegisters[20]  = "$3";
+  _mipsRegisters[19]  = "$5";
+  _mipsRegisters[16]  = "$6";
+  _mipsRegisters[18]  = "$7";
+  _mipsRegisters[17]  = "$8";
   _mipsRegisters[1]   = "$9";
   _mipsRegisters[2]   = "$10";
   _mipsRegisters[3]   = "$11";
@@ -20,7 +26,6 @@ RegisterAsigner::RegisterAsigner(int numRegisters)
   _mipsRegisters[13]  = "$21";
   _mipsRegisters[14]  = "$22";
   _mipsRegisters[15]  = "$23";
-  _mipsRegisters[16]   = "$8";
 }
 
 vector<string> eraseVec(vector<string> vs, string s)
@@ -37,8 +42,6 @@ vector<pair<bool,string>> RegisterAsigner::getReg(Quad* quad)
   string leftOp   = quad->_leftOperand;
   string rightOp  = quad->_rightOperand;
   string destiny  = quad->_destiny; 
-  vector<string> vs;
-  vs.push_back(leftOp); vs.push_back(rightOp); vs.push_back(destiny);
 
   vector<pair<bool, string>> vecPairs;
   
@@ -84,9 +87,10 @@ vector<pair<bool,string>> RegisterAsigner::getReg(Quad* quad)
   }
   else if(quad->isExpQuad())
   {
+    vector<string> vs;
+    vs.push_back(leftOp); vs.push_back(rightOp); vs.push_back(destiny);
     int r = cantInRegister(vs);
 
-    cout << _occupiedReg << " " << r << endl;
     if(_occupiedReg + r > _totalRegisters)
     {  
       cleanRegisters();
@@ -98,8 +102,6 @@ vector<pair<bool,string>> RegisterAsigner::getReg(Quad* quad)
       else
       {
         spill(quad, vs);
-        if(_occupiedReg + r > _totalRegisters)
-          cout << endl << "EMERGENCIA EL SPILL NO FUE SUFICIENTE, CONO" << endl;
       }
     }
     else
@@ -107,6 +109,59 @@ vector<pair<bool,string>> RegisterAsigner::getReg(Quad* quad)
       vecPairs = insertAll(vs);
       _variableMod.push_back(destiny);
     }
+  }
+  else if (quad->isJump())
+  {
+    vector<string> vs;
+    vs.push_back(leftOp); vs.push_back(rightOp);
+    int r = cantInRegister(vs);
+
+    if(_occupiedReg + r > _totalRegisters)
+    {  
+      cleanRegisters();
+      if(_occupiedReg + r <= _totalRegisters)
+      {
+        vecPairs = insertAll(vs);
+      }
+      else
+      {
+        spill(quad, vs);
+      }
+    }
+    else
+    {
+      vecPairs = insertAll(vs);
+    }
+    vecPairs.push_back(pair<bool, string>(false, ""));
+  }
+  else if (quad->isDesp())
+  {
+    vector<string> vs;
+    vs.push_back(leftOp); vs.push_back(rightOp); vs.push_back(destiny);
+    int r = cantInRegister(vs);
+
+    if(_occupiedReg + r > _totalRegisters)
+    {  
+      cleanRegisters();
+      if(_occupiedReg + r <= _totalRegisters)
+      {
+        vecPairs = insertAll(vs);
+      }
+      else
+      {
+        spill(quad, vs);
+      }
+    }
+    else
+    {
+      vecPairs = insertAll(vs);
+    }
+  }
+  else
+  {
+    vecPairs.push_back(pair<bool, string>(false, ""));
+    vecPairs.push_back(pair<bool, string>(false, ""));
+    vecPairs.push_back(pair<bool, string>(false, ""));
   }
   return vecPairs;
 }
@@ -122,11 +177,13 @@ int RegisterAsigner::cantInRegister(vector<string> vs)
   return r;
 }
 
-vector<pair<int, string>> RegisterAsigner::getVarToSpill()
+vector<pair<string, string>> RegisterAsigner::getVarToSpill()
 { 
-  vector<pair<int,string>> v = _varToSpill; 
+  vector<pair<string,string>> v;
+  for(auto& vts: _varToSpill) v.push_back(pair<string, string> (_mipsRegisters[vts.first], vts.second)); 
   _varToSpill.clear(); 
-  return v;    
+  _spillMode = false;
+  return v;
 }
 
 bool atLeastOne(string s, vector<string> vs)
@@ -159,17 +216,19 @@ void RegisterAsigner::spill(Quad* q, vector<string> vs)
     int first               = (*it).first;
     vector<string> second   = (*it).second;
 
-    mod = true;
     if(!second.empty())
     {
+      mod = true;
       for(vector<string>::iterator itv = second.begin(); itv != second.end(); itv++)
-        if(q->isLiveVar(*itv) or atLeastOne(*itv, vs))
+      {
+        if(atLeastOne(*itv, vs))
         {
           mod = false;
           break;
         }
 
       if(mod) vi.push_back(first);
+      }
     }
   }
 
@@ -182,22 +241,22 @@ void RegisterAsigner::spill(Quad* q, vector<string> vs)
       string v = *it;
       if(!isLiteral(v))
       {
-        if(find(_variableMod, v))
+        if(find(_variableMod, v) and (q->isLiveVar(v)))
         {
           _varToSpill.push_back(pair<int, string> (r,v));
-          vector<string> nvector;
-          for(vector<string>::iterator itn = _variableMod.begin(); itn != _variableMod.end(); itn++)
-            if(v != *itn)
-              nvector.push_back(*itn);
-          _variableMod = nvector;
         }
+        vector<string> nvector;
+        for(vector<string>::iterator itn = _variableMod.begin(); itn != _variableMod.end(); itn++)
+          if(v != *itn)
+            nvector.push_back(*itn);
+        _variableMod = nvector;
       }
       _variables.erase(v);
     }
     _register[r].clear();
-    cout << "OC " << _occupiedReg << endl;
     _occupiedReg--;
   }
+  _spillMode = true;
 }
 
 bool RegisterAsigner::isLiteral(string op)
@@ -226,9 +285,14 @@ vector<pair<bool,string>> RegisterAsigner::insertAll(vector<string> vs)
 
   for(vector<string>::iterator it = vs.begin(); it != vs.end(); it++)
   {
-    res = getRegister(*it);
-    if(-1 == res.second) cout << endl << "ERROR EN EL GETREGISTER" << *it << endl;
-    vecPairs.push_back(*(new pair<bool, string> (res.first, _mipsRegisters[res.second])));
+    if(!((*it).empty()))
+    {
+      res = getRegister(*it);
+      vecPairs.push_back(*(new pair<bool, string> (res.first, _mipsRegisters[res.second])));
+    } else
+    {
+      vecPairs.push_back(*(new pair<bool, string> (false, "")));
+    }
   }
 
   return vecPairs;
@@ -332,5 +396,16 @@ void RegisterAsigner::print()
   }
 
   cout << endl;
+}
+
+map<string, string> RegisterAsigner::getModVar()
+{
+  map<string, string> msi;
+
+  for(auto& v:_variableMod)
+  {
+    msi[v] = _mipsRegisters[_variables[v]];
+  }
+  return msi;
 }
 #endif
