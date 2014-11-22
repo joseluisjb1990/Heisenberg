@@ -98,6 +98,20 @@ Contenido* TablaSimbolos::find_scope( std::string nombre
   return nullptr;
 }
 
+Contenido* TablaSimbolos::find_scope( std::string nombre
+                                    , unsigned int alcance
+                                    )
+{
+  for(Diccionario::iterator it = _dicc.lower_bound(nombre); it != _dicc.upper_bound(nombre); ++it)
+  {
+    if (it->first == nombre and it->second->getAlcance() == alcance)
+    {
+      return it->second;
+    }
+  }
+  return nullptr;
+}
+
 bool TablaSimbolos::check_scope( std::string nombre )
 {
   Contenido *cont;
@@ -119,6 +133,8 @@ unsigned int TablaSimbolos::exit_scope()
 
 unsigned int TablaSimbolos::exit_function_scope()
 {
+  _alcanceFunciones.push(_pila.back());
+  _tamFunciones.push(_offsets.back());
   _pila.pop_back();
   _offsets.pop_back();
   return _pila.back();

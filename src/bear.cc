@@ -13,6 +13,8 @@ main (int argc, char *argv[])
       driver.untilTypeCheck= true;
     else if (argv[i] == std::string ("-p"))
       driver.untilAST = true;
+    else if (argv[i] == std::string ("-i"))
+      driver.untilInt = true;
     else if (!driver.parse (argv[i]))
       std::cout << std::endl;
     else

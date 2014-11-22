@@ -55,64 +55,6 @@ FlowGraph::FlowGraph(std::vector<QuadContainer*>* quadList)
 
   _quadList = quadList;
 
-  setRegisters(3);
 }
 
-void FlowGraph::setRegisters(int cantRegisters)
-{
-  if(_quadList->empty()) return;
-  
-  RegisterAsigner* ra = new RegisterAsigner(cantRegisters);
-
-  QuadContainer* qc;
-  Quad* q;
-  vector<pair<bool, string>> arrPairs;
-  string    regLeft, regRight, regRes;
-  bool      loadLeft, loadRight, loadRes;
-
-  for(vector<QuadContainer*>::iterator itq = _quadList->begin(); itq != _quadList->end(); itq++)
-  {
-    qc  = (*itq);
-    q   = qc->_quad; 
-    if(q->useVariables())
-    {
-      arrPairs = ra->getReg(q);
-
-      if(ra->getSpillMode())
-      {
-        ra->print();
-        vector<pair<int, string>> v = ra->getVarToSpill();
-        for(auto& pis: v)
-          cout << pis.first << ", " << pis.second << endl ;
-
-         arrPairs = ra->getReg(q);
-      }
-      loadLeft    = arrPairs.at(0).first;
-      regLeft     = arrPairs.at(0).second;
-      loadRight   = arrPairs.at(1).first;
-      regRight    = arrPairs.at(1).second;
-      loadRes     = arrPairs.at(2).first;
-      regRes      = arrPairs.at(2).second;
-
-      cout << "La variable izquierda "  << q->_leftOperand  << " Tiene el registro " << arrPairs.at(0).second << " " << arrPairs.at(0).first << endl;
-      cout << "La variable derecha "    << q->_rightOperand << " Tiene el registro " << arrPairs.at(1).second << " " << arrPairs.at(1).first << endl;
-      cout << "La variable destino "    << q->_destiny      << " Tiene el registro " << arrPairs.at(2).second << " " << arrPairs.at(2).first << endl;
-      q->print();
-      ra->print();
-      cout << endl;
-    }
-  }
-}
-
-void FlowGraph::print()
-{
-  QuadContainer* b;
-
-  for(std::vector<QuadContainer*>::iterator it = _quadList->begin(); it != _quadList->end(); it++)
-  {
-    b = (*it);
-    b->print();
-    cout << endl;
-  }
-}
 #endif

@@ -14,9 +14,10 @@ class RegisterAsigner
     RegisterAsigner(int numRegisters);
     vector<pair<bool,string>> getReg(Quad* quad);
     void                        print();
-    bool getSpillMode()                     { return !_varToSpill.empty();   }
-    vector<pair<int, string>> getVarToSpill();
+    bool getSpillMode()                     { return _spillMode;   }
+    vector<pair<string, string>> getVarToSpill();
     bool isLiteral(string op);
+    map<string, string> getModVar();
 
   private:
     void                        spill(Quad* q, vector<string> vs);
@@ -28,11 +29,12 @@ class RegisterAsigner
 
     void                        cleanRegisters();
     int                         _totalRegisters;
-    int                         _occupiedReg;
+    int                         _occupiedReg = 0;
     map<int, vector<string>>    _register;      //Diccionario para mapear los registros con las variables contenidas en el
     map<string, int>            _variables;     //Diccinario para almacenar en que registro esta una variable
     vector<string>              _variableMod;   //Lista para almacenar todas las variables que se usaron como lvalue. 
     map<int,string>             _mipsRegisters;
     vector<pair<int, string>>   _varToSpill;
+    bool                        _spillMode = false;
 };
 #endif

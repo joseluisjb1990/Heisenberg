@@ -24,9 +24,18 @@ int bear_driver::parse (const std::string &f)
     {
       IntermediateGen *intgen = new IntermediateGen(file, &tabla);
       AST->toIntermediate(intgen);
-      intgen->optimize()->print();
-      //intgen->printSpim(&tabla);
-      intgen->close();
+      if(!untilInt)
+      {
+        intgen->optimize();
+        intgen->print();
+        intgen->printSpim(&tabla);
+        intgen->close();
+      }
+      else
+      {
+        intgen->optimize();
+        intgen->print();
+      }
     }
   }
   scan_end();

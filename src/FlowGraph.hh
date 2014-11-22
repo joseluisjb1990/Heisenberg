@@ -14,8 +14,8 @@ class FlowGraph
   public:
     FlowGraph(std::vector<Block*>* blockList, EntryBlock* entry, EndingBlock* ending);
     FlowGraph(std::vector<QuadContainer*>* quadList);
-    void setRegisters(int cantRegisters);
     void print();
+    vector<QuadContainer*>* getQuadList() { return _quadList; }
  
   private:
     vector<Block*>*           _blockList;

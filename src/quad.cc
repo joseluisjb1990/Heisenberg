@@ -105,8 +105,7 @@ DivQuad::DivQuad(std::string leftOperand, Type* leftType, std::string rightOpera
 std::string DivQuad::toSpim() {
  
     if (_leftType->isInt()) {  
-        return "div "+  _destiny + ", " + _leftOperand + ", " +  _rightOperand;
-       
+        return "div "+ _leftOperand + " " +  _rightOperand + "\n   mflo " + _destiny + "\n" ;
     } else if (_leftType->isFloat()) {
         return "div.s "+  _destiny + ", " + _leftOperand + ", " +  _rightOperand;
     };
@@ -130,10 +129,10 @@ MulQuad::MulQuad(std::string leftOperand, Type* leftType, std::string rightOpera
 std::string MulQuad::toSpim() {
  
     if (_leftType->isInt()) {  
-        return "mul "+  _destiny + ", " + _leftOperand + ", " +  _rightOperand;
+        return "mult " + _leftOperand + ", " +  _rightOperand + "\n   mflo " + _destiny + "\n" ;;
        
     } else if (_leftType->isFloat()) {
-        return "mul.s "+  _destiny + ", " + _leftOperand + ", " +  _rightOperand;
+        return "mul.s " +  _destiny + " " + _leftOperand + " " +  _rightOperand;
     };
 
     return "";
@@ -145,11 +144,10 @@ RemQuad::RemQuad(std::string leftOperand, std::string rightOperand, std::string 
 {}
 
 std::string RemQuad::toSpim() {
- 
-    if (_leftType->isInt()) 
-        return "rem "+  _destiny + ", " + _leftOperand + ", " +  _rightOperand;
-       
-    return "";
+  if (_leftType->isInt()) 
+      return "div "+ _leftOperand + " " +  _rightOperand + "\n   mfhi " + _destiny + "\n" ;
+     
+  return "";
 };
 
 PowQuad::PowQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
@@ -163,11 +161,13 @@ UmQuad::UmQuad(std::string leftOperand, std::string rightOperand, std::string de
 std::string UmQuad::toSpim() {
  
     if (_leftType->isInt()) {  
-        return "neg "+  _destiny + ", " + _leftOperand;
+        return "sub " +  _destiny + ", $0 " + _leftOperand;
        
     } else if (_leftType->isFloat()) {
         return "neg.s "+  _destiny + ", " + _leftOperand;
     };
+
+    return "sub " +  _destiny + ", $0 " + _leftOperand;
 
     return "";
 };
@@ -177,17 +177,7 @@ LessThanQuad::LessThanQuad(std::string leftOperand, std::string rightOperand, st
 {}
 
 std::string LessThanQuad::toSpim() {
-
-    if (_rightOperand == "0") {  
-        return "bltz "+ _leftOperand + ", bloque" + _destiny;
-
-    } else if (_leftOperand == "0") { 
-        return "bgtz "+ _rightOperand + ", bloque" + _destiny;
-
-    } else {
-        return "blt " + _leftOperand + ", " + _rightOperand  + ", bloque" + _destiny;
-    }
-
+  return "blt " + _leftOperand + " " + _rightOperand  + " bloque" + _destiny;
 };
 
 LessEqualQuad::LessEqualQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
@@ -195,17 +185,7 @@ LessEqualQuad::LessEqualQuad(std::string leftOperand, std::string rightOperand, 
 {}
 
 std::string LessEqualQuad::toSpim() {
-
-    if (_rightOperand == "0") {  
-        return "blez "+ _leftOperand + ", bloque" + _destiny;
-
-    } else if (_leftOperand == "0") { 
-        return "bgez "+ _rightOperand + ", bloque" + _destiny;
-
-    } else {
-        return "ble " + _leftOperand + ", " + _rightOperand  + ", bloque" + _destiny;
-    }
-
+  return "ble " + _leftOperand + " " + _rightOperand  + " bloque" + _destiny;
 };
 
 GreaterThanQuad::GreaterThanQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
@@ -217,17 +197,7 @@ GreaterThanQuad::GreaterThanQuad(std::string leftOperand, std::string rightOpera
 {}
 
 std::string GreaterThanQuad::toSpim() {
-
-    if (_rightOperand == "0") {  
-        return "bgtz "+ _leftOperand + ", bloque" + _destiny; 
-
-    } else if (_leftOperand == "0") { 
-        return "bltz "+ _rightOperand + ", bloque" + _destiny;
-
-    } else {
-        return "bgt " + _leftOperand + ", " + _rightOperand  + ", bloque" + _destiny;
-    }
-
+  return "bgt " + _leftOperand + " " + _rightOperand  + " bloque" + _destiny;
 };
 
 GreaterEqualQuad::GreaterEqualQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
@@ -235,17 +205,7 @@ GreaterEqualQuad::GreaterEqualQuad(std::string leftOperand, std::string rightOpe
 {}
 
 std::string GreaterEqualQuad::toSpim() {
-
-    if (_rightOperand == "0") {  
-        return "bgez "+ _leftOperand + ", bloque" + _destiny;
-
-    } else if (_leftOperand == "0") { 
-        return "blez "+ _rightOperand + ", bloque" + _destiny;
-
-    } else {
-        return "bge " + _leftOperand + ", " + _rightOperand  + ", bloque" + _destiny;
-    }
-
+  return "bge " + _leftOperand + " " + _rightOperand  + " bloque" + _destiny;
 };
 
 EqualQuad::EqualQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
@@ -257,17 +217,7 @@ EqualQuad::EqualQuad(std::string leftOperand, std::string rightOperand)
 {}
 
 std::string EqualQuad::toSpim() {
-
-    if (_rightOperand == "0") {  
-        return "beqz "+ _leftOperand + ", bloque" + _destiny;
-
-    } else if (_leftOperand == "0") { 
-        return "beqz "+ _rightOperand + ", bloque" + _destiny;
-
-    } else {
-        return "beq " + _leftOperand + ", " + _rightOperand  + ", bloque" + _destiny;
-    }
-
+  return "beq " + _leftOperand + " " + _rightOperand  + " bloque" + _destiny;
 };
 
 NotEqualQuad::NotEqualQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
@@ -275,17 +225,7 @@ NotEqualQuad::NotEqualQuad(std::string leftOperand, std::string rightOperand, st
 {}
 
 std::string NotEqualQuad::toSpim() {
-
-    if (_rightOperand == "0") {  
-        return "bnez "+ _leftOperand + ", bloque" + _destiny;
-
-    } else if (_leftOperand == "0") { 
-        return "bnez "+ _rightOperand + ", bloque" + _destiny;
-
-    } else {
-        return "bne " + _leftOperand + ", " + _rightOperand  + ", bloque" + _destiny;
-    }
-
+  return "bne " + _leftOperand + " " + _rightOperand  + " bloque" + _destiny;
 };
 
 IdBoolQuad::IdBoolQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
@@ -300,21 +240,38 @@ GotoQuad::GotoQuad()
   : JumpQuad("goto", "", "", "")
 {}
 
+std::string GotoQuad::toSpim()
+{
+  return "b bloque" + _destiny;
+}
+
 GotoQuad::GotoQuad(std::string destiny)
   : JumpQuad("goto", "", "", destiny)
 {}
 
-std::string GotoQuad::toSpim() {
-    return "j bloque" + _destiny;
-};
-
 DespQuad::DespQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
-  : Quad("[]", leftOperand, rightOperand, destiny)
-{}
-
-DespEqualQuad::DespEqualQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
   : Quad("[]=", leftOperand, rightOperand, destiny)
 {}
+
+std::string DespQuad::toSpim()
+{
+  return   "add "      + _leftOperand   + " "   + _leftOperand  + " "           + _destiny 
+       +   "\n   sw "  + _rightOperand  + ", "  + "("           + _leftOperand  + ")"
+       +   "\n   sub " + _leftOperand   + " "   + _leftOperand  + " "           + _destiny
+       ;
+}
+
+DespEqualQuad::DespEqualQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
+  : Quad("=[]", leftOperand, rightOperand, destiny)
+{}
+
+std::string DespEqualQuad::toSpim()
+{
+  return   "add "      + _leftOperand   + " "   + _leftOperand  + " "           + _destiny 
+       +   "\n   lw "  + _rightOperand  + ", "  + "("           + _leftOperand  + ")"
+       +   "\n   sub " + _leftOperand   + " "   + _leftOperand  + " "           + _destiny
+       ;
+}
 
 AssignQuad::AssignQuad(std::string leftOperand, std::string destiny)
   : Quad(":=", leftOperand, "", destiny)
@@ -364,7 +321,7 @@ std::string FlagQuad::toSpim2() {
 
 	res+= "    sw 0($sp), $ra"  "\n    sub $sp, $sp, 4 \n";
 	res+= "    sw 0($sp), $fp"  "\n    sub $sp, $sp, 4 \n";
-	res+= "    add $fp, $sp, 8 \n    sub $sp, $sp, NumerodeVariablesLocales*Tipo";
+	res+= "    add $fp, $sp, 8";
 	return res;
 
 };

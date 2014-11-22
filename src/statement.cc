@@ -37,7 +37,8 @@ std::string Assign::to_string(int nesting)
 
 void Assign::toIntermediate(IntermediateGen *intGen)
 {
-  for (unsigned int i=0; i < _ids->size(); ++i) {
+  for (unsigned int i=0; i < _ids->size(); ++i) 
+  {
     Expression* id   = _ids->at(i);
     Expression* expr = _expr->at(i);
 
@@ -48,23 +49,23 @@ void Assign::toIntermediate(IntermediateGen *intGen)
     if(id->isArray())
     {
       std::string temp = intGen->nextTemp();
-      q = new DespQuad(id->getArrayName(), id->getTemp(), temp);
+      q = new DespQuad(id->getArrayName(), expr->getTemp(), id->getTemp());
       intGen->gen(q);
-      // intGen->gen("[]", id->getTemp(), id->getArrayName(), temp);
       id->setTemp(temp);
-    }
-
-    if(expr->isArray())
-    {
-      // intGen->gen("[]=", expr->getArrayName(), expr->getTemp(), id->getTemp(),"   // Asignacion indirecta, linea " + std::to_string(get_first_line()));
-      q = new DespEqualQuad(expr->getArrayName(), expr->getTemp(), id->getTemp());
-      intGen->gen(q);
-    }
+    } 
     else
     {
-      q = new AssignQuad(expr->getTemp(), id->getTemp());
-      intGen->gen(q);
-      // intGen->gen(":=", expr->getTemp() , " " , id->getTemp(), "   // Asignacion directa, linea " + std::to_string(get_first_line()));
+      if(expr->isArray())
+      {
+        q = new DespEqualQuad(expr->getArrayName(), id->getTemp(), expr->getTemp());
+        intGen->gen(q);
+      }
+      else
+      {
+        q = new AssignQuad(expr->getTemp(), id->getTemp());
+        intGen->gen(q);
+        // intGen->gen(":=", expr->getTemp() , " " , id->getTemp(), "   // Asignacion directa, linea " + std::to_string(get_first_line()));
+      }
     }
   }
 }

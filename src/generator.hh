@@ -22,6 +22,7 @@ public:
   void gen(std::string op, std::string arg1, std::string arg2, std::string des, std::string com);
   void gen(std::string op, std::string arg1, std::string arg2, std::string des);
   void gen(std::string id);
+  void spillVariables(vector<pair<int, string>> arrPairs, std::ofstream& file);
   void patch(unsigned int pos, int jumpDes);
   unsigned int gen(Quad* q);
   void genComment(std::string comment);
@@ -36,6 +37,9 @@ public:
   void print();
   void printSpim(TablaSimbolos* tSimbolos);
   void susVariables(vector<pair<bool, string>> arrPairs, Quad* q, std::ofstream& file);
+  void spillVariables(vector<pair<string, string>> arrPairs, unsigned int alcAct, unsigned int alcTop);
+  void susVariables(vector<pair<bool, string>> arrPairs, Quad* q, std::ofstream& file, unsigned int alcAct, unsigned int alcTop);
+  void storeAll(map<string, string> msi, unsigned int alcAct, unsigned int alcTop);
 
 private:
   std::vector<QuadContainer*>*  _totalQuadList;

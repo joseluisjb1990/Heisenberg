@@ -27,6 +27,7 @@ public:
   std::string file;
   bool untilTypeCheck = false;
   bool untilAST = false;
+  bool untilInt = false;
   void error (const yy::location& l, const std::string& m);
   void error (const yy::location& l1, const yy::location& l2, const std::string& m);
   void error (const unsigned int LI, const unsigned int CI, const unsigned int LF, unsigned int CF, const std::string& m);
