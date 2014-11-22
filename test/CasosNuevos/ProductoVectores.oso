@@ -1,0 +1,76 @@
+
+pEscalar( cueva [] de kodiak vector1, cueva [] de kodiak vector2) => kodiak
+{
+	kodiak res = 0.0;
+	polar i = 0;
+	mientras ((i < lon(vector1)) & (vector1[i] =/= 99.99)) {
+		res = res + (vector1[i] * vector2[i]); 
+	}
+
+	vomita res;
+
+}
+
+pCruz( cueva [] de kodiak vector1, cueva [] de kodiak vector2) => extinto
+{
+	polar i = 0;
+	mientras ((i < lon(vector1)) & (vector1[i] =/= 99.99)) {
+		vector1[i] = vector1[i] * vector2[i]; 
+	}
+}
+
+oso() => extinto
+{
+	cueva [21] de kodiak vector1;
+	cueva [21] de kodiak vector2;
+  	polar o, j, k = 0, 0, 0;
+  	kodiak aux = 0.0;
+
+	escribir("\n Opcion 1 - Producto Punto \n Opcion 2 - Producto Cruz  \n");
+	leer(o);
+
+	mientras ( (o =/= 1) | (o =/= 2)  ) {
+		escribir("Opcion Invalida, eliga una opcion correcta");
+		leer(o);
+	}
+
+
+	escribir("Por favor, diga los valores del primer vector \n");
+	escribir("Marque el valor 99.99, para avisar que termino de ingresar los valores del vector \n");
+
+
+	mientras ((aux =/= 99.99) & (j < 21)) {
+		escribir("Diga el Valor numero = "); escribir(j); escribir("\n");
+		leer(aux);
+		vector1[j] = aux;
+		j++;
+	}
+
+	escribir("Por favor, diga los valores del segundo vector \n");
+	escribir("Marque el valor 99.99, para avisar que termino de ingresar los valores del vector \n");
+
+	aux = 0.0;
+
+	mientras (vector1[k] =/= 99.99) {
+		escribir("Diga el Valor numero = "); escribir(k); escribir("\n");
+		leer(aux);
+		vector2[j] = aux;
+		k++;
+	}
+
+	si (o == 1) {
+		aux = pEscalar(vector1, vector2);
+		escribir("Resultado del Producto Escalar es = "); escribir(aux);
+	}
+
+	si (o == 2) {
+		pCruz(vector1, vector2);
+		k = 0;
+		escribir("El vector resultante del Producto Cruz es = (");
+		mientras ((k < lon(vector1)) & (vector1[k] =/= 99.99)) {
+			escribir(vector1[k]); escribir(", ");
+		}
+		escribir(")");
+	}
+
+}

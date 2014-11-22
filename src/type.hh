@@ -39,7 +39,7 @@ class Type
     virtual bool isBool()                           { return false;               };
     virtual bool isInt()                            { return false;               };
     virtual bool isConstant()                       { return false;               };
-
+    virtual bool isString()                         { return false;               };
     /**
      * Constructor para la clase.
      *
@@ -232,6 +232,7 @@ class HormigueroType : public Type
     std::string to_string();
     std::string to_string(int nesting);
     bool isSimple();
+    bool isString() { return true; };
     HormigueroType();
     bool compareTypes(Type* t2);
     bool isHormiguero();

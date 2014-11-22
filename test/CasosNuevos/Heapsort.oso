@@ -1,0 +1,71 @@
+left(polar i) => polar
+{
+	vomita 2*i+1;
+}
+
+right(polar i) => polar
+{
+	vomita 2*i+2;
+}
+
+polar heapSize;
+max_heapify(cueva [] de polar arr, polar i) => extinto
+{
+	polar l, r = left(i), right(i);
+	polar largestElementIndex = -1;
+
+	si ( (l < heapSize) & (arr[l] > arr[i]) ) {
+		largestElementIndex = l;
+	} sino {
+		largestElementIndex = i;
+	}
+
+	si ( (r < heapSize) & (arr[r] > arr[largestElementIndex]) ) {
+		largestElementIndex = r;
+	}
+
+    si (largestElementIndex =/= i) {
+
+        polar temp = arr[i];
+        arr[i] = arr[largestElementIndex];
+        arr[largestElementIndex] = temp;
+        
+        max_heapify(arr, largestElementIndex); 
+    }
+}
+
+build_max_heap(cueva [] de polar arr) => extinto
+{
+	heapSize = lon(arr);
+
+	para i en (lon(arr)/2;-1;0) {
+		max_heapify(arr, i);
+	}
+}
+
+
+heap_sort(cueva [] de polar arr) => extinto
+{
+
+    build_max_heap(arr);
+    polar i = lon(arr) -1;
+
+    mientras ( i >= 0) {
+
+        polar temp2 = arr[0];
+        arr[0]=arr[i];
+        arr[i]=temp2;
+        heapSize  = heapSize-1;
+        max_heapify(arr,0);
+    	i--;
+    }
+}
+
+
+
+oso() => extinto
+{
+
+
+}
+

@@ -205,10 +205,9 @@ class GotoQuad : public JumpQuad
   public:
     GotoQuad();
     GotoQuad(std::string destiny);
-    std::string toSpim();
     bool useVariables()             { return false; }
+    std::string toSpim();
 };
-
 
 class DespQuad : public Quad
 {
@@ -248,12 +247,15 @@ class ParamQuad : public Quad
   public:
     ParamQuad(std::string destiny);
     bool useVariables()             { return true; }
+    std::string toSpim();
 };
 
 class CallQuad : public Quad
 {
   public:
     CallQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
+    CallQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny);
+    std::string toSpim();
 };
 
 class ReturnQuad : public Quad
@@ -359,11 +361,26 @@ class EndQuad : public Quad
 {
   public:
     EndQuad();
+    std::string toSpim();
 };
 
 class BeginQuad : public Quad
 {
   public:
     BeginQuad();
+};
+
+class WriteQuad : public Quad
+{
+  public:
+    WriteQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny);
+    std::string toSpim();
+};
+
+class ReadQuad : public Quad
+{
+  public:
+    ReadQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny);
+    std::string toSpim();
 };
 #endif

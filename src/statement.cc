@@ -358,11 +358,11 @@ void Write::check()
 void Write::toIntermediate(IntermediateGen *intGen)
 {
   _expr->toIntermediate(intGen);
-  Quad* q = new ParamQuad(_expr->getTemp());
-  intGen->gen(q);
+  //Quad* q = new ParamQuad(_expr->getTemp());
+  //intGen->gen(q);
   // intGen->gen("param", _expr->getTemp(), "", "");
   std::string temp = intGen->nextTemp();
-  q = new CallQuad("escribir", "1", temp);
+  Quad* q = new WriteQuad(_expr->getTemp(), _expr->getType(), "", _expr->getType(), temp);
   intGen->gen(q);
   // intGen->gen("call", "escribir", "1", temp, "   // Escritura por salida estandar, linea " + std::to_string(get_first_line()));
 }
@@ -400,11 +400,11 @@ void Read::check()
 void Read::toIntermediate(IntermediateGen *intGen)
 {
   _id->toIntermediate(intGen);
-  Quad* q = new ParamQuad(_id->getTemp());
-  intGen->gen(q);
+  //Quad* q = new ParamQuad(_id->getTemp());
+  //intGen->gen(q);
   // intGen->gen("param", _id->getTemp(), "", "");
   std::string temp = intGen->nextTemp();
-  q = new CallQuad("leer", "1", temp);
+  Quad* q = new ReadQuad(_id->getTemp(), _id->getType(), "", _id->getType(), temp);
   intGen->gen(q);
   // intGen->gen("call", "leer", "1", temp, "   // Lectura por entrada estandar, linea " + std::to_string(get_first_line()));
 }

@@ -1,0 +1,105 @@
+
+<3 Valiables Globales
+
+polar i, cnt, flag = 0, 0, 0;
+polar max_power;
+kodiak x1, x2, t, fx1, fdx1, aux = 0.0, 0.0, 0.0, 0.0, 0.0, 0.0;
+cueva [10] de kodiak coef;
+
+abs(kodiak n) => kodiak
+{
+	si (n<0.0) { n = n* -1.0; }
+	vomita n;
+}
+
+oso() => extinto
+{
+
+	escribir("Escribe la potencia maxima del polinomio = ");
+	leer(max_power);
+	escribir("\n Diga los valores de los Coeficientes = \n");
+
+	para i en (0;max_power;1) {
+
+		escribir("X^");
+		escribir(i);
+		escribir("= ");	
+		leer(aux);
+		escribir("\n");
+		coef[i] = aux;
+	}
+
+    escribir("\n ******************************************************");
+    escribir("\n ITERATION    X1    FX1    F'X1  ");
+    escribir("\n ******************************************************");
+
+
+
+    <3 Primera Iteracion---------------------------------------------------
+
+ 	cnt++;
+    fx1, fdx1 = 0.0, 0.0;
+	polar i = max_power;
+	mientras ( i >= 1) {
+    	fx1 = fx1 + (coef[i] * (x1**a_kodiak(i)));
+		i--;
+	}
+
+	fx1= fx1 + coef[0];
+
+	i = max_power;
+
+	mientras ( i >= 0) {
+
+
+        fdx1= fdx1 + (coef[i] * (a_kodiak(i) * (x1 ** (a_kodiak(i)-1.0))));
+		i--;
+	}
+
+    t=x2;
+    x2=(x1-(fx1/fdx1));
+    x1=x2;
+    
+    escribir("\n");
+    escribir(cnt);
+	escribir(x2);
+	escribir(fx1);
+	escribir(fdx1);
+
+    <3 Final Primera Iteracion---------------------------------------
+
+
+    mientras( abs(t -1.0) >= 0.0001) {
+	 	cnt++;
+	    fx1, fdx1 = 0.0, 0.0;
+		polar i = max_power;
+		mientras ( i >= 1) {
+	    	fx1 = fx1 + (coef[i] * (x1**a_kodiak(i)));
+			i--;
+		}
+
+		fx1= fx1 + coef[0];
+
+		i = max_power;
+
+		mientras ( i >= 0) {
+
+
+	        fdx1= fdx1 + (coef[i] * (a_kodiak(i) * (x1 ** (a_kodiak(i)-1.0))));
+			i--;
+		}
+
+	    t=x2;
+	    x2=(x1-(fx1/fdx1));
+	    x1=x2;
+
+	    escribir("\n");
+	    escribir(cnt);
+		escribir(x2);
+		escribir(fx1);
+		escribir(fdx1);
+	}
+
+	escribir(" La raiz de la ecuacion es = ");
+	escribir(x2);
+}

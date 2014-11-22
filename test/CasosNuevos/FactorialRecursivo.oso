@@ -1,0 +1,27 @@
+factorial(polar n) => polar;
+factorial_cola(polar n, ^polar res) => extinto;
+
+factorial(polar n) => polar {
+  si (n < 0) { escribir("ERROR"); vomita -1; }
+  sino       { polar res = 1; factorial_cola(n,res); vomita res;  }
+}
+
+factorial_cola(polar n, ^polar res) => extinto
+{
+  si(n > 0) { res = res * n; factorial_cola( n-1, res ); }
+}
+
+oso() =>extinto
+{
+
+  <3 Recibimos por entrada estadar el valor que queremos obtener el factorial.
+
+  escribir("N :");
+  polar N = 0;
+  leer (N);
+
+  polar res = factorial(N);
+
+  <3 Retornamos el resultado.
+  escribir("El factorial de "); escribir(N); escribir("es "); escribir(res);
+}

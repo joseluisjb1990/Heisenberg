@@ -55,11 +55,13 @@ SumQuad::SumQuad(std::string leftOperand, Type* leftType, std::string rightOpera
   {}
 
 std::string SumQuad::toSpim() {
-    if (_leftType->isInt()) {
-        return "addu "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
-       
+
+    //Quad::tablaTemporales->(destiny) = 
+    if (_leftType->isInt()) {  
+        return "add "+  _destiny + ", " + _leftOperand + ", " +  _rightOperand;
+  
     } else if (_leftType->isFloat()) {
-        return "sum.s "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+        return "add.s "+  _destiny + ", " + _leftOperand + ", " +  _rightOperand;
     };
     return "";
 };
@@ -79,10 +81,10 @@ SubQuad::SubQuad(std::string leftOperand, Type* leftType, std::string rightOpera
 std::string SubQuad::toSpim() {
  
     if (_leftType->isInt()) {  
-        return "sub "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+        return "sub "+  _destiny + ", " + _leftOperand + ", " +  _rightOperand;
        
     } else if (_leftType->isFloat()) {
-        return "sub.s "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+        return "sub.s "+  _destiny + ", " + _leftOperand + ", " +  _rightOperand;
     };
 
     return "";
@@ -104,9 +106,8 @@ std::string DivQuad::toSpim() {
  
     if (_leftType->isInt()) {  
         return "div "+ _leftOperand + " " +  _rightOperand + "\n   mflo " + _destiny + "\n" ;
-       
     } else if (_leftType->isFloat()) {
-        return "div.s "+  _destiny + " " + _leftOperand + " " +  _rightOperand;
+        return "div.s "+  _destiny + ", " + _leftOperand + ", " +  _rightOperand;
     };
 
     return "";
@@ -143,7 +144,6 @@ RemQuad::RemQuad(std::string leftOperand, std::string rightOperand, std::string 
 {}
 
 std::string RemQuad::toSpim() {
- 
   if (_leftType->isInt()) 
       return "div "+ _leftOperand + " " +  _rightOperand + "\n   mfhi " + _destiny + "\n" ;
      
@@ -164,7 +164,7 @@ std::string UmQuad::toSpim() {
         return "sub " +  _destiny + ", $0 " + _leftOperand;
        
     } else if (_leftType->isFloat()) {
-        return "neg.s "+  _destiny + " " + _leftOperand;
+        return "neg.s "+  _destiny + ", " + _leftOperand;
     };
 
     return "sub " +  _destiny + ", $0 " + _leftOperand;
@@ -285,9 +285,22 @@ ParamQuad::ParamQuad(std::string destiny)
   : Quad("param", destiny, "", "")
 {}
 
+std::string ParamQuad::toSpim() {
+    return "sw 0($sp), " + _leftOperand + "\n    sub $sp, $sp, 4";
+};
+
 CallQuad::CallQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
   : Quad("call", leftOperand, rightOperand, destiny)
 {}
+
+CallQuad::CallQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny)
+  : Quad("call", leftOperand, leftType, rightOperand, rightType, destiny)
+{}
+
+std::string CallQuad::toSpim() {
+    return "sw 0($sp), " + _destiny + "\n    sub $sp, $sp, 4 \n    jal " + _leftOperand;
+};
+
 
 ReturnQuad::ReturnQuad(std::string destiny)
   : Quad("return", destiny, "", "")
@@ -342,9 +355,45 @@ NotEqualQuadExpr::NotEqualQuadExpr(std::string leftOperand, std::string rightOpe
   : Quad("=/=", leftOperand, rightOperand, destiny)
 {}
 
+WriteQuad::WriteQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny)
+  : Quad("escribir", leftOperand, leftType, rightOperand, rightType, destiny)
+{}
+
+std::string WriteQuad::toSpim() {
+
+    if (_leftType->isInt()) {   
+    	return "move $a0, " + _leftOperand + "\n    li $v0, 1 \n    syscall";
+    } else if (_leftType->isFloat()) {
+        return "move.s $f12, " + _leftOperand + "\n    li $v0, 2 \n    syscall"; 
+    } else if (_leftType->isString()) {
+    	return "move $a0, " + _leftOperand + "\n    li $v0, 4 \n    syscall";
+    };
+	 
+    return "";
+}
+
+ReadQuad::ReadQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny)
+  : Quad("leer", leftOperand, leftType, rightOperand, rightType, destiny)
+{}
+
+std::string ReadQuad::toSpim() {
+
+    if (_leftType->isInt()) {   
+    	return "li $v0, 5 \n    syscall \n    move " + _destiny + ", $v0";
+    } else if (_leftType->isFloat()) {
+        return "li $v0, 6 \n    syscall \n    mfc1 " + _destiny + ", $f0";  
+    };
+	 
+    return "";
+}
+
 EndQuad::EndQuad()
   : Quad("end", "", "", "")
 {}
+
+std::string EndQuad::toSpim() {
+	return "li $v0, 10 \n syscall";
+}
 
 BeginQuad::BeginQuad()
   : Quad("begin", "", "", "")
