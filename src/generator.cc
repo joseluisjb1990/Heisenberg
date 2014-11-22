@@ -15,7 +15,7 @@ void QuadContainer::print()
 { 
   std::cout << _numberBlock << " " << _numberQuad << " " << _isLeader << " "; _quad->print(); cout << " / ";
   for(set<string>::iterator it = _quad->_liveVar.begin(); it != _quad->_liveVar.end(); it++)
-    cout << (*it) << " ";
+	cout << (*it) << " ";
 
 }
 
@@ -31,9 +31,9 @@ void IntermediateGen::print()
   unsigned int i = 0;
   for(std::vector<QuadContainer*>::iterator it = _totalQuadList->begin(); it != _totalQuadList->end(); it++)
   {
-    std::cout << i++ << " ";
-    (*it)->print();
-    cout << endl;
+	std::cout << i++ << " ";
+	(*it)->print();
+	cout << endl;
   }
 
   cout << endl << "-------------------------ALCANCE DE FUNCIONES-----------------------------" << endl;
@@ -44,9 +44,9 @@ void IntermediateGen::print()
 
   for(int i = 1;  i <= size; i++)
   {
-    x = qalc.front();
-    cout << x << " | ";
-    qalc.push(x);
+	x = qalc.front();
+	cout << x << " | ";
+	qalc.push(x);
   }
 
   cout << endl << "-------------------------TAMANIO NECESARIO PARA LAS FUNCIONES-----------------------------" << endl;
@@ -56,21 +56,21 @@ void IntermediateGen::print()
 
   for(int i = 1;  i <= size; i++)
   {
-    x = qalc.front();
-    cout << x << " | ";
-    qalc.push(x);
+	x = qalc.front();
+	cout << x << " | ";
+	qalc.push(x);
   }
 }
 
 IntermediateGen::IntermediateGen(const std::string &file, TablaSimbolos * symbolTable)
   : Generator()
   { 
-    _nameTempFile = file + ".s";
-    _file.open( _nameTempFile.c_str(), std::ofstream::out); 
-    _quadNumber = 0;
-    _tempNumber = 0;
-    _symbolTable = symbolTable;
-    _totalQuadList = new std::vector<QuadContainer*>();
+	_nameTempFile = file + ".s";
+	_file.open( _nameTempFile.c_str(), std::ofstream::out); 
+	_quadNumber = 0;
+	_tempNumber = 0;
+	_symbolTable = symbolTable;
+	_totalQuadList = new std::vector<QuadContainer*>();
   }
 
 void IntermediateGen::close()
@@ -87,112 +87,119 @@ void IntermediateGen::storeAll(map<string, string> msi, unsigned int alcAct, uns
 {
   for(auto& t: msi)
   {
-    Contenido* c = nullptr;
-    cout << endl << "Debo hacer store de la variable " << t.first << " que esta en el registro " << t.second << " " << alcAct << " " << alcTop << endl;
-    for(unsigned int i = alcAct; i <= alcTop; i++)
-    {
-      if(!isTemp(t.first))
-      {
-        c = _symbolTable->find_scope(t.first, i);
-        if(c) break;
-      }
-    }
+	Contenido* c = nullptr;
+	cout << endl << "Debo hacer store de la variable " << t.first << " que esta en el registro " << t.second << " " << alcAct << " " << alcTop << endl;
+	for(unsigned int i = alcAct; i <= alcTop; i++)
+	{
+	  if(!isTemp(t.first))
+	  {
+		c = _symbolTable->find_scope(t.first, i);
+		if(c) break;
+	  }
+	}
 
-    if(c) _file << "   sw " << t.second << " , " << c->getOffset() << "($sp)" << endl; 
+	if(c) _file << "   sw " << t.second << " , " << c->getOffset() << "($sp)" << endl; 
   }
 }
 
 void IntermediateGen::printSpim(TablaSimbolos* tSimbolos)
 {
 
-    QuadContainer* qc;
-    Quad* q;
-    vector<pair<bool, string>> arrPairs;
-    
-    _file << "        .text"  << std::endl; 
+	QuadContainer* qc;
+	Quad* q;
+	vector<pair<bool, string>> arrPairs;
+	
+	_file << "        .text"  << std::endl; 
 
-    queue<unsigned int> qAlc = _symbolTable->getAlcFunciones();
-    queue<unsigned int> qTam = _symbolTable->getTamFunciones();
+	queue<unsigned int> qAlc = _symbolTable->getAlcFunciones();
+	queue<unsigned int> qTam = _symbolTable->getTamFunciones();
 
-    unsigned int alc = 0;
-    unsigned int tam = 0;
-    
-    RegisterAsigner* ra;
-    ra = new RegisterAsigner(20);
+	unsigned int alc = 0;
+	unsigned int tam = 0;
+	
+	RegisterAsigner* ra;
+	ra = new RegisterAsigner(20);
 
-    unsigned int actualScope = 0;
-    
-    for(vector<QuadContainer*>::iterator itq = _totalQuadList->begin() + 1; itq != _totalQuadList->end(); itq++)
-    { 
-        qc  = *itq;
-        q   = qc->_quad; 
-        
-        if(actualScope != qc->getNumberBlock())
-        {
-          map<string, string> msi = ra->getModVar();
-          storeAll(msi, alc, qAlc.front());
-          actualScope = qc->getNumberBlock();
-          ra = new RegisterAsigner(20);
-        }
+	unsigned int actualScope = 0;
+	
+	for(vector<QuadContainer*>::iterator itq = _totalQuadList->begin() + 1; itq != _totalQuadList->end(); itq++)
+	{ 
+		qc  = *itq;
+		q   = qc->_quad; 
+		
+		if(actualScope != qc->getNumberBlock())
+		{
+		  map<string, string> msi = ra->getModVar();
+		  storeAll(msi, alc, qAlc.front());
+		  actualScope = qc->getNumberBlock();
+		  ra = new RegisterAsigner(20);
+		}
 
-        std::string line;
-        if (q->isTag()) 
-        {
-            alc = qAlc.front(); qAlc.pop();
-            tam = qTam.front(); qTam.pop();
-            if(qAlc.empty()) qAlc.push(alc);
+		std::string line;
+		if (q->isTag()) 
+		{
+			alc = qAlc.front(); qAlc.pop();
+			tam = qTam.front(); qTam.pop();
+			if(qAlc.empty()) qAlc.push(alc);
 
-            //if (q->isMain()) 
-            _file << std::endl << q->toSpim() << std::endl << std::endl;
+			//if (q->isMain()) 
+			_file << std::endl << q->toSpim() << std::endl << std::endl;
 
-            _file << std::endl << "bloque" << qc->getNumberBlock() << ":" << std::endl << std::endl;
+			_file << std::endl << "bloque" << qc->getNumberBlock() << ":" << std::endl << std::endl;
 
-             // Imprime el Principio de la Funcion                                                            
-            _file << std::endl << q->toSpim2() << std::endl << std::endl; 
+			// Imprime el Prologo de la Funcion                                                            
+			if (!q->isMain()) {
+				_file << std::endl << q->Prolog() << std::endl << std::endl; 
+				_file << std::endl << "    subu $sp, $sp, " << tam << endl;
+			}
 
-            _file << std::endl << "    subu $sp $sp " << tam << endl;
-              
-        } 
-        else 
-        {
-
-            if (qc->isLeader()) 
-                _file << std::endl << "bloque" << qc->getNumberBlock() << ":" << std::endl << std::endl;
+			// Imprime el Epilogo de la Funcion                                                            
+			if  ((*(itq + 1))->_quad->isTag()) {
+			    _file << std::endl << "    add  $sp, $sp, " << tam << endl;
+				_file << std::endl << q->Epilogo() << std::endl << std::endl; 
+			}
 
 
-            if(q->useVariables())
-            {
-              arrPairs = ra->getReg(q);
-              //qc->print();
-              //ra->print();
-              //cout << endl;
-              if(ra->getSpillMode())
-              {
-                vector<pair<string, string>> v = ra->getVarToSpill();
-                //for(auto& pis: v)
-                  //cout << pis.first << ", " << pis.second << endl ;
-                
-                spillVariables(v, alc, qAlc.front());
-                arrPairs = ra->getReg(q);
-                ra->print();
-              }
+			  
+		} else {
 
-              // Guardamos los resultados en las variables necesarias
+			if (qc->isLeader()) 
+				_file << std::endl << "bloque" << qc->getNumberBlock() << ":" << std::endl << std::endl;
 
-              susVariables(arrPairs, q, _file, alc, qAlc.front());
-              if(qc->isJump())
-              {
-                map<string, string> msi = ra->getModVar();
-                storeAll(msi, alc, qAlc.front());
-                ra = new RegisterAsigner(20);
-              }
-            }
-            
-            line = q->toSpim();
-        
-            if (line != "") _file << "   " << line << std::endl; 
-        }
-    }
+
+			if(q->useVariables())
+			{
+			  arrPairs = ra->getReg(q);
+			  //qc->print();
+			  //ra->print();
+			  //cout << endl;
+			  if(ra->getSpillMode())
+			  {
+				vector<pair<string, string>> v = ra->getVarToSpill();
+				//for(auto& pis: v)
+				  //cout << pis.first << ", " << pis.second << endl ;
+				
+				spillVariables(v, alc, qAlc.front());
+				arrPairs = ra->getReg(q);
+				ra->print();
+			  }
+
+			  // Guardamos los resultados en las variables necesarias
+
+			  susVariables(arrPairs, q, _file, alc, qAlc.front());
+			  if(qc->isJump())
+			  {
+				map<string, string> msi = ra->getModVar();
+				storeAll(msi, alc, qAlc.front());
+				ra = new RegisterAsigner(20);
+			  }
+			}
+			
+			line = q->toSpim();
+		
+			if (line != "") _file << "   " << line << std::endl; 
+		}
+	}
 }
 
 void IntermediateGen::spillVariables(vector<pair<string, string>> arrPairs, unsigned int alcAct, unsigned int alcTop)
@@ -200,13 +207,13 @@ void IntermediateGen::spillVariables(vector<pair<string, string>> arrPairs, unsi
   Contenido* c = nullptr;
   for(auto& p: arrPairs)
   {
-    for(unsigned int i = alcAct; i <= alcAct; i++)
-    {
-      c = _symbolTable->find_scope(p.second, i);
-      if(c) break;
-    }
+	for(unsigned int i = alcAct; i <= alcAct; i++)
+	{
+	  c = _symbolTable->find_scope(p.second, i);
+	  if(c) break;
+	}
 
-    _file << "   sw " << p.first << " , " << c->getOffset() << "($sp)" << endl; 
+	_file << "   sw " << p.first << " , " << c->getOffset() << "($sp)" << endl; 
   }
 }
 
@@ -230,42 +237,42 @@ void IntermediateGen::susVariables(vector<pair<bool, string>> arrPairs, Quad* q,
 
   if(loadLeft)
   {
-    if(isLiteral(q->_leftOperand))
-    {
-      file << "   li " << regLeft << " " << q->_leftOperand << endl;
-    } else
-    {
-      for(unsigned int i = alcAct; i <= alcAct; i++)
-      {
-        c = _symbolTable->find_scope(q->_leftOperand, i);
-        if(c) break;
-      }
+	if(isLiteral(q->_leftOperand))
+	{
+	  file << "   li " << regLeft << " " << q->_leftOperand << endl;
+	} else
+	{
+	  for(unsigned int i = alcAct; i <= alcAct; i++)
+	  {
+		c = _symbolTable->find_scope(q->_leftOperand, i);
+		if(c) break;
+	  }
 
-      if(c->getTipo()->isArray())
-      {
-        _file << "   move "   << regLeft << " "             << "$sp"  << endl;
-        _file << "   addi "   << regLeft << " " << regLeft  << " "    << c->getOffset() << endl;
-      }
-      else
-        _file << "   lw "   << regLeft << ", " << c->getOffset() << "($sp)" << endl; 
-    }
+	  if(c->getTipo()->isArray())
+	  {
+		_file << "   move "   << regLeft << " "             << "$sp"  << endl;
+		_file << "   addi "   << regLeft << " " << regLeft  << " "    << c->getOffset() << endl;
+	  }
+	  else
+		_file << "   lw "   << regLeft << ", " << c->getOffset() << "($sp)" << endl; 
+	}
   }
 
   if(loadRight)
   {
-    if(isLiteral(q->_rightOperand))
-    {
-      file << "   li " << regRight << " " << q->_rightOperand << endl;
-    } else
-    {
-      for(unsigned int i = alcAct; i <= alcAct; i++)
-      {
-        c = _symbolTable->find_scope(q->_rightOperand, i);
-        if(c) break;
-      }
+	if(isLiteral(q->_rightOperand))
+	{
+	  file << "   li " << regRight << " " << q->_rightOperand << endl;
+	} else
+	{
+	  for(unsigned int i = alcAct; i <= alcAct; i++)
+	  {
+		c = _symbolTable->find_scope(q->_rightOperand, i);
+		if(c) break;
+	  }
 
-      _file << "   lw " << regRight << ", " << c->getOffset() << "($sp)" << endl; 
-    }
+	  _file << "   lw " << regRight << ", " << c->getOffset() << "($sp)" << endl; 
+	}
   }
   q->susVarReg(regLeft, regRight, regRes);
 }
@@ -285,13 +292,13 @@ void IntermediateGen::gen(std::string op, std::string arg1, std::string arg2, st
 {
   std::string r = write(op, arg1, arg2, des);
   _file   << r 
-          << std::string(  40 
-                        - r.size()
-                        , ' '
-                        )
-            << com
-            << std::endl
-            ;
+		  << std::string(  40 
+						- r.size()
+						, ' '
+						)
+			<< com
+			<< std::endl
+			;
 }
 
 void IntermediateGen::gen(std::string op, std::string arg1, std::string arg2, std::string des)
@@ -304,11 +311,11 @@ std::string IntermediateGen::write(std::string op, std::string arg1, std::string
   std::string r = std::to_string(getQuadNumber());
   
   return r 
-        +  ":  " 
-        +  op  + " " 
-        + arg1 + " " 
-        + arg2 + " " 
-        + des;
+		+  ":  " 
+		+  op  + " " 
+		+ arg1 + " " 
+		+ arg2 + " " 
+		+ des;
 }
 
 void IntermediateGen::writeOp(std::string op, std::string des, std::string arg1, std::string arg2)

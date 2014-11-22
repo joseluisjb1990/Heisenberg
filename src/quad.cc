@@ -145,7 +145,7 @@ RemQuad::RemQuad(std::string leftOperand, std::string rightOperand, std::string 
 
 std::string RemQuad::toSpim() {
   if (_leftType->isInt()) 
-      return "div "+ _leftOperand + " " +  _rightOperand + "\n   mfhi " + _destiny + "\n" ;
+      return "div "+ _leftOperand + " " +  _rightOperand + "\n    mfhi " + _destiny + "\n" ;
      
   return "";
 };
@@ -169,7 +169,6 @@ std::string UmQuad::toSpim() {
 
     return "sub " +  _destiny + ", $0 " + _leftOperand;
 
-    return "";
 };
 
 LessThanQuad::LessThanQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
@@ -255,9 +254,9 @@ DespQuad::DespQuad(std::string leftOperand, std::string rightOperand, std::strin
 
 std::string DespQuad::toSpim()
 {
-  return   "add "      + _leftOperand   + " "   + _leftOperand  + " "           + _destiny 
+  return   "add "      + _leftOperand   + ", "   + _leftOperand  + ", "           + _destiny 
        +   "\n   sw "  + _rightOperand  + ", "  + "("           + _leftOperand  + ")"
-       +   "\n   sub " + _leftOperand   + " "   + _leftOperand  + " "           + _destiny
+       +   "\n   sub " + _leftOperand   + ", "   + _leftOperand  + ", "           + _destiny
        ;
 }
 
@@ -267,9 +266,9 @@ DespEqualQuad::DespEqualQuad(std::string leftOperand, std::string rightOperand, 
 
 std::string DespEqualQuad::toSpim()
 {
-  return   "add "      + _leftOperand   + " "   + _leftOperand  + " "           + _destiny 
+  return   "add "      + _leftOperand   + ", "   + _leftOperand  + ", "           + _destiny 
        +   "\n   lw "  + _rightOperand  + ", "  + "("           + _leftOperand  + ")"
-       +   "\n   sub " + _leftOperand   + " "   + _leftOperand  + " "           + _destiny
+       +   "\n   sub " + _leftOperand   + ", "   + _leftOperand  + ", "           + _destiny
        ;
 }
 
@@ -305,6 +304,10 @@ ReturnQuad::ReturnQuad(std::string destiny)
   : Quad("return", destiny, "", "")
 {}
 
+std::string ReturnQuad::toSpim() {
+    return "sw 4($fp), " + _leftOperand;
+};
+
 FlagQuad::FlagQuad(std::string destiny)
   : Quad(destiny, ":", "", "")
 {}
@@ -314,14 +317,24 @@ std::string FlagQuad::toSpim() {
     if (_operator == "oso") return "main:"; else return _operator + ":";
 };
 
-
-std::string FlagQuad::toSpim2() {
+std::string FlagQuad::Prolog() {
      
 	std::string res = "";
 
 	res+= "    sw 0($sp), $ra"  "\n    sub $sp, $sp, 4 \n";
 	res+= "    sw 0($sp), $fp"  "\n    sub $sp, $sp, 4 \n";
 	res+= "    add $fp, $sp, 8";
+	return res;
+
+};
+
+std::string FlagQuad::Epilogo() {
+     
+	std::string res = "";
+
+	res+= "    add $sp, $sp, 4"  "\n    lw $fp, 0($sp) \n";
+	res+= "    add $sp, $sp, 4"  "\n    lw $ra, 0($sp) \n";
+	res+= "    jr $ra";
 	return res;
 
 };
