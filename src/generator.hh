@@ -40,6 +40,7 @@ public:
   void spillVariables(vector<pair<string, string>> arrPairs, unsigned int alcAct, unsigned int alcTop);
   void susVariables(vector<pair<bool, string>> arrPairs, Quad* q, std::ofstream& file, unsigned int alcAct, unsigned int alcTop);
   void storeAll(map<string, string> msi, unsigned int alcAct, unsigned int alcTop);
+  void loadVariable(string var, string reg, unsigned int alcAct, unsigned int aclTop);
 
 private:
   std::vector<QuadContainer*>*  _totalQuadList;
@@ -49,6 +50,9 @@ private:
   unsigned int        _quadNumber;
   std::string write(std::string op, std::string arg1, std::string arg2, std::string des);
   void writeOp(std::string op, std::string des, std::string arg1, std::string arg2);
+  unsigned int _offsetTemp = 0;
+  map<string, unsigned int> _mapOffTemp;
+  unsigned int _totalTemp = 0;
 };
 
 #endif

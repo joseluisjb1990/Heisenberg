@@ -153,6 +153,12 @@ unsigned int TablaSimbolos::enter_function_scope()
   return _alcance;
 }
 
+void TablaSimbolos::end_parameters()
+{
+  _offsets.pop_back();
+  _offsets.push_back(0);
+}
+
 typedef std::pair<std::string, Contenido*> pair_str_cont;
 typedef std::vector<pair_str_cont> vector_str_cont;
 
@@ -251,6 +257,19 @@ unsigned int TablaSimbolos::add_symbol( std::string nombre
                                       )
 {
   Contenido *cont = new Contenido( tipo, categoria, _pila.back(), linea, columna, mut );
+  insert_symbol(nombre, cont);
+  return _alcance;
+}
+
+unsigned int TablaSimbolos::add_parameter( std::string nombre
+                                           , Type* tipo
+                                           , Categorias categoria
+                                           , unsigned int linea
+                                           , unsigned int columna
+                                           , bool mut
+                                           )
+{
+  Contenido *cont = new Contenido( tipo, categoria, _pila.back(), linea, columna, mut, true );
   insert_symbol(nombre, cont);
   return _alcance;
 }

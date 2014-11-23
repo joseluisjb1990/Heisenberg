@@ -82,6 +82,14 @@ class Contenido
               , bool          mut
               );
 
+    Contenido ( Type*         tipo
+              , Categorias    categoria
+              , unsigned int  alcance
+              , unsigned int  linea
+              , unsigned int  columna
+              , bool          mut
+              , bool          param
+              );
     /**
      *  Retorna un string representando una instancia de la calse Contenido.
      *
@@ -120,8 +128,9 @@ class Contenido
     unsigned int getLineaDef()      { return _lineaDef;   };
     unsigned int getColumnaDef()    { return _columnaDef; };
     Categorias getCategoria()       { return _categoria;  };
-    unsigned int getOffset()            { return _offset;       };
+    unsigned int getOffset()        { return _offset;     };
     void addOffset(unsigned int offset) { _offset = offset;     };
+    bool isParameter()              { return _parametro;        };
 
   private:
 
@@ -135,6 +144,7 @@ class Contenido
     unsigned int  _offset;
     bool          _mutable;
     bool          _definido;
+    bool          _parametro = false;
 
 };
 

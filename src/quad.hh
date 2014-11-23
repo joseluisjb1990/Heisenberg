@@ -30,8 +30,6 @@ class Quad
                         );
     virtual void print();
     void setDestiny(std::string destiny)    { _destiny = destiny;  }
-    virtual bool isJump()                   { return false;        }
-    virtual bool isTag()                    { return false;        }
     virtual bool isMain()                   { return false;        }
     virtual int  getAddress()               { return 0;            }
     virtual set<string> getUsedVariables()  {  
@@ -47,8 +45,6 @@ class Quad
     virtual string getDefinedVariable()     { if(useVariables()) return _destiny; else return *(new std::string()); }
     virtual bool useVariables()             { return false; }
     virtual std::string toSpim()            { return "";    }
-    virtual std::string Prolog()            { return "";    }
-    virtual std::string Epilogo()           { return "";    }
     void susVarReg(string regLeft, string regRight, string regDes)  {  
                                                                       if(!regLeft .empty()) _leftOperand  = regLeft; 
                                                                       if(!regRight.empty()) _rightOperand = regRight; 
@@ -58,6 +54,12 @@ class Quad
     virtual bool isAssign()     { return false;   }
     virtual bool isDesp()       { return false;   }
     virtual bool isDespEqual()  { return false;   }
+    virtual bool isParam()      { return false;   }
+    virtual bool isReturn()     { return false;   }
+    virtual bool isCall()       { return false;   }
+    virtual bool isJump()       { return false;   }
+    virtual bool isTag()        { return false;   }
+    virtual bool isEnd()        { return false;   }
     bool isLiveVar(string s) { return  _liveVar.find(s) != _liveVar.end();  }
     static map<string, Type*> tablaTemporales;
     std::string _operator     = *(new std::string());
@@ -249,7 +251,8 @@ class ParamQuad : public Quad
 {
   public:
     ParamQuad(std::string destiny);
-    bool useVariables()             { return true; }
+    bool useVariables()             { return true;     }
+    bool isParam()                  { return true;    }
     std::string toSpim();
 };
 
@@ -259,13 +262,15 @@ class CallQuad : public Quad
     CallQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
     CallQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny);
     std::string toSpim();
+    bool isCall() { return true;  }
 };
 
 class ReturnQuad : public Quad
 {
   public:
     ReturnQuad(std::string destiny);
-    bool useVariables()             { return true; }
+    bool useVariables()               { return true;    }
+    bool isReturn()                   { return true;    }
     std::string toSpim();
 };
 
@@ -276,8 +281,6 @@ class FlagQuad : public Quad
     bool isTag()  { return true;  }
     bool isMain() { if (_operator == "oso") return true; else return false; }
     std::string toSpim();
-    std::string Prolog();
-    std::string Epilogo();
 };
 
 class RefQuad : public Quad
@@ -366,7 +369,8 @@ class EndQuad : public Quad
 {
   public:
     EndQuad();
-    std::string toSpim();
+    EndQuad(string destiny);
+    bool isEnd()        { return true;   }
 };
 
 class BeginQuad : public Quad

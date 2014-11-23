@@ -189,6 +189,14 @@ vector<pair<bool,string>> RegisterAsigner::getReg(Quad* quad)
       vecPairs = insertAll(vs);
       _variableMod.push_back(rightOp);
     }
+  } 
+  else if(quad->isParam() or quad->isReturn())
+  {
+    vector<string> vs;
+    vs.push_back(leftOp);
+    vecPairs = insertAll(vs);
+    vecPairs.push_back(pair<bool, string>(false, ""));
+    vecPairs.push_back(pair<bool, string>(false, ""));
   }
   else
   {

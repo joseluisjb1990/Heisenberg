@@ -61,6 +61,26 @@ Contenido::Contenido( Type* tipo
   , _definido   ( false     )
   {}
 
+Contenido::Contenido( Type* tipo
+                    , Categorias categoria
+                    , unsigned int alcance
+                    , unsigned int linea
+                    , unsigned int columna
+                    , bool mut
+                    , bool param
+                    )
+  : _tipo       ( tipo      )
+  , _categoria  ( categoria )
+  , _alcance    ( alcance   )
+  , _lineaDec   ( linea     )
+  , _columnaDec ( columna   )
+  , _lineaDef   ( 0         )
+  , _columnaDef ( 0         )
+  , _mutable    ( mut       )
+  , _definido   ( false     )
+  , _parametro  ( true      )
+  {}
+
 void Contenido::addType(Type* tipo) { _tipo = tipo; }
 
 void Contenido::define( unsigned int linea
@@ -155,6 +175,7 @@ std::string Contenido::to_string()
   std::string mutab       = std::to_string(_mutable);
   std::string def         = std::to_string(_definido);
   std::string offset      = std::to_string(_offset);
+  std::string parametro   = std::to_string(_parametro);
   std::string cat         = return_category(_categoria);
 
   if(_definido)
@@ -171,7 +192,8 @@ std::string Contenido::to_string()
           + def         + std::string(SMALL_WIDTH / 2   - def.length()        , ' ') + SEPARADOR
           + cat         + std::string(SMALL_WIDTH   - cat.length()            , ' ') + SEPARADOR
           + offset      + std::string(SMALL_WIDTH / 2   - offset.length()     , ' ') + SEPARADOR
-          +               std::string(BIG_WIDTH / 2                           , ' ')
+          +               std::string(BIG_WIDTH / 2                           , ' ') + SEPARADOR
+          + parametro   + std::string(SMALL_WIDTH / 2   - parametro.length(), ' ')
           ;
   }
   else
@@ -187,7 +209,8 @@ std::string Contenido::to_string()
           + def         + std::string(SMALL_WIDTH / 2   - def.length()        , ' ') + SEPARADOR
           + cat         + std::string(SMALL_WIDTH   - cat.length()            , ' ') + SEPARADOR
           + offset      + std::string(SMALL_WIDTH / 2   - offset.length()     , ' ') + SEPARADOR
-          +               std::string(BIG_WIDTH / 2                           , ' ')
+          +               std::string(BIG_WIDTH / 2                           , ' ') + SEPARADOR  
+          + parametro   + std::string(SMALL_WIDTH / 2   - parametro.length(), ' ')
           ;
 
   }

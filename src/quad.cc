@@ -57,12 +57,12 @@ SumQuad::SumQuad(std::string leftOperand, Type* leftType, std::string rightOpera
 std::string SumQuad::toSpim() {
 
     //Quad::tablaTemporales->(destiny) = 
-    if (_leftType->isInt()) {  
+    //if (_leftType->isInt()) {  
         return "add "+  _destiny + ", " + _leftOperand + ", " +  _rightOperand;
   
-    } else if (_leftType->isFloat()) {
+    //} else if (_leftType->isFloat()) {
         return "add.s "+  _destiny + ", " + _leftOperand + ", " +  _rightOperand;
-    };
+    //};
     return "";
 };
 
@@ -285,7 +285,7 @@ ParamQuad::ParamQuad(std::string destiny)
 {}
 
 std::string ParamQuad::toSpim() {
-    return "sw 0($sp), " + _leftOperand + "\n    sub $sp, $sp, 4";
+    return "\n   # Codigo emitido por el param\n   sub $sp $sp 4\n   sw " + _leftOperand + " 0($sp) ";
 };
 
 CallQuad::CallQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
@@ -297,7 +297,7 @@ CallQuad::CallQuad(std::string leftOperand, Type* leftType, std::string rightOpe
 {}
 
 std::string CallQuad::toSpim() {
-    return "sw 0($sp), " + _destiny + "\n    sub $sp, $sp, 4 \n    jal " + _leftOperand;
+    return "sub $sp, $sp, 4\n   jal " + _leftOperand + "\n   lw $10 0($sp)\n   add $sp $sp 4\n   add $sp $sp " + to_string(4 * atoi(_rightOperand.c_str())) + "\n";
 };
 
 ReturnQuad::ReturnQuad(std::string destiny)
@@ -305,7 +305,7 @@ ReturnQuad::ReturnQuad(std::string destiny)
 {}
 
 std::string ReturnQuad::toSpim() {
-    return "sw " + _leftOperand + ", 4($fp) ";
+    return "sw " + _leftOperand + " 4($fp)\n   b _epilog" + _destiny + "\n";
 };
 
 FlagQuad::FlagQuad(std::string destiny)
@@ -315,28 +315,6 @@ FlagQuad::FlagQuad(std::string destiny)
 std::string FlagQuad::toSpim() {
  
     if (_operator == "oso") return "main:"; else return _operator + ":";
-};
-
-std::string FlagQuad::Prolog() {
-     
-	std::string res = "";
-
-	res+= "    sw 0($sp), $ra"  "\n    sub $sp, $sp, 4 \n";
-	res+= "    sw 0($sp), $fp"  "\n    sub $sp, $sp, 4 \n";
-	res+= "    add $fp, $sp, 8";
-	return res;
-
-};
-
-std::string FlagQuad::Epilogo() {
-     
-	std::string res = "";
-
-	res+= "    add $sp, $sp, 4"  "\n    lw $fp, 0($sp) \n";
-	res+= "    add $sp, $sp, 4"  "\n    lw $ra, 0($sp) \n";
-	res+= "    jr $ra";
-	return res;
-
 };
 
 RefQuad::RefQuad(std::string leftOperand, std::string destiny)
@@ -415,9 +393,9 @@ EndQuad::EndQuad()
   : Quad("end", "", "", "")
 {}
 
-std::string EndQuad::toSpim() {
-	return "li $v0, 10 \n    syscall";
-}
+EndQuad::EndQuad(string destiny)
+  : Quad("end", "", "", destiny)
+{}
 
 BeginQuad::BeginQuad()
   : Quad("begin", "", "", "")

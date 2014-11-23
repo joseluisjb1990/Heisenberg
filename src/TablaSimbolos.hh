@@ -60,6 +60,7 @@ public:
      */
 
     TablaSimbolos();
+    void end_parameters();
 
     /**
      *  Agrega un símbolo nuevo a la tabla de símbolos
@@ -81,6 +82,13 @@ public:
                             , bool mut
                             );
 
+    unsigned int add_parameter(  string nombre
+                                , Type* tipo
+                                , Categorias categoria
+                                , unsigned int linea
+                                , unsigned int columna
+                                , bool mut
+                                );
     /**
      *  Agrega un símbolo nuevo a la tabla de símbolos.
      *  Inluyendo la línea y columna de definición.

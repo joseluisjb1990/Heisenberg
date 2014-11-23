@@ -267,9 +267,11 @@ void DefFunction::toIntermediate(IntermediateGen *intGen)
 
   q = new FlagQuad(_id);
   intGen->gen(q);
-  //intGen->gen(_id);  
 
   _statements->toIntermediate(intGen);
+
+  q = new EndQuad(_id);
+  intGen->gen(q);
 }
 
 #endif

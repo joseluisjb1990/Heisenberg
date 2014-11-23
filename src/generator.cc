@@ -80,26 +80,7 @@ void IntermediateGen::close()
 
 bool isTemp(string op)
 {
-  return boost::regex_match(op.c_str(), boost::regex("_t(.*)"));
-}
-
-void IntermediateGen::storeAll(map<string, string> msi, unsigned int alcAct, unsigned int alcTop)
-{
-  for(auto& t: msi)
-  {
-	Contenido* c = nullptr;
-	cout << endl << "Debo hacer store de la variable " << t.first << " que esta en el registro " << t.second << " " << alcAct << " " << alcTop << endl;
-	for(unsigned int i = alcAct; i <= alcTop; i++)
-	{
-	  if(!isTemp(t.first))
-	  {
-		c = _symbolTable->find_scope(t.first, i);
-		if(c) break;
-	  }
-	}
-
-	if(c) _file << "   sw " << t.second << " , " << c->getOffset() << "($sp)" << endl; 
-  }
+  return boost::regex_match(op.c_str(), boost::regex("_(.*)"));
 }
 
 void IntermediateGen::printSpim(TablaSimbolos* tSimbolos)
@@ -108,7 +89,7 @@ void IntermediateGen::printSpim(TablaSimbolos* tSimbolos)
 	Quad* q;
 	vector<pair<bool, string>> arrPairs;
 	
-	_file << "        .text"  << std::endl; 
+	_file << "      .text\n      .globl main\n      j main "  << std::endl; 
 
 	queue<unsigned int> qAlc = _symbolTable->getAlcFunciones();
 	queue<unsigned int> qTam = _symbolTable->getTamFunciones();
@@ -134,44 +115,50 @@ void IntermediateGen::printSpim(TablaSimbolos* tSimbolos)
 		  ra = new RegisterAsigner(20);
 		}
 
+		qc->print();
+		ra->print();
+		cout << endl;
 		std::string line;
+
 		if (q->isTag()) 
 		{
 			alc = qAlc.front(); qAlc.pop();
 			tam = qTam.front(); qTam.pop();
 			if(qAlc.empty()) qAlc.push(alc);
 
-			//if (q->isMain()) 
 			_file << std::endl << q->toSpim() << std::endl << std::endl;
 
 			_file << std::endl << "bloque" << qc->getNumberBlock() << ":" << std::endl << std::endl;
 
-			// Imprime el Prologo de la Funcion                                                            
-			if (!q->isMain()) {
-				_file << std::endl << q->Prolog() << std::endl << std::endl; 
-				_file << std::endl << "    subu $sp, $sp, " << tam << endl;
-			}
-
-			// Imprime el Epilogo de la Funcion                                                            
-			if  ((*(itq + 1))->_quad->isTag()) {
-			    _file << std::endl << "    add  $sp, $sp, " << tam << endl;
-				_file << std::endl << q->Epilogo() << std::endl << std::endl; 
-			}
-
+	    _file <<  "   sub $sp, $sp, 4\n   sw $ra 0($sp)\n";
+	    _file <<  "   sub $sp, $sp, 4\n   sw $fp 0($sp)\n";
+			_file <<  "   add $fp $sp "   << "4"  <<  endl;
+			_file <<  "   sub $sp $sp "   << tam  <<  endl;
 
 			  
-		} else {
+		} else if (q->isEnd())
+    {
+      if(q->_destiny.empty())
+        _file << "li $v0, 10 \n   syscall";
+      else if (q->_destiny != "oso")
+      {
+        _file << "_epilog" << q->_destiny << ":\n";
+			  _file << "   add $sp $sp "   << tam  <<  endl;
+	      _file << "   lw $fp 0($sp)\n   add $sp, $sp, 4\n";
+	      _file << "   lw $ra 0($sp)\n   add $sp, $sp, 4\n";
+	      _file << "   jr $ra";
+      }
+    }
+    else
+    {
 
 			if (qc->isLeader()) 
 				_file << std::endl << "bloque" << qc->getNumberBlock() << ":" << std::endl << std::endl;
 
-
-			if(q->useVariables())
+      if(q->useVariables())
 			{
+
 			  arrPairs = ra->getReg(q);
-			  //qc->print();
-			  //ra->print();
-			  //cout << endl;
 			  if(ra->getSpillMode())
 			  {
 				vector<pair<string, string>> v = ra->getVarToSpill();
@@ -186,17 +173,30 @@ void IntermediateGen::printSpim(TablaSimbolos* tSimbolos)
 			  // Guardamos los resultados en las variables necesarias
 
 			  susVariables(arrPairs, q, _file, alc, qAlc.front());
-			  if(qc->isJump())
-			  {
-				map<string, string> msi = ra->getModVar();
-				storeAll(msi, alc, qAlc.front());
-				ra = new RegisterAsigner(20);
-			  }
 			}
 			
+			if(qc->isJump() or qc->_quad->isCall())
+			{
+			  map<string, string> msi = ra->getModVar();
+			  storeAll(msi, alc, qAlc.front());
+			  ra = new RegisterAsigner(20);
+			}
+
 			line = q->toSpim();
 		
 			if (line != "") _file << "   " << line << std::endl; 
+		  
+      if (q->isCall())
+      {
+        if(_mapOffTemp.find(q->_destiny) == _mapOffTemp.end())
+        {
+          _mapOffTemp[q->_destiny] = _offsetTemp + tam;  
+          _file << "   sub $sp $sp 4\n"; 
+          _file << "   sw $10 0($sp)" << endl;
+          _offsetTemp += 4;
+          _totalTemp++;
+        }
+      }
 		}
 	}
 }
@@ -212,7 +212,35 @@ void IntermediateGen::spillVariables(vector<pair<string, string>> arrPairs, unsi
 	  if(c) break;
 	}
 
-	_file << "   sw " << p.first << " , " << c->getOffset() << "($sp)" << endl; 
+	_file << "   sw " << p.first << " , " << c->getOffset() << "($fp)" << endl; 
+  }
+}
+
+void IntermediateGen::storeAll(map<string, string> msi, unsigned int alcAct, unsigned int alcTop)
+{
+  for(auto& t: msi)
+  {
+	  Contenido* c = nullptr;
+	  for(unsigned int i = alcAct; i <= alcTop; i++)
+	  {
+	    if(!isTemp(t.first))
+	    {
+	  	  c = _symbolTable->find_scope(t.first, i);
+	  	  if(c) break;
+	    }
+      else return;
+	  }
+
+	  if(c) 
+    {
+      if(!c->getTipo()->isArray())
+      {
+        if(!c->isParameter())
+          _file << "   sw " << t.second << " -" << c->getOffset() + 8 << "($fp)" << endl; 
+        else
+          _file << "   sw " << t.second << " "  << c->getOffset() + 4 << "($fp)" << endl; 
+      }
+    }
   }
 }
 
@@ -221,58 +249,65 @@ bool isLiteral(string op)
   return boost::regex_match(op.c_str(), boost::regex("([0-9])+"));
 }
 
+void IntermediateGen::loadVariable(string var, string reg, unsigned int alcAct, unsigned int alcTop)
+{
+  Contenido* c;
+  if(isLiteral(var))
+  {
+    _file << "   li " << reg << " " << var << endl;
+  }
+  else if (isTemp(var))
+  {
+  	_file << "   lw "   << reg << " -" << 8 + _mapOffTemp[var] << "($fp)" << endl; 
+    if(--_totalTemp == 0)
+    {
+      _file << "    add $sp $sp " << _offsetTemp << endl;
+      _offsetTemp = 0;
+      _mapOffTemp.clear();
+    }
+  }
+  else
+  {
+    for(unsigned int i = alcAct; i <= alcTop; i++)
+    {
+  	  c = _symbolTable->find_scope(var, i);
+  	  if(c) break;
+    }
+
+    if(!c->isParameter())
+    {
+      if(c->getTipo()->isArray())
+      {
+  	    _file << "   move "   << reg << " " << "$fp"  << endl;
+  	    _file << "   subi "   << reg << " " << reg    << " "  << c->getOffset() + 8 << endl;
+      }
+      else
+  	    _file << "   lw "   << reg << " -" << c->getOffset() + 8 << "($fp)" << endl; 
+    }
+    else
+    {
+  	  _file << "   lw "   << reg << " " << c->getOffset() + 8 << "($fp)" << endl; 
+    }
+  }
+}
+
 void IntermediateGen::susVariables(vector<pair<bool, string>> arrPairs, Quad* q, std::ofstream& file, unsigned int alcAct, unsigned int alcTop)
 {
   string    regLeft, regRight, regRes;
   bool      loadLeft, loadRight, loadRes;
 
-  Contenido* c = nullptr;
   loadLeft    = arrPairs.at(0).first;
   regLeft     = arrPairs.at(0).second;
   loadRight   = arrPairs.at(1).first;
   regRight    = arrPairs.at(1).second;
-  loadRes     = arrPairs.at(2).first;
   regRes      = arrPairs.at(2).second;
 
   if(loadLeft)
-  {
-	if(isLiteral(q->_leftOperand))
-	{
-	  file << "   li " << regLeft << " " << q->_leftOperand << endl;
-	} else
-	{
-	  for(unsigned int i = alcAct; i <= alcAct; i++)
-	  {
-		c = _symbolTable->find_scope(q->_leftOperand, i);
-		if(c) break;
-	  }
-
-	  if(c->getTipo()->isArray())
-	  {
-		_file << "   move "   << regLeft << " "             << "$sp"  << endl;
-		_file << "   addi "   << regLeft << " " << regLeft  << " "    << c->getOffset() << endl;
-	  }
-	  else
-		_file << "   lw "   << regLeft << ", " << c->getOffset() << "($sp)" << endl; 
-	}
-  }
+    loadVariable(q->_leftOperand, regLeft, alcAct, alcTop);
 
   if(loadRight)
-  {
-	if(isLiteral(q->_rightOperand))
-	{
-	  file << "   li " << regRight << " " << q->_rightOperand << endl;
-	} else
-	{
-	  for(unsigned int i = alcAct; i <= alcAct; i++)
-	  {
-		c = _symbolTable->find_scope(q->_rightOperand, i);
-		if(c) break;
-	  }
+    loadVariable(q->_rightOperand, regRight, alcAct, alcTop);
 
-	  _file << "   lw " << regRight << ", " << c->getOffset() << "($sp)" << endl; 
-	}
-  }
   q->susVarReg(regLeft, regRight, regRes);
 }
 

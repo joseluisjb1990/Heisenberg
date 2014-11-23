@@ -50,6 +50,17 @@ FlowGraph::FlowGraph(std::vector<QuadContainer*>* quadList)
     if(qc->isJump()) { qc->replaceAddress(quadList->at(qc->getAddress())->getNumberBlock()); } 
   }
 
+  string actualFun;
+  for(std::vector<QuadContainer*>::iterator it = quadList->begin(); it != quadList->end(); it++)
+  {
+    qc = (*it);
+    if(qc->_quad->isTag()) 
+      actualFun = qc->_quad->_operator;
+
+    if(qc->_quad->isReturn())
+      qc->_quad->_destiny = actualFun;
+  }
+
   for(std::vector<Block*>::iterator it = _blockList->begin(); it != _blockList->end(); it++)
     (*it)->setLiveVar(); 
 
