@@ -28,6 +28,11 @@ class Quad
                         , std::string destiny
                         , Type* destinyType
                         );
+    Quad(std::string op , std::string leftOperand
+                        , std::string rightOperand
+                        , std::string destiny
+                        , Type* destinyType
+                        );
     virtual void print();
     void setDestiny(std::string destiny)    { _destiny = destiny;  }
     virtual bool isMain()                   { return false;        }
@@ -261,6 +266,7 @@ class CallQuad : public Quad
   public:
     CallQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
     CallQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny);
+    CallQuad(std::string leftOperand, std::string rightOperand, std::string destiny, Type* returnType);
     std::string toSpim();
     bool isCall() { return true;  }
 };

@@ -28,6 +28,14 @@ Quad::Quad( std::string op, std::string leftOperand, Type* leftType, std::string
   , _destinyType  ( destinyType   )
 {}
 
+Quad::Quad( std::string op, std::string leftOperand, std::string rightOperand, std::string destiny, Type* destinyType)
+  : _operator     ( op            )
+  , _leftOperand  ( leftOperand   )
+  , _rightOperand ( rightOperand  )
+  , _destiny      ( destiny       )
+  , _destinyType  ( destinyType   )
+{}
+
 JumpQuad::JumpQuad(std::string op, std::string leftOperand, std::string rightOperand, std::string destiny)
  : Quad(op, leftOperand, rightOperand, destiny)
 {}
@@ -296,7 +304,22 @@ CallQuad::CallQuad(std::string leftOperand, Type* leftType, std::string rightOpe
   : Quad("call", leftOperand, leftType, rightOperand, rightType, destiny)
 {}
 
+CallQuad::CallQuad(std::string leftOperand, std::string rightOperand, std::string destiny, Type* returnType)
+  : Quad("call", leftOperand, rightOperand, destiny, returnType)
+{}
+
 std::string CallQuad::toSpim() {
+    if(_leftOperand == "escribir")
+    {
+      int flag = 0;
+      if(_destinyType->isInt())     flag = 1;
+      else
+      if(_destinyType->isFloat())   flag = 2;
+      else
+      if(_destinyType->isString())  flag = 3;
+
+      return "li $v0 " + to_string(flag) + "\n   lw $a0 ($sp)\n" + "   syscall\n   add $sp $sp 4\n"; 
+    }
     return "sub $sp, $sp, 4\n   jal " + _leftOperand + "\n   lw $10 0($sp)\n   add $sp $sp 4\n   add $sp $sp " + to_string(4 * atoi(_rightOperand.c_str())) + "\n";
 };
 

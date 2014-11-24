@@ -279,7 +279,7 @@ void IntermediateGen::loadVariable(string var, string reg, unsigned int alcAct, 
       if(c->getTipo()->isArray())
       {
   	    _file << "   move "   << reg << " " << "$fp"  << endl;
-  	    _file << "   subi "   << reg << " " << reg    << " "  << c->getOffset() + 8 << endl;
+  	    _file << "   sub "    << reg << " " << reg    << " "  << c->getOffset() + 8 << endl;
       }
       else
   	    _file << "   lw "   << reg << " -" << c->getOffset() + 8 << "($fp)" << endl; 
