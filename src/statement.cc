@@ -559,23 +559,19 @@ void ComplexFor::toIntermediate(IntermediateGen *intGen)
 
   q = new AssignQuad(_begin->getTemp(),_id);
   intGen->gen(q);
-  //intGen->gen(":=", _begin->getTemp(), " ",  _id, "   // Variable de Iteracion ");
 
   unsigned int pos = intGen->getQuad();
 
   q = new GreaterThanQuad(_id, _end->getTemp());
   _nextInst = intGen->gen(q);
-  //_nextInst = intGen->genEmpty("if " + _id + " > " + _end->getTemp() + " goto");
 
   _body->toIntermediate(intGen);
 
   q = new SumQuad( _id, PolarType::getInstance(), _step->getTemp(), PolarType::getInstance(), _id, PolarType::getInstance()); 
   intGen->gen(q);     
-  //intGen->gen("+", _id, _step->getTemp(), _id, "   // Incremento del Iterador");
 
   q = new GotoQuad(std::to_string(pos));
   intGen->gen(q);
-  //intGen->gen("goto", " ", " ", std::to_string(pos), "   // Fin de la Iteracion");
 }
 
 void ComplexFor::nextInst(int nextInst, IntermediateGen *intGen)
@@ -645,23 +641,19 @@ void SimpleFor::toIntermediate(IntermediateGen *intGen)
 
   q = new AssignQuad(_begin->getTemp(),_id);
   intGen->gen(q);
-  //intGen->gen(":=", _begin->getTemp(), " ",  _id, "   // Variable de Iteracion ");
 
   unsigned int pos = intGen->getQuad();
   
   q = new GreaterThanQuad(_id, _end->getTemp());
   _nextInst = intGen->gen(q);
-  //_nextInst = intGen->genEmpty("if " + _id + " > " + _end->getTemp() + " goto");
 
   _body->toIntermediate(intGen);
   
   q = new SumQuad( _id, PolarType::getInstance(), "1", PolarType::getInstance(), _id, PolarType::getInstance()); 
   intGen->gen(q);
-  //intGen->gen("+", _id, "1", _id, "   // Incremento del Iterador");
 
   q = new GotoQuad(std::to_string(pos));
   intGen->gen(q);
-  //intGen->gen("goto", " ", " ", std::to_string(pos), "   // Fin de la Iteracion");
 
 }
 
@@ -721,31 +713,25 @@ void IdFor::toIntermediate(IntermediateGen *intGen)
 
   q = new AssignQuad("0",temp);
   intGen->gen(q);
-  //intGen->gen(":=", "0", " ",  temp, "   // Variable de Iteracion ");
   
   unsigned int pos = intGen->getQuad();
 
   q = new EqualQuad(temp, std::to_string(t->getLongitud() -1));
   _nextInst = intGen->gen(q);
-  //_nextInst = intGen->genEmpty("if " + temp + " = " + std::to_string(t->getLongitud() -1) + " goto");
 
   q = new MulQuad(tc,PolarType::getInstance(), temp, PolarType::getInstance(), temp2, PolarType::getInstance()); 
   intGen->gen(q);
-  //intGen->gen("*", tc, temp, temp2, "   // Desplazamiento Arreglo");  
 
-  q = new DespQuad( _iterVar,temp2, _id); 
+  q = new DespEqualQuad(_iterVar, _id, temp2); 
   intGen->gen(q);
-  //intGen->gen("[]", _iterVar, temp2, _id, "   // Acceso al Arreglo, linea ");
 
   _body->toIntermediate(intGen);
 
   q = new SumQuad(temp, PolarType::getInstance(), "1", PolarType::getInstance(), temp, PolarType::getInstance()); 
   intGen->gen(q);
-  //intGen->gen("+",temp,"1",temp, "   // Incremento del Iterador");
 
   q = new GotoQuad(std::to_string(pos));
   intGen->gen(q);
-  //intGen->gen("goto", " ", " ", std::to_string(pos), "   // Fin de la Iteracion");
 
 }
 
@@ -851,7 +837,6 @@ void Increase::toIntermediate(IntermediateGen *intGen)
 
   q = new SumQuad( _id, PolarType::getInstance(), "1", PolarType::getInstance(), _id, PolarType::getInstance()); 
   intGen->gen(q);
-  //intGen->gen("+",_id,"1",_id, "   // Incremento, linea " + std::to_string(get_first_line()));  
 
 }
 
@@ -882,9 +867,8 @@ void Decrement::toIntermediate(IntermediateGen *intGen)
 {  
   Quad* q;
 
-  q = new SubQuad( _id, "1", _id); 
+  q = new SubQuad( _id, PolarType::getInstance(), "1", PolarType::getInstance(), _id, PolarType::getInstance()); 
   intGen->gen(q);
-  //intGen->gen("-",_id,"1",_id, "// Decremento, linea " + std::to_string(get_first_line()));  
 
 }
 

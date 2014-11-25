@@ -53,6 +53,7 @@ private:
   unsigned int _offsetTemp = 0;
   map<string, unsigned int> _mapOffTemp;
   unsigned int _totalTemp = 0;
+  unsigned int _floatRegister = 0;
 };
 
 #endif

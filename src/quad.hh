@@ -80,9 +80,7 @@ class Quad
 class SumQuad : public Quad
 {
   public:
-    SumQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny);
     SumQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny, Type* destinyType);
-    SumQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
     bool useVariables()             { return true; }
     std::string toSpim();
     bool isExpQuad() { return true; }
@@ -91,8 +89,6 @@ class SumQuad : public Quad
 class SubQuad : public Quad
 {
   public:
-    SubQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny);
-    SubQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
     SubQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny, Type* destinyType);
     bool useVariables()             { return true; }
     bool isExpQuad() { return true; }
@@ -103,20 +99,15 @@ class SubQuad : public Quad
 class DivQuad : public Quad
 {
   public:
-    DivQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny);
-    DivQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
     DivQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny, Type* destinyType);
-    bool useVariables()             { return true; }
-    bool isExpQuad() { return true; }
+    bool useVariables()   { return true; }
+    bool isExpQuad()      { return true; }
     std::string toSpim();
 };
 
 class MulQuad : public Quad
 {
   public:
-
-    MulQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny);
-    MulQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
     MulQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny, Type* destinyType);
     bool useVariables()             { return true; }
     bool isExpQuad() { return true; }
@@ -127,7 +118,7 @@ class MulQuad : public Quad
 class RemQuad : public Quad
 {
   public:
-    RemQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
+    RemQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny, Type* destinyType);
     bool useVariables()             { return true; }
     bool isExpQuad() { return true; }
     std::string toSpim();
@@ -136,7 +127,7 @@ class RemQuad : public Quad
 class PowQuad : public Quad
 {
   public:
-    PowQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
+    PowQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny, Type* destinyType);
     bool isExpQuad() { return true; }
     bool useVariables()             { return true; }
 };
@@ -144,7 +135,7 @@ class PowQuad : public Quad
 class UmQuad : public Quad
 {
   public:
-    UmQuad(std::string leftOperand, std::string rightOperand, std::string destiny);
+    UmQuad(std::string leftOperand, Type* leftType, std::string destiny, Type* destinyType);
     bool useVariables()             { return true; }
     bool isExpQuad() { return true; }
     std::string toSpim();
@@ -215,7 +206,8 @@ class GotoQuad : public JumpQuad
   public:
     GotoQuad();
     GotoQuad(std::string destiny);
-    bool useVariables()             { return false; }
+    bool useVariables() { return false; }
+    bool isJump()       { return true;   }
     std::string toSpim();
 };
 
@@ -268,7 +260,8 @@ class CallQuad : public Quad
     CallQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny);
     CallQuad(std::string leftOperand, std::string rightOperand, std::string destiny, Type* returnType);
     std::string toSpim();
-    bool isCall() { return true;  }
+    bool isCall()       { return true;  }
+    bool useVariables() { if(_leftOperand == "leer") return true; else return false; }
 };
 
 class ReturnQuad : public Quad

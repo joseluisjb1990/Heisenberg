@@ -115,10 +115,6 @@ void IntermediateGen::printSpim(TablaSimbolos* tSimbolos)
 		  ra = new RegisterAsigner(20);
 		}
 
-		qc->print();
-		ra->print();
-		cout << endl;
-		std::string line;
 
 		if (q->isTag()) 
 		{
@@ -128,7 +124,6 @@ void IntermediateGen::printSpim(TablaSimbolos* tSimbolos)
 
 			_file << std::endl << q->toSpim() << std::endl << std::endl;
 
-			_file << std::endl << "bloque" << qc->getNumberBlock() << ":" << std::endl << std::endl;
 
 	    _file <<  "   sub $sp, $sp, 4\n   sw $ra 0($sp)\n";
 	    _file <<  "   sub $sp, $sp, 4\n   sw $fp 0($sp)\n";
@@ -136,18 +131,26 @@ void IntermediateGen::printSpim(TablaSimbolos* tSimbolos)
 			_file <<  "   sub $sp $sp "   << tam  <<  endl;
 
 			  
+			if (qc->isLeader()) 
+				_file << std::endl << "bloque" << qc->getNumberBlock() << ":" << std::endl << std::endl;
+
 		} else if (q->isEnd())
     {
+			if (qc->isLeader()) 
+				_file << std::endl << "bloque" << qc->getNumberBlock() << ":" << std::endl << std::endl;
+
       if(q->_destiny.empty())
-        _file << "li $v0, 10 \n   syscall";
+        _file << "   li $v0, 10 \n   syscall";
       else if (q->_destiny != "oso")
       {
+
         _file << "_epilog" << q->_destiny << ":\n";
 			  _file << "   add $sp $sp "   << tam  <<  endl;
 	      _file << "   lw $fp 0($sp)\n   add $sp, $sp, 4\n";
 	      _file << "   lw $ra 0($sp)\n   add $sp, $sp, 4\n";
 	      _file << "   jr $ra";
       }
+
     }
     else
     {
@@ -158,6 +161,9 @@ void IntermediateGen::printSpim(TablaSimbolos* tSimbolos)
       if(q->useVariables())
 			{
 
+		    qc->print();
+		    ra->print();
+		    cout << endl;
 			  arrPairs = ra->getReg(q);
 			  if(ra->getSpillMode())
 			  {
@@ -175,27 +181,34 @@ void IntermediateGen::printSpim(TablaSimbolos* tSimbolos)
 			  susVariables(arrPairs, q, _file, alc, qAlc.front());
 			}
 			
+
+		  std::string line;
+			line = q->toSpim();
+		
+		  
 			if(qc->isJump() or qc->_quad->isCall())
 			{
+        //cout << "TENGO QUE HACER STORE PORQUE ESTOY EN UN JUMP O UNA LLAMADA \n";
+		    //qc->print();
+		    //ra->print();
+		    //cout << endl;
 			  map<string, string> msi = ra->getModVar();
 			  storeAll(msi, alc, qAlc.front());
 			  ra = new RegisterAsigner(20);
 			}
 
-			line = q->toSpim();
-		
 			if (line != "") _file << "   " << line << std::endl; 
-		  
       if (q->isCall())
       {
-        if(_mapOffTemp.find(q->_destiny) == _mapOffTemp.end())
-        {
-          _mapOffTemp[q->_destiny] = _offsetTemp + tam;  
-          _file << "   sub $sp $sp 4\n"; 
-          _file << "   sw $10 0($sp)" << endl;
-          _offsetTemp += 4;
-          _totalTemp++;
-        }
+        if(isTemp(q->_destiny))
+          if(_mapOffTemp.find(q->_destiny) == _mapOffTemp.end())
+          {
+            _mapOffTemp[q->_destiny] = _offsetTemp + tam;  
+            _file << "   sub $sp $sp 4\n"; 
+            _file << "   sw $10 0($sp)" << endl;
+            _offsetTemp += 4;
+            _totalTemp++;
+          }
       }
 		}
 	}
@@ -218,9 +231,9 @@ void IntermediateGen::spillVariables(vector<pair<string, string>> arrPairs, unsi
 
 void IntermediateGen::storeAll(map<string, string> msi, unsigned int alcAct, unsigned int alcTop)
 {
+	Contenido* c = nullptr;
   for(auto& t: msi)
   {
-	  Contenido* c = nullptr;
 	  for(unsigned int i = alcAct; i <= alcTop; i++)
 	  {
 	    if(!isTemp(t.first))
@@ -228,7 +241,6 @@ void IntermediateGen::storeAll(map<string, string> msi, unsigned int alcAct, uns
 	  	  c = _symbolTable->find_scope(t.first, i);
 	  	  if(c) break;
 	    }
-      else return;
 	  }
 
 	  if(c) 
@@ -244,17 +256,26 @@ void IntermediateGen::storeAll(map<string, string> msi, unsigned int alcAct, uns
   }
 }
 
-bool isLiteral(string op)
+bool isLiteralInt(string op)
 {
   return boost::regex_match(op.c_str(), boost::regex("([0-9])+"));
+}
+
+bool isLiteralFloat(string op)
+{
+  return boost::regex_match(op.c_str(), boost::regex("(([0-9]))+\\.(([0-9])+)"));
 }
 
 void IntermediateGen::loadVariable(string var, string reg, unsigned int alcAct, unsigned int alcTop)
 {
   Contenido* c;
-  if(isLiteral(var))
+  if(isLiteralInt(var))
   {
     _file << "   li " << reg << " " << var << endl;
+  } else if(isLiteralFloat(var))
+  {
+    _file << "   li.s " << "$f0" << " " << var << endl;
+    _file << "   mfc1 " << reg   << " " << "$f0" << endl;
   }
   else if (isTemp(var))
   {

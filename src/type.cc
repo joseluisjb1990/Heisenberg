@@ -98,7 +98,7 @@ NumType::NumType()
 NumType* NumType::_instance = 0;
 
 KodiakType::KodiakType()
-  : Type(8,8)
+  : Type(4,4)
   {}
 
 std::string KodiakType::to_string()

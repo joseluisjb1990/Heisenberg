@@ -247,7 +247,6 @@ void Multiplication::toIntermediate(IntermediateGen *intGen)
   Quad* q = new MulQuad(izq->getTemp(), izq->getType(), der->getTemp(), der->getType(), temp, izq->getType());
   intGen->gen(q);
   
-//  intGen->gen("*",izq->getTemp(), der->getTemp(),temp, "   // Multiplication, linea " + std::to_string(get_first_line()));  
   setTemp(temp); 
   setType(izq->getType());
 }
@@ -328,10 +327,10 @@ void Remainder::toIntermediate(IntermediateGen *intGen)
   der->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
 
-  Quad* q = new RemQuad(izq->getTemp(), der->getTemp(), temp);
+  Quad* q = new RemQuad(izq->getTemp(), PolarType::getInstance(), der->getTemp(), PolarType::getInstance(), temp, PolarType::getInstance());
   intGen->gen(q);
   
-  // intGen->gen("%",izq->getTemp(), der->getTemp(),temp, "   // Modulo, linea " + std::to_string(get_first_line()));    
+  setType(PolarType::getInstance());
   setTemp(temp);
 }
 
@@ -369,10 +368,10 @@ void Power::toIntermediate(IntermediateGen *intGen)
   der->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
 
-  Quad* q = new PowQuad(izq->getTemp(), der->getTemp(), temp);
+  Quad* q = new PowQuad(izq->getTemp(), PolarType::getInstance(), der->getTemp(), PolarType::getInstance(), temp, PolarType::getInstance());
   intGen->gen(q);
   
-//  intGen->gen("**",izq->getTemp(), der->getTemp(),temp, "   // Potenciación, linea " + std::to_string(get_first_line()));    
+  setType(PolarType::getInstance());
   setTemp(temp);
 }
 
@@ -404,9 +403,10 @@ void Minus::toIntermediate(IntermediateGen *intGen)
   operando->toIntermediate(intGen);
   std::string temp = intGen->nextTemp();
 
-  Quad* q = new UmQuad(operando->getTemp(), "", temp);
+  Quad* q = new UmQuad(operando->getTemp(), operando->getType(), temp, operando->getType());
   intGen->gen(q);
   
+  setType(operando->getType());
   // intGen->gen("um",operando->getTemp(), " ", temp, "   // Unario, linea " + std::to_string(get_first_line()));  
   setTemp(temp);
 }
@@ -1300,7 +1300,6 @@ void PardoExpr::toIntermediate(IntermediateGen* intGen)
 
   Quad* q = new DespQuad(std::to_string(_tableRow->getOffset()), _pardo->getTemp(), temp);
   intGen->gen(q); 
-  // intGen->gen("[]", std::to_string(_tableRow->getOffset()), _pardo->getTemp(), temp);
   setTemp(temp);
 }
 
@@ -1412,7 +1411,6 @@ void CuevaExpr::toIntermediate(IntermediateGen *intGen)
 
     q = new MulQuad(_dimensions->at(i)->getTemp(), PolarType::getInstance(), std::to_string(t->getSize()), PolarType::getInstance(), temp, PolarType::getInstance());
     intGen->gen(q);
-  	// intGen->gen("*",_dimensions->at(i)->getTemp(), std::to_string(t->getSize()), temp, "   // Desplazamiento Arreglo, linea " + std::to_string(get_first_line()));  
   	temps.push_back(temp);
     if(t->isArray()) { ct = dynamic_cast<CuevaType* > (t); t = ct->getTipo(); }
   }
@@ -1425,7 +1423,6 @@ void CuevaExpr::toIntermediate(IntermediateGen *intGen)
     
     q = new SumQuad(aux, PolarType::getInstance(), temps[i+1], PolarType::getInstance(), temp, PolarType::getInstance());
     intGen->gen(q);
-  	// intGen->gen("+",aux,  temps[i+1] ,temp, "   // Suma de Desplazamientos");  
   	aux  = temp;  
 	  temp = intGen->nextTemp();
   }

@@ -198,6 +198,17 @@ vector<pair<bool,string>> RegisterAsigner::getReg(Quad* quad)
     vecPairs.push_back(pair<bool, string>(false, ""));
     vecPairs.push_back(pair<bool, string>(false, ""));
   }
+  else if(quad->isCall())
+  {
+    if(leftOp == "leer")
+    {
+      vector<string> vs;
+      vs.push_back("");
+      vs.push_back("");
+      vs.push_back(destiny);
+      vecPairs = insertAll(vs);
+    }
+  }
   else
   {
     vecPairs.push_back(pair<bool, string>(false, ""));
@@ -447,6 +458,7 @@ map<string, string> RegisterAsigner::getModVar()
   {
     msi[v] = _mipsRegisters[_variables[v]];
   }
+
   return msi;
 }
 #endif

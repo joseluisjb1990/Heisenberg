@@ -50,37 +50,22 @@ void Quad::print()
 
 map<string, Type*> Quad::tablaTemporales;
 
-SumQuad::SumQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
-  : Quad("+", leftOperand, rightOperand, destiny)
-{}
-
-SumQuad::SumQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny)
-  : Quad("+", leftOperand, leftType, rightOperand, rightType, destiny)
-  {}
-
 SumQuad::SumQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny, Type* destinyType)
   : Quad("+", leftOperand, leftType, rightOperand, rightType, destiny, destinyType)
   {}
 
 std::string SumQuad::toSpim() {
 
-    //Quad::tablaTemporales->(destiny) = 
-    //if (_leftType->isInt()) {  
-        return "add "+  _destiny + ", " + _leftOperand + ", " +  _rightOperand;
-  
-    //} else if (_leftType->isFloat()) {
-        return "add.s "+  _destiny + ", " + _leftOperand + ", " +  _rightOperand;
-    //};
+    if (_leftType->isInt())
+    {  
+      return "add "+  _destiny + ", " + _leftOperand + ", " +  _rightOperand;
+    } 
+    else if (_leftType->isFloat())
+    {
+      return "mtc1 " + _leftOperand + " $f0\n   mtc1 " + _rightOperand + " $f1\n   add.s $f2 $f0 $f1\n    mfc1 " + _destiny + " $f2\n";
+    };
     return "";
 };
-
-SubQuad::SubQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
-  : Quad("-", leftOperand, rightOperand, destiny)
-{}
-
-SubQuad::SubQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny)
-  : Quad("-", leftOperand, leftType, rightOperand, rightType, destiny)
-{}
 
 SubQuad::SubQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny, Type* destinyType)
   : Quad("-", leftOperand, leftType, rightOperand, rightType, destiny, destinyType)
@@ -88,23 +73,17 @@ SubQuad::SubQuad(std::string leftOperand, Type* leftType, std::string rightOpera
 
 std::string SubQuad::toSpim() {
  
-    if (_leftType->isInt()) {  
+    if (_leftType->isInt())
+    {  
         return "sub "+  _destiny + ", " + _leftOperand + ", " +  _rightOperand;
-       
-    } else if (_leftType->isFloat()) {
-        return "sub.s "+  _destiny + ", " + _leftOperand + ", " +  _rightOperand;
+    }
+    else if (_leftType->isFloat())
+    {
+      return "mtc1 " + _leftOperand + " $f0\n   mtc1 " + _rightOperand + " $f1\n   sub.s $f2 $f0 $f1\n    mfc1 " + _destiny + " $f2\n";
     };
 
     return "";
 };
-
-DivQuad::DivQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
-  : Quad("/", leftOperand, rightOperand, destiny)
-{}
-
-DivQuad::DivQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny)
-  : Quad("/", leftOperand, leftType, rightOperand, rightType, destiny)
-{}
 
 DivQuad::DivQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny, Type* destinyType)
   : Quad("/", leftOperand, leftType, rightOperand, rightType, destiny, destinyType)
@@ -112,23 +91,18 @@ DivQuad::DivQuad(std::string leftOperand, Type* leftType, std::string rightOpera
 
 std::string DivQuad::toSpim() {
  
-    if (_leftType->isInt()) {  
-        return "div "+ _leftOperand + " " +  _rightOperand + "\n   mflo " + _destiny + "\n" ;
-    } else if (_leftType->isFloat()) {
-        return "div.s "+  _destiny + ", " + _leftOperand + ", " +  _rightOperand;
+    if (_leftType->isInt())
+    {  
+      return "div "+ _leftOperand + " " +  _rightOperand + "\n   mflo " + _destiny + "\n" ;
+    }
+    else if (_leftType->isFloat())
+    {
+      return "mtc1 " + _leftOperand + " $f0\n   mtc1 " + _rightOperand + " $f1\n   div.s $f2 $f0 $f1\n    mfc1 " + _destiny + " $f2\n";
     };
 
     return "";
 };
 
-
-MulQuad::MulQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
-  : Quad("*", leftOperand, rightOperand, destiny)
-{}
-
-MulQuad::MulQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny)
-  : Quad("*", leftOperand, leftType, rightOperand, rightType, destiny)
-{}
 
 MulQuad::MulQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny, Type* destinyType)
   : Quad("*", leftOperand, leftType, rightOperand, rightType, destiny, destinyType)
@@ -136,20 +110,21 @@ MulQuad::MulQuad(std::string leftOperand, Type* leftType, std::string rightOpera
 
 std::string MulQuad::toSpim() {
  
-    if (_leftType->isInt()) {  
+    if (_leftType->isInt())
+    {
         return "mult " + _leftOperand + ", " +  _rightOperand + "\n   mflo " + _destiny + "\n" ;;
-       
-    } else if (_leftType->isFloat()) {
-        return "mul.s " +  _destiny + " " + _leftOperand + " " +  _rightOperand;
+    }   
+    else if (_leftType->isFloat())
+    {
+      return "mtc1 " + _leftOperand + " $f0\n   mtc1 " + _rightOperand + " $f1\n   mul.s $f2 $f0 $f1\n    mfc1 " + _destiny + " $f2\n";
     };
 
     return "";
 };
 
-
-RemQuad::RemQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
-  : Quad("%", leftOperand, rightOperand, destiny)
-{}
+RemQuad::RemQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny, Type* destinyType)
+  : Quad("%", leftOperand, leftType, rightOperand, rightType, destiny, destinyType)
+  {}
 
 std::string RemQuad::toSpim() {
   if (_leftType->isInt()) 
@@ -158,21 +133,23 @@ std::string RemQuad::toSpim() {
   return "";
 };
 
-PowQuad::PowQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
-  : Quad("**", leftOperand, rightOperand, destiny)
-{}
+PowQuad::PowQuad(std::string leftOperand, Type* leftType, std::string rightOperand, Type* rightType, std::string destiny, Type* destinyType)
+  : Quad("**", leftOperand, leftType, rightOperand, rightType, destiny, destinyType)
+  {}
 
-UmQuad::UmQuad(std::string leftOperand, std::string rightOperand, std::string destiny)
-  : Quad("um", leftOperand, rightOperand, destiny)
-{}
+UmQuad::UmQuad(std::string leftOperand, Type* leftType, std::string destiny, Type* destinyType)
+  : Quad("um", leftOperand, leftType, "", new EmptyType(), destiny, destinyType)
+  {}
 
 std::string UmQuad::toSpim() {
  
     if (_leftType->isInt()) {  
         return "sub " +  _destiny + ", $0 " + _leftOperand;
        
-    } else if (_leftType->isFloat()) {
-        return "neg.s "+  _destiny + ", " + _leftOperand;
+    }   
+    else if (_leftType->isFloat())
+    {
+      return "mtc1 " + _leftOperand + " $f0\n  neg.s $f2 $f0\n    mfc1 " + _destiny + " $f2\n";
     };
 
     return "sub " +  _destiny + ", $0 " + _leftOperand;
@@ -262,9 +239,9 @@ DespQuad::DespQuad(std::string leftOperand, std::string rightOperand, std::strin
 
 std::string DespQuad::toSpim()
 {
-  return   "add "      + _leftOperand   + ", "   + _leftOperand  + ", "           + _destiny 
+  return   "sub "      + _leftOperand   + ", "   + _leftOperand  + ", "           + _destiny 
        +   "\n   sw "  + _rightOperand  + ", "  + "("           + _leftOperand  + ")"
-       +   "\n   sub " + _leftOperand   + ", "   + _leftOperand  + ", "           + _destiny
+       +   "\n   add " + _leftOperand   + ", "   + _leftOperand  + ", "           + _destiny
        ;
 }
 
@@ -274,9 +251,9 @@ DespEqualQuad::DespEqualQuad(std::string leftOperand, std::string rightOperand, 
 
 std::string DespEqualQuad::toSpim()
 {
-  return   "add "      + _leftOperand   + ", "   + _leftOperand  + ", "           + _destiny 
+  return   "sub "      + _leftOperand   + ", "   + _leftOperand  + ", "           + _destiny 
        +   "\n   lw "  + _rightOperand  + ", "  + "("           + _leftOperand  + ")"
-       +   "\n   sub " + _leftOperand   + ", "   + _leftOperand  + ", "           + _destiny
+       +   "\n   add " + _leftOperand   + ", "   + _leftOperand  + ", "           + _destiny
        ;
 }
 
@@ -312,13 +289,38 @@ std::string CallQuad::toSpim() {
     if(_leftOperand == "escribir")
     {
       int flag = 0;
-      if(_destinyType->isInt())     flag = 1;
+      if(_destinyType->isInt())
+      {
+        flag = 1;
+        return "li $v0 " + to_string(flag) + "\n   lw $a0 ($sp)\n" + "   syscall\n   add $sp $sp 4\n"; 
+      }
       else
-      if(_destinyType->isFloat())   flag = 2;
+      if(_destinyType->isFloat())
+      {
+        flag = 2;
+        return "li $v0 " + to_string(flag) + "\n   lw $a0 ($sp)\n   mtc1 $a0 $f12\n" + "   syscall\n   add $sp $sp 4\n"; 
+      }
       else
-      if(_destinyType->isString())  flag = 3;
-
-      return "li $v0 " + to_string(flag) + "\n   lw $a0 ($sp)\n" + "   syscall\n   add $sp $sp 4\n"; 
+      if(_destinyType->isString())
+      {
+        flag = 4;
+        return "";
+      }
+    }
+    if(_leftOperand == "leer")
+    {
+      int flag = 0;
+      if(_destinyType->isInt())
+      {
+        flag = 5;
+        return "li $v0 " + to_string(flag) + "\n" + "   syscall\n   move " + _destiny + " $v0\n";
+      }
+      else
+      if(_destinyType->isFloat())
+      {
+        flag = 6;
+        return "";
+      }
     }
     return "sub $sp, $sp, 4\n   jal " + _leftOperand + "\n   lw $10 0($sp)\n   add $sp $sp 4\n   add $sp $sp " + to_string(4 * atoi(_rightOperand.c_str())) + "\n";
 };
