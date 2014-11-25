@@ -1,0 +1,23 @@
+fibonacci(polar m) => polar
+{
+  polar n, o;
+
+  si(m == 0) { vomita 1; }
+  sino
+  {
+    si(m == 1) { vomita 1; }
+    sino       { 
+                 n = fibonacci(m - 1);
+                 o = fibonacci(m - 2); 
+                 vomita o + n;
+                 }
+  }
+}
+
+oso() => extinto
+{
+  polar n, m;
+  n = 15;
+  m = fibonacci(n);
+  escribir(m);
+}
