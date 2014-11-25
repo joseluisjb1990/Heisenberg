@@ -107,7 +107,6 @@ void IntermediateGen::printSpim(TablaSimbolos* tSimbolos)
 		qc  = *itq;
 		q   = qc->_quad; 
 		
-		qc->print();
 		if(actualScope != qc->getNumberBlock())
 		{
 		  map<string, string> msi = ra->getModVar();
@@ -166,8 +165,6 @@ void IntermediateGen::printSpim(TablaSimbolos* tSimbolos)
 			  if(ra->getSpillMode())
 			  {
 				vector<pair<string, string>> v = ra->getVarToSpill();
-				//for(auto& pis: v)
-				  //cout << pis.first << ", " << pis.second << endl ;
 				
 				spillVariables(v, alc, qAlc.front());
 				arrPairs = ra->getReg(q);
@@ -183,19 +180,8 @@ void IntermediateGen::printSpim(TablaSimbolos* tSimbolos)
 		  std::string line;
 			line = q->toSpim();
 		
-      cout << endl << "-------------------------------------------------------------------------------------------------" << endl;
-		  qc->print();
-      cout << endl << "================================================================================================== << endl";
-      cout << endl << line << endl;
-      cout << endl << "************************************************************************************************** << endl";
-		  cout << endl;
-		  
 			if(qc->isJump() or qc->_quad->isCall())
 			{
-        //cout << "TENGO QUE HACER STORE PORQUE ESTOY EN UN JUMP O UNA LLAMADA \n";
-		    //qc->print();
-		    //ra->print();
-		    //cout << endl;
 			  map<string, string> msi = ra->getModVar();
 			  storeAll(msi, alc, qAlc.front());
 			  ra = new RegisterAsigner(20);
@@ -319,7 +305,7 @@ void IntermediateGen::loadVariable(string var, string reg, unsigned int alcAct, 
 void IntermediateGen::susVariables(vector<pair<bool, string>> arrPairs, Quad* q, std::ofstream& file, unsigned int alcAct, unsigned int alcTop)
 {
   string    regLeft, regRight, regRes;
-  bool      loadLeft, loadRight, loadRes;
+  bool      loadLeft, loadRight;
 
   loadLeft    = arrPairs.at(0).first;
   regLeft     = arrPairs.at(0).second;

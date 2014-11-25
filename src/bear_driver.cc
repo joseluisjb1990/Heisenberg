@@ -27,7 +27,6 @@ int bear_driver::parse (const std::string &f)
       if(!untilInt)
       {
         intgen->optimize();
-        intgen->print();
         intgen->printSpim(&tabla);
         intgen->close();
       }
