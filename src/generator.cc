@@ -252,9 +252,9 @@ void IntermediateGen::storeAll(map<string, string> msi, unsigned int alcAct, uns
       if(!c->getTipo()->isArray())
       {
         if(!c->isParameter())
-          _file << "   sw " << t.second << " -" << c->getOffset() + 8 << "($fp)" << endl; 
+          _file << "\n   sw " << t.second << " -" << c->getOffset() + 8 << "($fp)" << endl; 
         else
-          _file << "   sw " << t.second << " "  << c->getOffset() + 4 << "($fp)" << endl; 
+          _file << "\n   sw " << t.second << " "  << c->getOffset() + 4 << "($fp)" << endl; 
       }
     }
   }
