@@ -107,6 +107,7 @@ void IntermediateGen::printSpim(TablaSimbolos* tSimbolos)
 		qc  = *itq;
 		q   = qc->_quad; 
 		
+		qc->print();
 		if(actualScope != qc->getNumberBlock())
 		{
 		  map<string, string> msi = ra->getModVar();
@@ -120,7 +121,7 @@ void IntermediateGen::printSpim(TablaSimbolos* tSimbolos)
 		{
 			alc = qAlc.front(); qAlc.pop();
 			tam = qTam.front(); qTam.pop();
-			if(qAlc.empty()) qAlc.push(alc);
+			if(qAlc.empty()) qAlc.push(_symbolTable->_alcMayor);
 
 			_file << std::endl << q->toSpim() << std::endl << std::endl;
 
@@ -161,9 +162,6 @@ void IntermediateGen::printSpim(TablaSimbolos* tSimbolos)
       if(q->useVariables())
 			{
 
-		    qc->print();
-		    ra->print();
-		    cout << endl;
 			  arrPairs = ra->getReg(q);
 			  if(ra->getSpillMode())
 			  {
@@ -185,6 +183,12 @@ void IntermediateGen::printSpim(TablaSimbolos* tSimbolos)
 		  std::string line;
 			line = q->toSpim();
 		
+      cout << endl << "-------------------------------------------------------------------------------------------------" << endl;
+		  qc->print();
+      cout << endl << "================================================================================================== << endl";
+      cout << endl << line << endl;
+      cout << endl << "************************************************************************************************** << endl";
+		  cout << endl;
 		  
 			if(qc->isJump() or qc->_quad->isCall())
 			{

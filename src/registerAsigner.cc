@@ -160,8 +160,6 @@ vector<pair<bool,string>> RegisterAsigner::getReg(Quad* quad)
   else if (quad->isDespEqual())
   {
     vector<string> vs;
-    vs.push_back(leftOp); vs.push_back(rightOp); vs.push_back(destiny);
-    int r = cantInRegister(vs);
 
     if(inRegister(rightOp))
     {
@@ -170,6 +168,9 @@ vector<pair<bool,string>> RegisterAsigner::getReg(Quad* quad)
       _variables.erase(rightOp);
       _variableMod = eraseVec(_variableMod,rightOp);
     }
+
+    vs.push_back(leftOp); vs.push_back(rightOp); vs.push_back(destiny);
+    int r = cantInRegister(vs);
 
     if(_occupiedReg + r > _totalRegisters)
     {  

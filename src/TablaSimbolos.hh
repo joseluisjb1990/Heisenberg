@@ -50,8 +50,10 @@ private:
 
 public:
 
+    unsigned int _alcMayor = 0;
     queue<unsigned int> getAlcFunciones() { return _alcanceFunciones;  }
     queue<unsigned int> getTamFunciones() { return _tamFunciones;      }
+    void insert_symbol(std::string nombre, Contenido* cont, unsigned int tam2);
     /**
      * Constructor para la clase.
      *
